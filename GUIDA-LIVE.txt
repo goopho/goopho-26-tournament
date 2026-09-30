@@ -1,0 +1,96 @@
+GOOPHO 26 - Come attivare la LIVE per i giocatori
+==================================================
+
+Cosa ottieni: tu inserisci i risultati dal Mac, i giocatori aprono un link
+dal telefono (SENZA registrarsi) e vedono calendario, classifiche e tabellone
+aggiornarsi da soli in pochi secondi.
+
+Servono due cose, da fare UNA VOLTA SOLA (circa 20 minuti):
+  A) uno spazio Firebase gratuito (dove passano i risultati)
+  B) l'app messa online (l'indirizzo che aprono i giocatori)
+
+Nota: i menu di Firebase e GitHub possono cambiare leggermente nel tempo;
+i nomi delle voci qui sotto sono quelli principali da cercare.
+
+
+A) FIREBASE (gratuito, serve un account Google)
+------------------------------------------------
+1. Vai su https://console.firebase.google.com e premi "Crea un progetto"
+   (o "Aggiungi progetto"). Nome: goopho26. Google Analytics: puoi
+   disattivarlo. Conferma.
+
+2. DATABASE
+   Menu a sinistra: Build (Crea) > Realtime Database > "Crea database".
+   Posizione: Belgio (europe-west1). Modalità: "blocco" (locked). Fine.
+   In alto nella scheda "Dati" vedi l'INDIRIZZO DEL DATABASE, tipo:
+     https://goopho26-default-rtdb.europe-west1.firebasedatabase.app
+   Copialo: ti servirà.
+
+3. ACCESSO (così solo tu puoi scrivere i risultati)
+   Menu: Build > Authentication > "Inizia".
+   Scheda "Metodo di accesso": attiva "Email/password" e salva.
+   Scheda "Utenti": "Aggiungi utente" con la tua email e una password.
+   Nella riga dell'utente copia l'"UID utente" (una lunga sigla).
+
+4. REGOLE DEL DATABASE
+   Torna su Realtime Database > scheda "Regole", cancella tutto e incolla
+   (sostituendo IL_TUO_UID con l'UID copiato al punto 3):
+
+   {
+     "rules": {
+       ".read": false,
+       ".write": false,
+       "live": {
+         "$id": {
+           ".read": true,
+           ".write": "auth != null && auth.uid === 'IL_TUO_UID'"
+         }
+       }
+     }
+   }
+
+   Premi "Pubblica".
+
+5. CHIAVE WEB API
+   Ingranaggio in alto a sinistra > Impostazioni progetto > Generali.
+   Se non vedi la "Chiave API web", scendi su "Le tue app", premi l'icona
+   </> (Web), dai un nome (goopho26) e registra: nella configurazione che
+   compare copia il valore di apiKey (inizia con AIza...).
+
+
+B) METTERE L'APP ONLINE (gratuito) - con GitHub Pages
+------------------------------------------------------
+1. Crea un account su https://github.com (se non l'hai).
+2. Premi "+" in alto > "New repository". Nome: goopho26. Pubblico. Crea.
+3. Nella pagina del repository premi "uploading an existing file" e
+   trascina TUTTO il contenuto della cartella goopho26-app (index.html,
+   manifest.webmanifest, sw.js e la cartella icons). "Commit changes".
+4. Settings > Pages > "Branch": main, cartella / (root) > Save.
+   Dopo un paio di minuti l'app è online su:
+     https://TUONOME.github.io/goopho26/
+   (va bene anche qualsiasi altro servizio che ospita siti, con https).
+
+
+C) COLLEGARE L'APP E ANDARE IN LIVE
+------------------------------------
+1. Apri l'app sul Mac (da file o dall'indirizzo online: usa poi sempre
+   la stessa, perché i dati salvati sono separati).
+2. In fondo alla pagina apri "📡 Live per i giocatori" e compila:
+   - Indirizzo del database   (punto A2)
+   - Chiave Web API           (punto A5)
+   - Indirizzo pubblico dell'app (punto B4, es. https://tuonome.github.io/goopho26/)
+   - Email e password dell'utente Firebase (punto A3)
+   Premi "Collega". La password non viene salvata.
+3. Premi "📡 Attiva la Live", poi "🔗 Copia link per i giocatori" e mandalo
+   su WhatsApp. Il link resta sempre lo stesso anche nei tornei successivi.
+4. Durante il torneo tieni il Mac collegato a internet: ogni risultato
+   arriva ai giocatori in pochi secondi. Chi apre il link può anche
+   premere "📺 Modalità TV".
+
+Se qualcosa non va, il riquadro Live mostra un messaggio:
+- "Email o password non corrette" > ricontrolla l'utente del punto A3.
+- "In Firebase va attivato l'accesso con Email/password" > punto A3.
+- "Permesso negato dal database" > controlla le regole e l'UID (punto A4).
+- "ultimo invio non riuscito" > il Mac non è connesso a internet.
+
+Il piano gratuito di Firebase è ampiamente sufficiente per i tornei.

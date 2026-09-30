@@ -1,0 +1,43 @@
+GOOPHO 26 - app indipendente
+============================
+
+Contenuto della cartella
+- index.html            l'app completa
+- manifest.webmanifest  nome, colori e icona dell'app
+- sw.js                 permette di usarla anche senza internet
+- icons/                icone per iPhone, Mac e browser
+- GUIDA-LIVE.txt        come far seguire il torneo in diretta ai giocatori
+
+L'app è una semplice cartella di file: non dipende da nessun servizio
+in particolare. Puoi usarla in due modi.
+
+A) SOLO SUL MAC, SENZA METTERLA ONLINE
+   Apri il file index.html con Chrome (doppio clic, oppure trascinalo su Chrome).
+   Funziona anche senza internet e salva i dati sul Mac.
+   Limiti: niente icona da installare e niente uso sull'iPhone.
+   Consiglio: aggiungi la pagina ai Preferiti di Chrome per ritrovarla subito.
+
+B) ONLINE, CON ICONA SU MAC E IPHONE
+   Carica la CARTELLA su un qualsiasi servizio che ospita siti statici
+   (ce ne sono di gratuiti, per esempio GitHub Pages, Cloudflare Pages,
+   Netlify, oppure lo spazio web di un tuo dominio). Serve un indirizzo
+   https://, poi:
+   - iPhone: apri l'indirizzo con SAFARI > tasto Condividi > "Aggiungi alla
+     schermata Home".
+   - Mac: apri l'indirizzo con CHROME > icona "Installa" nella barra
+     dell'indirizzo (oppure Safari > File > "Aggiungi al Dock").
+   Da quel momento si apre dall'icona, a tutto schermo, anche senza internet.
+   Per aggiornarla: ricarica la cartella nuova sullo stesso servizio.
+
+MODALITÀ TV (Mac + cavo HDMI)
+   Apri due finestre dell'app nello STESSO browser (Chrome: tasto destro sulla
+   scheda > "Duplica" e trascinala fuori; con l'app installata: Cmd+N).
+   Sposta una finestra sulla TV e premi "📺 Modalità TV".
+   Nell'altra inserisci i risultati: la TV si aggiorna da sola.
+
+DA SAPERE
+   - I dati (iscritti, tornei, storico) restano salvati sul dispositivo e nel
+     browser in cui usi l'app: Mac e iPhone hanno ciascuno i propri dati, e
+     l'app aperta dal file (A) ha dati diversi da quella online (B).
+   - Non cancellare i dati di navigazione del sito, altrimenti si perdono
+     i tornei salvati.
