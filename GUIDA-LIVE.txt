@@ -34,7 +34,7 @@ A) FIREBASE (gratuito, serve un account Google)
 
 4. REGOLE DEL DATABASE
    Torna su Realtime Database > scheda "Regole", cancella tutto e incolla
-   (sostituendo IL_TUO_UID con l'UID copiato al punto 3):
+   (mettendo la TUA email, quella dell'utente creato al punto 3):
 
    {
      "rules": {
@@ -43,13 +43,14 @@ A) FIREBASE (gratuito, serve un account Google)
        "live": {
          "$id": {
            ".read": true,
-           ".write": "auth != null && auth.uid === 'IL_TUO_UID'"
+           ".write": "auth != null && auth.token.email === 'LA_TUA_EMAIL'"
          }
        }
      }
    }
 
-   Premi "Pubblica".
+   Premi "Pubblica". Significa: tutti possono LEGGERE il torneo in diretta,
+   solo chi entra con quella email (e la sua password) può SCRIVERE.
 
 5. CHIAVE WEB API
    Ingranaggio in alto a sinistra > Impostazioni progetto > Generali.
@@ -90,7 +91,8 @@ C) COLLEGARE L'APP E ANDARE IN LIVE
 Se qualcosa non va, il riquadro Live mostra un messaggio:
 - "Email o password non corrette" > ricontrolla l'utente del punto A3.
 - "In Firebase va attivato l'accesso con Email/password" > punto A3.
-- "Permesso negato dal database" > controlla le regole e l'UID (punto A4).
+- "Permesso negato dal database" > controlla le regole e l'email (punto A4),
+  premi Pubblica, poi nell'app Scollega e ricollegati.
 - "ultimo invio non riuscito" > il Mac non è connesso a internet.
 
 Il piano gratuito di Firebase è ampiamente sufficiente per i tornei.

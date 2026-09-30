@@ -41,3 +41,56 @@ DA SAPERE
      l'app aperta dal file (A) ha dati diversi da quella online (B).
    - Non cancellare i dati di navigazione del sito, altrimenti si perdono
      i tornei salvati.
+
+BACKUP DEI DATI (importante)
+   I tornei, gli iscritti e lo storico sono salvati solo nel browser.
+   In fondo all'app apri "💾 Backup dei dati" e premi "Esporta dati" dopo
+   ogni torneo: scarichi un file goopho26-backup-DATA.json. Conservalo su
+   iCloud Drive o Google Drive. Su un altro computer (o dopo aver perso i
+   dati) apri l'app, "Importa dati" e scegli quel file: torna tutto com'era.
+   Dopo l'importazione, per la Live basta ricollegarsi con email e password.
+
+NOVITÀ (versione 8)
+   - Biliardini: in alto scegli quanti biliardini hai. L'app assegna le
+     partite ai tavoli ("🎯 Tavolo 1 · in corso"), mostra chi deve
+     prepararsi e non chiama mai due volte la stessa persona insieme.
+     In TV compaiono "In campo ora" e "Preparatevi".
+   - Ritiro di una coppia: sezione "Ritira una coppia". Le partite che le
+     restano finiscono 7-0 per gli avversari e la coppia esce dal tabellone.
+     Si può annullare.
+   - "↩️ Annulla ultima modifica": torna indietro dopo un errore.
+     Se cambi un risultato del girone dopo aver creato il tabellone, compare
+     un avviso con "🔄 Rifai il tabellone".
+   - Iscrizioni veloci: incolla un elenco di nomi (uno per riga) e usa i
+     giocatori abituali con un tocco. I nomi doppi vengono scartati.
+   - Coppia in ritardo: "Aggiungi una coppia arrivata tardi" la inserisce in
+     un girone con le sue partite (solo prima della fase finale).
+   - Tabellone grafico in TV durante la fase finale.
+   - "🖼️ Immagine del podio": crea un'immagine da mandare nel gruppo WhatsApp.
+   - Storico > "🏆 Stagione": albo d'oro e classifica giocatori dei tornei
+     salvati (1° 10 punti, 2° 7, 3° 5, vincitori Fascia B 3, +1 a torneo).
+     Ricordati di premere "💾 Salva risultati torneo" a fine serata.
+
+NOVITÀ (versione 9) - GIORNATE INSERITE A MANO
+   Modalità Giallo > "Chi forma le giornate" > "✍️ Le inserisco io
+   (sorteggio già fatto)". Per ogni giornata scegli portiere e attaccante
+   di ogni squadra; chi non compare riposa, chi compare due volte nella
+   stessa giornata fa da Talpa la seconda volta. Poi "✍️ Crea calendario".
+   Puoi correggere in qualsiasi momento e premere "🔄 Aggiorna calendario":
+   i risultati già inseriti restano.
+   Se il calendario l'ha sorteggiato l'app e vuoi cambiarlo:
+   "📋 Parti dal calendario attuale", correggi, poi Aggiorna.
+   Per le coppie fisse nei gironi usa "🤝 Coppie fisse scelte" con
+   "✋ Decido io chi va in quale girone".
+
+NOVITÀ (versione 10)
+   - Tolto il PIN organizzatore.
+   - QR code della diretta in Modalità TV: quando la Live è attiva, in basso
+     a destra compare un QR code. Chi è al torneo lo inquadra con la
+     fotocamera del telefono e segue risultati e classifiche.
+     Se la Live è spenta il QR non compare.
+
+NOVITÀ (versione 11)
+   - Iscritti da WhatsApp: copia il messaggio con le liste "Portieri" e
+     "Attaccanti", aprilo in "📋 Incolla una lista di nomi" e premi
+     "📥 Aggiungi tutto": l'app divide i nomi nei due ruoli da sola.

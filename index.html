@@ -37,14 +37,82 @@
   #tvOverlay .tv-exit:hover{ opacity:1; }
   #tvOverlay .tv-empty{ font-size:clamp(16px, 2.4vw, 44px); opacity:.8; text-align:center; padding-top:20vh; width:80vw; }
   body.tv-on{ overflow:hidden; }
+  #tvOverlay .tv-qr{ position:absolute; right:2vw; bottom:4.5vh; width:min(30vh, 17vw); background:#fff; color:#0d2452; border-radius:14px; padding:10px 10px 8px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.45); border:3px solid #d4af37; }
+  #tvOverlay .tv-qr canvas{ display:block; width:100%; height:auto; image-rendering:pixelated; }
+  #tvOverlay .tv-qr-label{ font-size:clamp(11px, 1.15vw, 24px); font-weight:900; margin-bottom:6px; line-height:1.2; }
+  #tvOverlay .tv-qr-sub{ font-size:clamp(9px, 0.75vw, 15px); font-weight:600; opacity:.7; margin-top:4px; }
+  #tvOverlay.has-qr .tv-viewport{ margin-right:calc(min(30vh, 17vw) + 3vw); }
+  /* ---------- BILIARDINI / TURNI ---------- */
+  .table-badge{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; padding:3px 10px; border-radius:999px; margin-bottom:8px; letter-spacing:.02em; }
+  .table-badge.on{ background:#1f9a3f; color:#fff; box-shadow:0 0 10px rgba(31,154,63,0.5); }
+  .table-badge.prep{ background:#ffd868; color:#1a2233; }
+  .match-card.on-table{ box-shadow: 0 0 0 3px #1f9a3f, 0 10px 24px rgba(0,0,0,0.2); }
+  #tvOverlay .tv-next-item.on{ background: rgba(31,154,63,0.45); border:1px solid rgba(120,230,150,0.6); }
+  #tvOverlay .tv-next-item.on .tv-next-tag{ background:#fff; }
+  #tvOverlay .tv-table-no{ flex-shrink:0; font-size:22px; font-weight:900; color:#fff; min-width:34px; height:34px; border-radius:50%; background:#1f9a3f; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 12px rgba(31,154,63,0.8); }
+  #tvOverlay .tv-stage .tie-badge{ display:none; }
+  /* tabellone grafico */
+  .card.tvb-card{ background: linear-gradient(165deg, #0a2f7a, #1c5fe0 85%); border:3px solid #d4af37; border-radius:16px; padding:16px 18px 18px; color:#fff; box-shadow:0 16px 36px rgba(3,10,26,0.45); }
+  .card.tvb-card.fb{ background: linear-gradient(165deg, #7a0f0a, #e02a18 85%); }
+  .tvb-head{ font-size:26px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; margin-bottom:12px; text-shadow:0 2px 8px rgba(0,0,0,0.4); }
+  .tvb{ display:flex; gap:26px; align-items:stretch; }
+  .tvb-col{ display:flex; flex-direction:column; min-width:230px; }
+  .tvb-stage{ font-size:14px; font-weight:800; color:#ffd868; text-transform:uppercase; letter-spacing:.05em; text-align:center; margin-bottom:10px; }
+  .tvb-matches{ flex:1; display:flex; flex-direction:column; justify-content:space-around; gap:10px; }
+  .tvb-box{ position:relative; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.28); border-radius:10px; overflow:hidden; }
+  .tvb-box.live{ border-color:#5fe37f; box-shadow:0 0 14px rgba(95,227,127,0.7); }
+  .tvb-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 10px; font-size:15px; font-weight:700; white-space:nowrap; }
+  .tvb-row + .tvb-row{ border-top:1px solid rgba(255,255,255,0.15); }
+  .tvb-row.win{ background:rgba(255,216,104,0.28); color:#fff; }
+  .tvb-row.lose{ opacity:.5; }
+  .tvb-row .sc{ font-weight:900; color:#ffd868; min-width:18px; text-align:right; }
+  .tvb-row .tbd{ opacity:.55; font-style:italic; font-weight:600; }
+  .tvb-bye{ padding:6px 10px; font-size:14px; font-weight:700; opacity:.8; }
+  .tvb-empty{ visibility:hidden; height:1px; }
+  .tvb-champ{ margin-top:14px; text-align:center; font-size:22px; font-weight:900; color:#ffd868; text-shadow:0 0 14px rgba(255,216,104,0.7); }
+  .tvb-third{ margin-top:12px; }
+  .tvb-third .tvb-stage{ margin-bottom:6px; }
+  .tvb-tri{ border-collapse:collapse; font-size:17px; min-width:420px; }
+  .tvb-tri th, .tvb-tri td{ padding:7px 10px; text-align:center; border-bottom:1px solid rgba(255,255,255,0.18); }
+  .tvb-tri th:first-child, .tvb-tri td:first-child{ text-align:left; }
+  #tvOverlay .tv-next-sub{ font-size:18px; font-weight:800; color:#ffd868; margin:14px 0 8px; text-transform:uppercase; letter-spacing:.04em; }
+  .retired-tag{ display:inline-block; font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px; background:#c1443b; color:#fff; margin-left:4px; vertical-align:middle; }
+  #retireCard select{ margin-top:6px; }
+  #retireList .rt-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 10px; border-radius:10px; background:rgba(193,68,59,0.1); margin-top:8px; font-weight:700; }
+  #undoBtn[disabled]{ opacity:.45; cursor:not-allowed; }
+  .stale-warn{ background:#fff4d6; border:2px solid #f5a623; color:#5a3500; border-radius:12px; padding:12px 14px; margin:10px 0; font-size:14px; line-height:1.45; }
+  .stale-warn .btn{ margin-top:8px; }
+  .fav-wrap{ margin-top:10px; }
+  .fav-wrap:empty, .fav-wrap.hidden{ display:none; }
+  .fav-title{ font-size:11px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .fav-list{ display:flex; flex-wrap:wrap; gap:6px; }
+  .fav-chip{ display:inline-flex; align-items:center; gap:4px; border:1px dashed rgba(20,41,74,0.35); background:#fff; border-radius:999px; padding:4px 6px 4px 10px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer; }
+  .fav-chip:hover{ background:#fff4d6; border-style:solid; }
+  .fav-chip .fav-x{ border:none; background:transparent; color:var(--ink-soft); font-size:12px; cursor:pointer; padding:0 4px; }
+  .paste-box{ margin-top:14px; }
+  .paste-box summary{ cursor:pointer; font-weight:700; color:var(--pitch); font-size:14px; }
+  .paste-box textarea{ width:100%; box-sizing:border-box; margin-top:8px; border:1px solid var(--line); border-radius:9px; padding:10px; font-size:15px; font-family:inherit; }
+  .paste-help{ font-size:12.5px; color:var(--ink-soft); margin:8px 0 0; }
+  #lateCard input, #lateCard select{ width:100%; box-sizing:border-box; }
+  .season-year{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .season-year select{ width:auto; }
+  .albo-row{ display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:12px; background:rgba(212,175,55,0.14); margin-top:8px; }
+  .albo-date{ font-size:12px; font-weight:700; color:var(--ink-soft); min-width:84px; }
+  .albo-main{ flex:1; min-width:0; }
+  .albo-name{ font-weight:800; color:var(--pitch); }
+  .albo-win{ font-size:14px; }
+  table.season{ width:100%; border-collapse:collapse; font-size:14px; }
+  table.season th, table.season td{ padding:8px 6px; border-bottom:1px solid var(--line); text-align:center; }
+  table.season th:first-child, table.season td:first-child, table.season th:nth-child(2), table.season td:nth-child(2){ text-align:left; }
+  table.season td.pts{ font-weight:900; color:var(--pitch); font-size:16px; }
   /* ---------- LIVE (Firebase) ---------- */
   #fbLiveCard .rules-body label.field{ margin-top:10px; }
   #fbLiveCard .rules-body input{ width:100%; box-sizing:border-box; }
-  #fbLiveCard .fb-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-  #fbLiveCard .fb-row .btn{ flex:1 1 180px; }
-  #fbLiveCard .fb-status{ margin-top:12px; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.07); font-size:13.5px; line-height:1.45; }
-  #fbLiveCard .fb-status.on{ background:rgba(34,160,80,0.14); }
-  #fbLiveCard .fb-status.err{ background:rgba(193,68,59,0.14); }
+  #fbLiveCard .fb-row, #backupCard .fb-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  #fbLiveCard .fb-row .btn, #backupCard .fb-row .btn{ flex:1 1 180px; }
+  #fbLiveCard .fb-status, #backupCard .fb-status{ margin-top:12px; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.07); font-size:13.5px; line-height:1.45; }
+  #fbLiveCard .fb-status.on, #backupCard .fb-status.on{ background:rgba(34,160,80,0.14); }
+  #fbLiveCard .fb-status.err, #backupCard .fb-status.err{ background:rgba(193,68,59,0.14); }
   #fbLiveCard .fb-link{ word-break:break-all; font-family:var(--mono); font-size:12px; margin-top:6px; }
   .fb-viewer-bar{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
   .fb-dot{ display:inline-block; width:9px; height:9px; border-radius:50%; background:#2fbf5a; box-shadow:0 0 8px #2fbf5a; margin-right:6px; vertical-align:middle; }
@@ -135,6 +203,27 @@
   .leaderboard-card .player-name.pair-name{ font-size:15px; padding:5px 12px; }
   .leaderboard-card .player-name.pair-out{ color: rgba(255,255,255,0.55); background: rgba(0,0,0,0.12); text-shadow:none; }
   .mp-row{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+  .mr-tools{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 4px; }
+  .mr-turn{ border:1px solid var(--line); border-radius:14px; padding:10px 10px 8px; margin-top:12px; background:rgba(255,255,255,0.55); }
+  .mr-head{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .mr-head b{ font-size:15px; color:var(--pitch); }
+  .mr-head .mr-count{ flex:1; font-size:12.5px; color:var(--ink-soft); font-weight:600; }
+  .mr-icon{ background:none; border:0; cursor:pointer; font-size:16px; padding:4px 6px; border-radius:8px; color:var(--ink-soft); }
+  .mr-icon:hover{ background:rgba(20,41,74,0.08); }
+  .mr-match{ display:grid; grid-template-columns: 22px 1fr auto 1fr 28px; gap:6px; align-items:center; padding:6px 0; border-top:1px dashed var(--line); }
+  .mr-head + .mr-match{ border-top:0; }
+  .mr-num{ font-size:12px; font-weight:800; color:var(--ink-soft); text-align:center; }
+  .mr-team{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+  .mr-team select{ width:100%; min-width:0; padding:7px 8px; font-size:14px; }
+  .mr-team select.mr-p{ border-left:4px solid #1c5fe0; }
+  .mr-team select.mr-a{ border-left:4px solid #e02a18; }
+  .mr-team select.mr-dup{ background:#fff4d6; }
+  .mr-team select.mr-bad{ background:#ffe1dd; }
+  .mr-vs{ font-size:12px; font-weight:900; color:var(--ink-soft); }
+  .mr-match.mr-scored{ box-shadow: inset 3px 0 0 #22a050; }
+  .mr-note{ font-size:12.5px; line-height:1.4; margin-top:6px; color:var(--ink-soft); }
+  .mr-note.warn{ color:#8a5a00; }
+  .mr-note.err{ color:#c1443b; font-weight:700; }
   .mp-keeper{ flex:0 0 38%; font-weight:700; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .mp-row select{ flex:1; min-width:0; }
   .mp-row.mp-empty .mp-keeper{ opacity:.6; }
@@ -808,6 +897,7 @@
             <input type="text" id="newKeeper" placeholder="Nome portiere">
             <button class="btn btn-ghost btn-sm" id="addKeeperBtn">+ Aggiungi</button>
           </div>
+          <div class="fav-wrap" id="favKeepersWrap"><div class="fav-title">⭐ Portieri abituali (tocca per aggiungere)</div><div class="fav-list" id="favKeepers"></div></div>
         </div>
         <div class="roster-col">
           <h3>Attaccanti</h3>
@@ -816,8 +906,19 @@
             <input type="text" id="newAttacker" placeholder="Nome attaccante">
             <button class="btn btn-ghost btn-sm" id="addAttackerBtn">+ Aggiungi</button>
           </div>
+          <div class="fav-wrap" id="favAttackersWrap"><div class="fav-title">⭐ Attaccanti abituali (tocca per aggiungere)</div><div class="fav-list" id="favAttackers"></div></div>
         </div>
       </div>
+      <details class="paste-box" id="pasteBox">
+        <summary>📋 Incolla una lista di nomi</summary>
+        <p class="paste-help">Copia il messaggio di WhatsApp con le iscrizioni e incollalo qui. Se contiene le intestazioni <b>Portieri</b> e <b>Attaccanti</b>, premi <b>📥 Aggiungi tutto</b>: l'app divide i nomi da sola. Altrimenti incolla un ruolo alla volta e usa i pulsanti sotto. Numeri, trattini e asterischi all'inizio vengono tolti, i doppioni saltati.</p>
+        <textarea id="pasteNames" rows="6" placeholder="Mario&#10;Luca&#10;Giulia"></textarea>
+        <button class="btn btn-primary btn-block" type="button" id="pasteAllBtn" style="margin-top:10px;">📥 Aggiungi tutto (Portieri e Attaccanti)</button>
+        <div class="fb-row">
+          <button class="btn btn-primary" type="button" id="pasteKeepersBtn">+ Aggiungi come portieri</button>
+          <button class="btn btn-primary" type="button" id="pasteAttackersBtn">+ Aggiungi come attaccanti</button>
+        </div>
+      </details>
     </div>
 
     <div class="card" id="cardMatchesPerPlayer">
@@ -828,9 +929,28 @@
         <option value="fixed">📌 Fisso (coppie sorteggiate, uguali per tutto il torneo)</option>
         <option value="manual">🤝 Coppie fisse scelte (le formi tu)</option>
       </select>
+      <label class="field" for="tablesCount" style="margin-top:12px;">🎯 Biliardini disponibili</label>
+      <input type="number" id="tablesCount" min="1" max="12" value="2">
+      <div class="draw-summary" style="margin-top:4px;">L'app assegna le partite ai biliardini (senza far giocare nessuno su due tavoli e facendo riposare chi ha appena giocato) e le mostra nel calendario e in Modalità TV.</div>
       <div id="matchesPerPlayerWrap">
-        <label class="field" for="matchesPerPlayer" style="margin-top:12px;">Partite a persona nel girone</label>
-        <input type="number" id="matchesPerPlayer" min="1" max="20" value="5">
+        <label class="field" for="roundsSource" style="margin-top:12px;">Chi forma le giornate</label>
+        <select id="roundsSource">
+          <option value="auto">🎲 Le sorteggia l'app</option>
+          <option value="manual">✍️ Le inserisco io (sorteggio già fatto)</option>
+        </select>
+        <div id="autoRoundsWrap">
+          <label class="field" for="matchesPerPlayer" style="margin-top:12px;">Partite a persona nel girone</label>
+          <input type="number" id="matchesPerPlayer" min="1" max="20" value="5">
+        </div>
+        <div id="manualRoundsWrap" style="display:none; margin-top:12px;">
+          <div class="draw-summary">Per ogni giornata scegli chi gioca con chi, come nel sorteggio già fatto. Chi non compare in una giornata riposa. Se un giocatore compare <b>due volte</b> nella stessa giornata, la seconda volta fa da <b>Talpa</b> (non fa punteggio in quella partita). Puoi correggere tutto anche a torneo iniziato: i risultati già inseriti restano.</div>
+          <div class="mr-tools">
+            <button class="btn btn-ghost btn-sm" type="button" id="mrFromCurrentBtn" style="display:none;">📋 Parti dal calendario attuale</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="mrClearBtn">🧹 Svuota</button>
+          </div>
+          <div id="manualRoundsList"></div>
+          <button class="btn btn-ghost btn-block" type="button" id="mrAddTurnBtn" style="margin-top:8px;">➕ Aggiungi giornata</button>
+        </div>
       </div>
       <div id="groupCountWrap" style="display:none; margin-top:12px;">
         <label class="field" for="manualGroupCount">Numero di gironi (vuoto = automatico)</label>
@@ -910,6 +1030,8 @@
       <button class="btn btn-whatsapp" id="shareWhatsAppBtn" type="button">📤 Condividi su WhatsApp</button>
       <button class="btn btn-live" id="liveSyncToggleBtn" type="button" style="display:none">🔴 Live attivo · Disattiva</button>
       <button class="btn btn-primary" id="tvModeBtn" type="button">📺 Modalità TV</button>
+      <button class="btn btn-ghost btn-ghost-onpitch" id="undoBtn" type="button" disabled>↩️ Annulla ultima modifica</button>
+      <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
       <button class="btn btn-electric" id="resetTournamentBtn">Nuovo torneo</button>
     </div>
@@ -921,14 +1043,59 @@
       </div>
       <div class="tv-viewport" id="tvViewport"><div class="tv-stage" id="tvStage"></div></div>
       <div class="tv-foot"><span id="tvPageInfo"></span><span>Aggiornamento automatico</span></div>
+      <div class="tv-qr" id="tvQr" style="display:none;"><div class="tv-qr-label">📱 Segui la diretta</div><canvas id="tvQrCanvas"></canvas><div class="tv-qr-sub">inquadra con la fotocamera</div></div>
       <button type="button" class="tv-exit" id="tvExitBtn" title="Esci (Esc)">✕</button>
+    </div>
+
+    <div class="card rules-card" id="lateCard" style="display:none;">
+      <details id="lateDetails">
+        <summary>➕ Coppia arrivata in ritardo</summary>
+        <div class="rules-body">
+          <p>Aggiungi una coppia a un girone già sorteggiato: gioca contro tutte le coppie di quel girone (le sue partite si aggiungono al calendario). Possibile finché la fase finale non è stata creata.</p>
+          <label class="field" for="lateKeeper">Portiere</label>
+          <input type="text" id="lateKeeper" list="lateKeeperList" placeholder="Nome del portiere"><datalist id="lateKeeperList"></datalist>
+          <label class="field" for="lateAttacker">Attaccante</label>
+          <input type="text" id="lateAttacker" list="lateAttackerList" placeholder="Nome dell'attaccante"><datalist id="lateAttackerList"></datalist>
+          <label class="field" for="lateGroup">Girone</label>
+          <select id="lateGroup"></select>
+          <div class="fb-row"><button class="btn btn-primary" id="lateAddBtn" type="button">➕ Aggiungi al girone</button></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card rules-card" id="retireCard" style="display:none;">
+      <details id="retireDetails">
+        <summary>🚫 Ritiro di una coppia a torneo in corso</summary>
+        <div class="rules-body">
+          <p>Se una coppia se ne va o si fa male: le sue partite ancora da giocare vengono date <b>vinte 7-0 a tavolino</b> agli avversari (anche nella fase finale) e la coppia non entra nella fase finale. Il ritiro si può annullare.</p>
+          <label class="field" for="retireSelect">Coppia da ritirare</label>
+          <select id="retireSelect"></select>
+          <div class="fb-row"><button class="btn btn-electric" id="retireBtn" type="button">🚫 Ritira la coppia</button></div>
+          <div id="retireList"></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card rules-card" id="backupCard">
+      <details id="backupDetails">
+        <summary>💾 Backup dei dati (esporta / importa)</summary>
+        <div class="rules-body">
+          <p>I tuoi dati (iscritti, torneo in corso, storico e impostazioni) sono salvati solo in questo browser. Con <b>Esporta</b> scarichi un file di backup da conservare (ad es. su iCloud o Google Drive); con <b>Importa</b> lo ricarichi su questo o su un altro computer.</p>
+          <div class="fb-row">
+            <button class="btn btn-primary" id="exportDataBtn" type="button">💾 Esporta dati</button>
+            <button class="btn btn-ghost" id="importDataBtn" type="button">📂 Importa dati</button>
+            <input type="file" id="importDataFile" accept=".json,application/json" style="display:none">
+          </div>
+          <div class="fb-status" id="backupStatus">Consiglio: esporta i dati dopo ogni torneo.</div>
+        </div>
+      </details>
     </div>
 
     <div class="card rules-card" id="fbLiveCard">
       <details id="fbLiveDetails">
         <summary>📡 Live per i giocatori (dal telefono, senza registrarsi)</summary>
         <div class="rules-body">
-          <p>Con la Live ogni risultato che inserisci viene inviato online e i giocatori lo vedono aggiornarsi da soli aprendo un link. Serve il tuo spazio gratuito su <b>Firebase</b> (vedi la guida nel file LEGGIMI) e internet sul Mac mentre giochi.</p>
+          <p>Con la Live ogni risultato che inserisci viene inviato online e i giocatori lo vedono aggiornarsi da soli aprendo un link. Serve il tuo spazio gratuito su <b>Firebase</b> (vedi il file GUIDA-LIVE) e internet sul Mac mentre giochi.</p>
           <div id="fbSetup">
             <label class="field" for="fbDbUrl">Indirizzo del database Firebase</label>
             <input type="text" id="fbDbUrl" placeholder="https://nome-progetto-default-rtdb.europe-west1.firebasedatabase.app" autocomplete="off">
@@ -990,6 +1157,7 @@
     <div class="segmented">
       <button data-seg="tornei" class="active">Tornei salvati</button>
       <button data-seg="manuali">Partite manuali</button>
+      <button data-seg="stagione">🏆 Stagione</button>
     </div>
     <div class="card" id="histTorneiFilterBar">
       <h2>📅 Filtra per data</h2>
@@ -1007,6 +1175,7 @@
     </div>
     <div id="histTornei"></div>
     <div id="histManuali" style="display:none;"></div>
+    <div id="histStagione" style="display:none;"></div>
   </section>
 
   <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a></div>
@@ -1031,6 +1200,1269 @@
   </div>
 </div>
 </div><script>
+// QR code: libreria di Kazuhiko Arase (licenza MIT, http://www.d-project.com/), impacchettata per uso nel browser.
+var GQR = (function(){
+  var __m = {};
+  function __req(n){ return __m[n.replace("./","")]; }
+  __m["QRMode"] = (function(){ var module = { exports: {} };
+module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+  return module.exports; })();
+  __m["QRErrorCorrectLevel"] = (function(){ var module = { exports: {} };
+module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+  return module.exports; })();
+  __m["QRMaskPattern"] = (function(){ var module = { exports: {} };
+module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+  return module.exports; })();
+  __m["QRMath"] = (function(){ var module = { exports: {} };
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+  return module.exports; })();
+  __m["QRPolynomial"] = (function(){ var module = { exports: {} };
+var QRMath = __req('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+  return module.exports; })();
+  __m["QRRSBlock"] = (function(){ var module = { exports: {} };
+var QRErrorCorrectLevel = __req('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+  return module.exports; })();
+  __m["QRBitBuffer"] = (function(){ var module = { exports: {} };
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+  return module.exports; })();
+  __m["QR8bitByte"] = (function(){ var module = { exports: {} };
+var QRMode = __req('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+  return module.exports; })();
+  __m["QRUtil"] = (function(){ var module = { exports: {} };
+var QRMode = __req('./QRMode');
+var QRPolynomial = __req('./QRPolynomial');
+var QRMath = __req('./QRMath');
+var QRMaskPattern = __req('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+  return module.exports; })();
+  __m["index"] = (function(){ var module = { exports: {} };
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = __req('./QR8bitByte');
+var QRUtil = __req('./QRUtil');
+var QRPolynomial = __req('./QRPolynomial');
+var QRRSBlock = __req('./QRRSBlock');
+var QRBitBuffer = __req('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+  return module.exports; })();
+  return { QRCode: __m["index"], L: __m["QRErrorCorrectLevel"].L, M: __m["QRErrorCorrectLevel"].M };
+})();
+</script>
+<script>
 (function(){
   "use strict";
 
@@ -1407,7 +2839,12 @@
     var benched = players.keepers.concat(players.attackers).filter(function(p){ return !paired[p.id]; });
     return { teams: teams, benched: benched };
   }
-  function persistCurrent(){ safeSet(LS_CURRENT, current); scheduleLiveSync(); }
+  function persistCurrent(){
+    try{ if(typeof beforePersistHooks !== "undefined") beforePersistHooks.forEach(function(f){ f(); }); }catch(e){ console.error(e); }
+    safeSet(LS_CURRENT, current); scheduleLiveSync();
+    try{ if(typeof afterPersistHooks !== "undefined") afterPersistHooks.forEach(function(f){ f(); }); }catch(e){ console.error(e); }
+  }
+  var beforePersistHooks = [], afterPersistHooks = [];
   function persistHistory(){ safeSet(LS_HISTORY, history); }
   function persistManual(){ safeSet(LS_MANUAL, manualMatches); }
 
@@ -1450,6 +2887,8 @@
       document.getElementById("histTornei").style.display = btn.dataset.seg === "tornei" ? "" : "none";
       document.getElementById("histTorneiFilterBar").style.display = btn.dataset.seg === "tornei" ? "" : "none";
       document.getElementById("histManuali").style.display = btn.dataset.seg === "manuali" ? "" : "none";
+      document.getElementById("histStagione").style.display = btn.dataset.seg === "stagione" ? "" : "none";
+      if(btn.dataset.seg === "stagione") renderSeason();
     });
   });
 
@@ -2107,6 +3546,240 @@
     return false;
   }
 
+  // ---------- GIORNATE INSERITE A MANO (sorteggio già fatto) ----------
+  // Nella modalità Giallo l'organizzatore può inserire lui ogni giornata
+  // (per esempio quando subentra a un sorteggio fatto su carta o da altri).
+  // La bozza resta salvata; "Crea/Aggiorna calendario" la trasforma nelle
+  // giornate del torneo mantenendo i risultati già inseriti (per posizione).
+  var LS_MROUNDS = "tg_manual_rounds_v1";
+  var mrDraft = safeGet(LS_MROUNDS, null) || { source: "auto", rounds: [] };
+  if(!mrDraft.rounds) mrDraft.rounds = [];
+  function mrPersist(){ safeSet(LS_MROUNDS, mrDraft); }
+  function mrIsManual(){ return document.getElementById("drawMode").value === "rotation" && mrDraft.source === "manual"; }
+  function mrPlayerById(id, role){
+    var list = role === "P" ? players.keepers : players.attackers;
+    for(var i = 0; i < list.length; i++) if(list[i].id === id) return list[i];
+    return null;
+  }
+  function mrDefaultMatches(){ return Math.max(1, Math.floor(Math.min(players.keepers.length, players.attackers.length) / 2)); }
+  function mrEmptyMatch(){ return { kA: "", aA: "", kB: "", aB: "" }; }
+  function mrNewTurn(){ var t = { matches: [] }; for(var i = 0; i < mrDefaultMatches(); i++) t.matches.push(mrEmptyMatch()); return t; }
+  var MR_SLOTS = [["kA","P"],["aA","A"],["kB","P"],["aB","A"]];
+  // Analizza una giornata: partite complete, doppioni (Talpa) ed errori.
+  function mrAnalyzeTurn(t){
+    var seen = {}, res = { complete: 0, filled: 0, matchInfo: [], errors: [], notes: [], used: {} };
+    t.matches.forEach(function(m, mi){
+      var info = { talpa: null, dup: {}, bad: {}, complete: false, empty: false };
+      var vals = MR_SLOTS.map(function(sl){ var id = m[sl[0]]; return id && mrPlayerById(id, sl[1]) ? id : ""; });
+      var n = vals.filter(Boolean).length;
+      info.complete = n === 4; info.empty = n === 0;
+      if(info.complete) res.complete++;
+      if(!info.empty) res.filled++;
+      if(n > 0 && n < 4) res.errors.push("Partita " + (mi + 1) + ": mancano " + (4 - n) + " giocatori.");
+      if(vals[0] && vals[0] === vals[2]){ info.bad.kA = info.bad.kB = 1; res.errors.push("Partita " + (mi + 1) + ": lo stesso portiere è in entrambe le squadre."); }
+      if(vals[1] && vals[1] === vals[3]){ info.bad.aA = info.bad.aB = 1; res.errors.push("Partita " + (mi + 1) + ": lo stesso attaccante è in entrambe le squadre."); }
+      var reps = [];
+      MR_SLOTS.forEach(function(sl, si){
+        var id = vals[si]; if(!id) return;
+        res.used[id] = (res.used[id] || 0) + 1;
+        if(seen[id]){ reps.push(id); info.dup[sl[0]] = 1; }
+      });
+      MR_SLOTS.forEach(function(sl, si){ if(vals[si]) seen[vals[si]] = (seen[vals[si]] || 0) + 1; });
+      if(reps.length > 1){ res.errors.push("Partita " + (mi + 1) + ": più di un giocatore sta già giocando in questa giornata (al massimo una Talpa per partita)."); MR_SLOTS.forEach(function(sl){ if(info.dup[sl[0]]) info.bad[sl[0]] = 1; }); }
+      else if(reps.length === 1){
+        info.talpa = reps[0];
+        var pl = mrPlayerById(reps[0], "P") || mrPlayerById(reps[0], "A");
+        res.notes.push("Partita " + (mi + 1) + ": " + (pl ? pl.name : "?") + " gioca di nuovo e fa da Talpa (non fa punteggio in questa partita).");
+      }
+      res.matchInfo.push(info);
+    });
+    Object.keys(res.used).forEach(function(id){
+      if(res.used[id] > 2){ var pl = mrPlayerById(id, "P") || mrPlayerById(id, "A"); res.errors.push((pl ? pl.name : "?") + " compare " + res.used[id] + " volte nella stessa giornata."); }
+    });
+    return res;
+  }
+  function mrIsScored(m){ return !!(m && m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined); }
+  // Il calendario attuale è "collegato" alla bozza (le posizioni coincidono)?
+  function mrLinked(){ return !!(current && !current.fixedTeams && current.rounds && current.rounds.length && (current.manualRounds || mrDraft.loadedFrom === current.id)); }
+  function mrPosMap(){
+    var map = {};
+    if(!mrLinked()) return map;
+    current.rounds.forEach(function(r, ri){ r.matches.forEach(function(m, mi){ map[m.mrPos || (ri + ":" + mi)] = m; }); });
+    return map;
+  }
+  var mrPosCache = {};
+  function mrScoredAt(ti, mi){ return mrIsScored(mrPosCache[ti + ":" + mi]); }
+  function mrRender(){
+    var box = document.getElementById("manualRoundsList"); if(!box) return;
+    var html = ""; mrPosCache = mrPosMap();
+    mrDraft.rounds.forEach(function(t, ti){
+      var an = mrAnalyzeTurn(t);
+      html += '<div class="mr-turn" data-t="' + ti + '"><div class="mr-head"><b>Giornata ' + (ti + 1) + '</b><span class="mr-count">' + an.complete + ' ' + (an.complete === 1 ? 'partita pronta' : 'partite pronte') + '</span>' +
+        '<button type="button" class="mr-icon" data-act="delTurn" title="Elimina giornata">🗑️</button></div>';
+      t.matches.forEach(function(m, mi){
+        var info = an.matchInfo[mi];
+        function sel(slot, role){
+          var list = role === "P" ? players.keepers : players.attackers;
+          var v = m[slot] && mrPlayerById(m[slot], role) ? m[slot] : "";
+          var cls = "mr-" + (role === "P" ? "p" : "a") + (info.bad[slot] ? " mr-bad" : (info.dup[slot] ? " mr-dup" : ""));
+          var o = '<option value="">' + (role === "P" ? "Portiere…" : "Attaccante…") + '</option>';
+          list.forEach(function(pl){
+            var elsewhere = (an.used[pl.id] || 0) - (v === pl.id ? 1 : 0) > 0;
+            o += '<option value="' + esc(pl.id) + '"' + (v === pl.id ? " selected" : "") + '>' + esc(pl.name) + (elsewhere && v !== pl.id ? " · già in campo" : "") + '</option>';
+          });
+          return '<select class="' + cls + '" data-slot="' + slot + '" data-m="' + mi + '" aria-label="' + (role === "P" ? "Portiere" : "Attaccante") + '">' + o + '</select>';
+        }
+        html += '<div class="mr-match' + (mrScoredAt(ti, mi) ? ' mr-scored' : '') + '"><span class="mr-num">' + (mi + 1) + '</span>' +
+          '<div class="mr-team">' + sel("kA", "P") + sel("aA", "A") + '</div><span class="mr-vs">vs</span>' +
+          '<div class="mr-team">' + sel("kB", "P") + sel("aB", "A") + '</div>' +
+          '<button type="button" class="mr-icon" data-act="delMatch" data-m="' + mi + '" title="Elimina partita">✕</button></div>';
+      });
+      html += '<button type="button" class="btn btn-ghost btn-sm" data-act="addMatch" style="margin-top:6px;">➕ Partita</button>';
+      var rest = players.keepers.concat(players.attackers).filter(function(pl){ return !an.used[pl.id]; }).map(function(pl){ return pl.name; });
+      if(an.filled && rest.length) html += '<div class="mr-note">😴 Riposano: ' + esc(rest.join(", ")) + '</div>';
+      an.notes.forEach(function(n){ html += '<div class="mr-note warn">🕳️ ' + esc(n) + '</div>'; });
+      an.errors.forEach(function(n){ html += '<div class="mr-note err">⚠️ ' + esc(n) + '</div>'; });
+      html += '</div>';
+    });
+    if(!mrDraft.rounds.length) html = '<div class="empty-note" style="margin-top:10px;">Nessuna giornata: premi "➕ Aggiungi giornata".</div>';
+    box.innerHTML = html;
+  }
+  function mrRefreshUI(){
+    var manual = mrIsManual();
+    var src = document.getElementById("roundsSource"); if(src) src.value = mrDraft.source;
+    document.getElementById("autoRoundsWrap").style.display = manual ? "none" : "";
+    document.getElementById("manualRoundsWrap").style.display = manual ? "" : "none";
+    var fromBtn = document.getElementById("mrFromCurrentBtn");
+    fromBtn.style.display = (current && current.rounds && current.rounds.length && !current.fixedTeams) ? "" : "none";
+    fromBtn.textContent = mrLinked() ? "↩️ Ricarica il calendario attuale" : "📋 Parti dal calendario attuale";
+    var btn = document.getElementById("drawBtn");
+    if(btn){
+      var t = !manual ? "🎲 Sorteggia partite" : (mrLinked() ? "🔄 Aggiorna calendario (i risultati restano)" : "✍️ Crea calendario");
+      if(btn.textContent !== t) btn.textContent = t;
+    }
+    if(manual){
+      if(!mrDraft.rounds.length && current && current.manualRounds) mrLoadFromCurrent();
+      if(!mrDraft.rounds.length){ mrDraft.rounds.push(mrNewTurn()); mrPersist(); }
+      mrRender();
+    }
+  }
+  function mrLoadFromCurrent(){
+    if(!current || !current.rounds) return;
+    mrDraft.rounds = current.rounds.map(function(r, ri){
+      return { matches: r.matches.map(function(m, mi){ m.mrPos = ri + ":" + mi; return { kA: m.teamA.keeper.id, aA: m.teamA.attacker.id, kB: m.teamB.keeper.id, aB: m.teamB.attacker.id }; }) };
+    });
+    mrDraft.loadedFrom = current.id;
+    safeSet(LS_CURRENT, current);
+    mrPersist();
+  }
+  // Trasforma la bozza nelle giornate del torneo. Restituisce null se ci sono errori.
+  function mrBuildRounds(){
+    var out = [], firstErr = null;
+    mrDraft.rounds.forEach(function(t, ti){
+      var an = mrAnalyzeTurn(t);
+      if(an.errors.length && !firstErr) firstErr = "Giornata " + (ti + 1) + " · " + an.errors[0];
+    });
+    if(firstErr) return { error: firstErr };
+    mrDraft.rounds.forEach(function(t, ti){
+      var an = mrAnalyzeTurn(t), matches = [];
+      t.matches.forEach(function(m, mi){
+        if(!an.matchInfo[mi].complete) return;
+        var mm = { id: uid(), teamA: { keeper: mrPlayerById(m.kA, "P"), attacker: mrPlayerById(m.aA, "A") }, teamB: { keeper: mrPlayerById(m.kB, "P"), attacker: mrPlayerById(m.aB, "A") }, scoreA: null, scoreB: null, mrPos: ti + ":" + mi };
+        if(an.matchInfo[mi].talpa) mm.talpaPlayerId = an.matchInfo[mi].talpa;
+        matches.push(mm);
+      });
+      if(!matches.length) return;
+      var byes = players.keepers.concat(players.attackers).filter(function(pl){ return !an.used[pl.id]; });
+      out.push({ matches: matches, byes: byes, recovery: false, violations: 0 });
+    });
+    if(!out.length) return { error: "Inserisci almeno una partita completa (2 portieri e 2 attaccanti)." };
+    return { rounds: out };
+  }
+  // Riporta risultati e dati di gioco dalle giornate attuali alle nuove (stessa giornata, stessa posizione).
+  function mrCarryOver(newRounds){
+    var old = mrPosMap(), lost = 0, byPos = {};
+    newRounds.forEach(function(r){ r.matches.forEach(function(m){ byPos[m.mrPos] = m; }); });
+    Object.keys(old).forEach(function(pos){
+      var m = old[pos], target = byPos[pos];
+      if(!target){ if(mrIsScored(m)) lost++; return; }
+      Object.keys(m).forEach(function(k){ if(k !== "teamA" && k !== "teamB" && k !== "talpaPlayerId" && k !== "mrPos") target[k] = m[k]; });
+    });
+    return lost;
+  }
+  function mrLostCount(newRounds){
+    var old = mrPosMap(), byPos = {}, lost = 0;
+    newRounds.forEach(function(r){ r.matches.forEach(function(m){ byPos[m.mrPos] = 1; }); });
+    Object.keys(old).forEach(function(pos){ if(!byPos[pos] && mrIsScored(old[pos])) lost++; });
+    return lost;
+  }
+  // Aggiorna il calendario del torneo in corso senza perdere nome, risultati, fase finale.
+  function mrApplyToCurrent(){
+    var b = mrBuildRounds();
+    if(b.error){ toast("⚠️ " + b.error); mrScrollToFirstError(); return; }
+    var lostCount = mrLostCount(b.rounds);
+    function go(){
+      mrCarryOver(b.rounds);
+      current.rounds = b.rounds; current.onTable = {}; current.manualRounds = true;
+      persistCurrent(); renderRounds(); renderStandings();
+      if(current.playoffs) renderPlayoffBracket();
+      mrRefreshUI();
+      toast("🔄 Calendario aggiornato: i risultati già inseriti sono rimasti.");
+    }
+    if(lostCount) showConfirm("Hai tolto " + lostCount + (lostCount === 1 ? " partita che aveva già un risultato: quel risultato verrà cancellato." : " partite che avevano già un risultato: quei risultati verranno cancellati.") + " Continuare?", go);
+    else go();
+  }
+  function mrScrollToFirstError(){
+    var el = document.querySelector("#manualRoundsList .mr-note.err");
+    if(el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  (function(){
+    var src = document.getElementById("roundsSource");
+    src.value = mrDraft.source;
+    src.addEventListener("change", function(){ mrDraft.source = this.value; mrPersist(); mrRefreshUI(); });
+    var list = document.getElementById("manualRoundsList");
+    list.addEventListener("change", function(e){
+      var t = e.target; if(!t.dataset || !t.dataset.slot) return;
+      var ti = +t.closest(".mr-turn").dataset.t, mi = +t.dataset.m;
+      mrDraft.rounds[ti].matches[mi][t.dataset.slot] = t.value;
+      mrPersist(); mrRender();
+    });
+    list.addEventListener("click", function(e){
+      var b = e.target.closest("[data-act]"); if(!b) return;
+      var ti = +b.closest(".mr-turn").dataset.t, turn = mrDraft.rounds[ti];
+      var act = b.dataset.act;
+      if(act === "addMatch"){ turn.matches.push(mrEmptyMatch()); }
+      else if(act === "delMatch"){
+        var mi = +b.dataset.m, m = turn.matches[mi];
+        var filled = m.kA || m.aA || m.kB || m.aB;
+        if(filled && !confirm("Eliminare la partita " + (mi + 1) + " della giornata " + (ti + 1) + "?")) return;
+        turn.matches.splice(mi, 1);
+      }
+      else if(act === "delTurn"){
+        var any = turn.matches.some(function(m){ return m.kA || m.aA || m.kB || m.aB; });
+        if(any && !confirm("Eliminare tutta la giornata " + (ti + 1) + "?")) return;
+        mrDraft.rounds.splice(ti, 1);
+      }
+      mrPersist(); mrRender();
+    });
+    document.getElementById("mrAddTurnBtn").addEventListener("click", function(){
+      mrDraft.rounds.push(mrNewTurn()); mrPersist(); mrRender();
+      var turns = document.querySelectorAll("#manualRoundsList .mr-turn");
+      if(turns.length) turns[turns.length - 1].scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    document.getElementById("mrClearBtn").addEventListener("click", function(){
+      if(!confirm("Svuotare tutte le giornate inserite? (Il calendario già creato non cambia finché non premi Aggiorna.)")) return;
+      mrDraft.rounds = [mrNewTurn()]; mrPersist(); mrRender();
+    });
+    document.getElementById("mrFromCurrentBtn").addEventListener("click", function(){
+      var go = function(){ mrLoadFromCurrent(); mrRefreshUI(); toast("Giornate caricate dal calendario attuale: correggi quello che serve."); };
+      var filled = mrDraft.rounds.some(function(t){ return t.matches.some(function(m){ return m.kA || m.aA || m.kB || m.aB; }); });
+      if(filled && !confirm("Sostituire le giornate che hai inserito con quelle del calendario attuale?")) return;
+      go();
+    });
+  })();
+
+  (function(){ var _rrMr = renderRoster; renderRoster = function(){ _rrMr.apply(this, arguments); if(mrIsManual()) mrRender(); }; })();
+
   // Mostra il campo "giornate" solo in modalità a rotazione: nel sorteggio
   // fisso il numero di giornate è deciso automaticamente dal girone/gironi.
   function updateDrawModeUI(){
@@ -2115,6 +3788,7 @@
     document.getElementById("manualPairsWrap").style.display = modeVal === "manual" ? "" : "none";
     if(modeVal === "manual") renderManualPairs();
     document.getElementById("matchesPerPlayerWrap").style.display = isFixed ? "none" : "";
+    mrRefreshUI();
     document.getElementById("fixedModeNote").style.display = isFixed ? "" : "none";
     document.getElementById("groupCountWrap").style.display = isFixed ? "" : "none";
   }
@@ -2140,6 +3814,8 @@
     var isManual = mode === "manual";
     var isFixed = mode === "fixed" || isManual;
     var rounds, fixedTeamsList = null, benchedPlayers = [], groupsList = null;
+    var manualRounds = !isFixed && mrIsManual();
+    if(manualRounds && mrLinked()){ mrApplyToCurrent(); return; }
     if(isFixed){
       var built = isManual ? buildManualTeams() : buildFixedTeams(players.keepers, players.attackers);
       if(built.teams.length < 2){
@@ -2179,6 +3855,10 @@
       });
       rounds = [];
       groupsList.forEach(function(g){ rounds = rounds.concat(g.rounds); });
+    } else if(manualRounds){
+      var mb = mrBuildRounds();
+      if(mb.error){ toast("⚠️ " + mb.error); mrScrollToFirstError(); return; }
+      rounds = mb.rounds;
     } else {
       rounds = generateDraw(players.keepers, players.attackers, matchesPerPlayer);
     }
@@ -2191,6 +3871,7 @@
       matchesPerPlayer: matchesPerPlayer,
       fixedTeams: isFixed,
       drawMode: mode,
+      manualRounds: manualRounds,
       teams: fixedTeamsList,
       groups: groupsList,
       benched: benchedPlayers,
@@ -2207,8 +3888,9 @@
     if(isFixed && benchedPlayers.length){
       toast((isManual ? "Calendario creato! " : "Partite sorteggiate! ") + benchedPlayers.length + " giocatore/i restano senza coppia fissa in questo sorteggio.");
     } else {
-      toast("Partite sorteggiate!");
+      toast(manualRounds ? "✍️ Calendario creato con le tue giornate!" : "Partite sorteggiate!");
     }
+    mrRefreshUI();
   });
 
   // Azzera completamente lo stato del torneo (giocatori, sorteggio, classifiche,
@@ -2242,6 +3924,7 @@
     manualPairs = {};
     pairOpts = { mode: "random", assign: {}, seeds: {} };
     persistManualPairs();
+    mrDraft = { source: "auto", rounds: [] }; mrPersist();
     updateDrawModeUI();
     toast(toastMsg);
   }
@@ -2561,7 +4244,7 @@
     var pairs = [];
     for(var i=0;i<rows.length-1;i++){
       var a = rows[i], b = rows[i+1];
-      if(a.pt===b.pt && a.gf===b.gf && a.gs===b.gs){
+      if(a.pt===b.pt && a.gf===b.gf && a.gs===b.gs && a.pg > 0 && a.pg === b.pg){
         var h2h = headToHeadDiff(idFn(a), idFn(b), rounds);
         if(h2h===null || h2h===0){
           pairs.push({ idA: idFn(a), idB: idFn(b), nameA: nameFn(a), nameB: nameFn(b) });
@@ -2679,7 +4362,7 @@
     return teamRows.map(function(r, idx){
       var badge = rankBadgeHtml(idx);
       var qualified = idx < qualifyCount;
-      var label = '<span class="player-name pair-name ' + (qualified ? 'fascia-a' : 'pair-out') + '" title="Portiere - Attaccante">' + esc(r.team.keeper.name) + ' - ' + esc(r.team.attacker.name) + '</span>' + (r.team.headSeed ? ' <span title="Testa di serie">⭐</span>' : '');
+      var label = '<span class="player-name pair-name ' + (qualified ? 'fascia-a' : 'pair-out') + '" title="Portiere - Attaccante">' + esc(r.team.keeper.name) + ' - ' + esc(r.team.attacker.name) + '</span>' + (r.team.headSeed ? ' <span title="Testa di serie">⭐</span>' : '') + (isRetiredTeam(r.team) ? ' <span class="retired-tag">🚫 ritirata</span>' : '');
       var isTied = !!tied[r.team.keeper.id];
       var rowClasses = [idx < 3 ? 'rank-'+(idx+1) : '', qualified?'qualified':'', isTied?'tie-row':''].filter(Boolean).join(' ');
       return '<tr class="'+rowClasses+'"><td>' + badge + label + (isTied ? ' <span class="tie-badge" title="Parità totale con un\'altra coppia: nessuno scontro diretto disponibile per stabilire l\'ordine">⚠️</span>' : '') + '</td>' +
@@ -2837,7 +4520,7 @@
   }
   function computeQualifiers(){
     if(!current || !current.groups) return [];
-    var perGroupRanked = current.groups.map(computeTeamGroupStandings);
+    var perGroupRanked = current.groups.map(computeTeamGroupStandings).map(function(g){ return g.filter(function(r){ return !isRetiredTeam(r.team); }); });
     var qualifiers = [];
     for(var rank=0; rank<qualifyPerGroup(); rank++){
       var tier = [];
@@ -3131,7 +4814,17 @@
 
   // Righe di classifica dei gironi ordinate "a fasce di piazzamento" dalla
   // posizione from (compresa) a to (esclusa): prima tutte le 1ª, poi le 2ª...
+  (function(){
+    var _ctgs = computeTeamGroupStandings;
+    computeTeamGroupStandings = function(g){
+      var rows = _ctgs(g);
+      if(!current || !current.retired || !current.retired.length) return rows;
+      return rows.filter(function(r){ return !isRetiredTeam(r.team); }).concat(rows.filter(function(r){ return isRetiredTeam(r.team); }));
+    };
+  })();
+  function isRetiredTeam(t){ return !!(t && current && current.retired && current.retired.indexOf(t.keeper.id) !== -1); }
   function rankedByPlacement(perGroupRanked, from, to){
+    perGroupRanked = perGroupRanked.map(function(g){ return g.filter(function(r){ return !isRetiredTeam(r.team); }); });
     var out = [];
     for(var rank=from; rank<to; rank++){
       var tier = [];
@@ -4087,6 +5780,652 @@
   }
   initLiveMode();
 
+  // ---------- BILIARDINI E TURNI DI GIOCO ----------
+  // Assegna le partite ancora da giocare ai biliardini liberi: nessun
+  // giocatore su due tavoli insieme, precedenza a chi riposa da più tempo e
+  // a chi ha giocato meno; nel Giallo si rispetta l'ordine delle giornate.
+  // L'assegnazione è salvata nel torneo (current.onTable) così resta stabile
+  // e arriva uguale alla TV e ai giocatori della Live.
+  var LS_TABLES = "tg_tables_v1";
+  function tablesCount(){
+    var n = current && parseInt(current.tables, 10);
+    if(!(n > 0)) n = parseInt(safeGet(LS_TABLES, 2), 10) || 2;
+    return Math.max(1, Math.min(12, n));
+  }
+  function isScored(m){ return m && m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined; }
+  function legDone(l){ return l && l.scoreA !== null && l.scoreA !== undefined && l.scoreB !== null && l.scoreB !== undefined; }
+  function teamPlayers(t){ var out = []; if(t){ if(t.keeper && t.keeper.id) out.push(t.keeper.id); if(t.attacker && t.attacker.id) out.push(t.attacker.id); } return out; }
+  function pairLabel(t){ return t ? (t.keeper.name + " - " + t.attacker.name) : "?"; }
+  function forEachFasciaMatch(c, fn){
+    var po = c && c.playoffs; if(!po) return;
+    [["A", po.fasciaA], ["B", po.fasciaB]].forEach(function(fx){
+      var f = fx[1]; if(!f) return;
+      f.rounds.forEach(function(r, ri){ r.matches.forEach(function(m){ fn(m, f, fx[0], r, ri); }); });
+      if(f.third) fn(f.third, f, fx[0], { stage: "3°/4° posto" }, f.rounds.length);
+    });
+  }
+  // Elenco delle partite pronte da giocare, con priorità.
+  function pendingMatchList(c){
+    var list = [], seq = 0;
+    if(!c || !c.rounds) return list;
+    if(c.groups && c.groups.length){
+      c.groups.forEach(function(g, gi){
+        (g.rounds || []).forEach(function(r){ (r.matches || []).forEach(function(m){
+          if(isScored(m) || m.forfeit) return;
+          list.push({ id: m.id, a: m.teamA, b: m.teamB, tag: g.label.replace(/^Girone\s*/i, "Gir. "), prio: 0, seq: seq++ });
+        }); });
+      });
+    } else {
+      c.rounds.forEach(function(r, ri){ (r.matches || []).forEach(function(m){
+        if(isScored(m)) return;
+        list.push({ id: m.id, a: m.teamA, b: m.teamB, tag: r.recovery ? "Recupero" : "G" + (ri+1), prio: ri, seq: seq++ });
+      }); });
+    }
+    var po = c.playoffs;
+    forEachFasciaMatch(c, function(m, f, letter, r, ri){
+      if(m.voidSlot || m.bye || !m.teamA || !m.teamB) return;
+      var fTag = po.fasciaB ? letter + " · " : "";
+      if(f.type === "triangle"){
+        if(!legDone(m.legs[0])) list.push({ id: m.id, a: m.teamA, b: m.teamB, tag: fTag + "Triang.", prio: 50, seq: seq++ });
+        return;
+      }
+      if(playoffWinner(m)) return;
+      var w0 = legWinner(m.legs[0]), w1 = legWinner(m.legs[1]);
+      var st = String(r.stage || "").replace(" di finale", "").replace(" (con ripescaggio)", "").replace(" (le prime riposano)", "")
+        .replace("Primo turno", "1° turno").replace("Sedicesimi", "16esimi").replace("Semifinale", "Semi").replace("3°/4° posto", "3°/4°");
+      list.push({ id: m.id, a: m.teamA, b: m.teamB, tag: fTag + st, note: !w0 ? "andata" : (!w1 ? "ritorno" : "bella"), prio: 50 + ri, seq: seq++ });
+    });
+    // riposo e partite giocate
+    var last = {}, played = {};
+    function mark(t, at){ teamPlayers(t).forEach(function(id){ if(at && (!last[id] || at > last[id])) last[id] = at; played[id] = (played[id] || 0) + 1; }); }
+    c.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){ if(isScored(m)){ mark(m.teamA, m.playedAt); mark(m.teamB, m.playedAt); } }); });
+    forEachFasciaMatch(c, function(m){ if(m.lastAt){ mark(m.teamA, m.lastAt); mark(m.teamB, m.lastAt); } });
+    list.forEach(function(it){
+      var ids = teamPlayers(it.a).concat(teamPlayers(it.b));
+      it.players = ids;
+      it.lastAt = ids.reduce(function(mx, id){ return Math.max(mx, last[id] || 0); }, 0);
+      it.played = ids.reduce(function(sm, id){ return sm + (played[id] || 0); }, 0);
+    });
+    list.sort(function(x, y){
+      if(x.prio !== y.prio) return x.prio - y.prio;
+      if(x.lastAt !== y.lastAt) return x.lastAt - y.lastAt;      // chi riposa da più tempo
+      if(x.played !== y.played) return x.played - y.played;       // chi ha giocato meno
+      return x.seq - y.seq;
+    });
+    return list;
+  }
+  // Calcola chi è in campo (stabile) e chi deve prepararsi.
+  function computeTables(c){
+    var T = tablesCount();
+    var pending = pendingMatchList(c);
+    var byId = {}; pending.forEach(function(it){ byId[it.id] = it; });
+    var onTable = {}, busy = {}, used = {};
+    var prev = (c && c.onTable) || {};
+    Object.keys(prev).forEach(function(id){
+      var tn = prev[id];
+      if(byId[id] && tn >= 1 && tn <= T && !used[tn] && !byId[id].players.some(function(p){ return busy[p]; })){
+        onTable[id] = tn; used[tn] = true; byId[id].players.forEach(function(p){ busy[p] = true; });
+      }
+    });
+    for(var t = 1; t <= T; t++){
+      if(used[t]) continue;
+      for(var i = 0; i < pending.length; i++){
+        var it = pending[i];
+        if(onTable[it.id]) continue;
+        if(it.players.some(function(p){ return busy[p]; })) continue;
+        onTable[it.id] = t; used[t] = true; it.players.forEach(function(p){ busy[p] = true; });
+        break;
+      }
+    }
+    var prep = [], prepBusy = {};
+    pending.forEach(function(it){
+      if(prep.length >= T || onTable[it.id]) return;
+      if(it.players.some(function(p){ return busy[p] || prepBusy[p]; })) return;
+      prep.push(it.id); it.players.forEach(function(p){ prepBusy[p] = true; });
+    });
+    return { onTable: onTable, prep: prep, pending: pending, byId: byId };
+  }
+  // Prima di ogni salvataggio: orari delle partite giocate e tavoli aggiornati.
+  beforePersistHooks.push(function(){
+    if(!current || !current.rounds) return;
+    var now = Date.now();
+    current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){
+      if(isScored(m)){ if(!m.playedAt) m.playedAt = now; } else if(m.playedAt){ delete m.playedAt; }
+    }); });
+    forEachFasciaMatch(current, function(m){
+      var n = (m.legs || []).filter(legDone).length;
+      if(n !== (m._legsDone || 0)){ m._legsDone = n; m.lastAt = n ? now : null; }
+    });
+    current.onTable = computeTables(current).onTable;
+  });
+  function refreshTableBadges(){
+    document.querySelectorAll(".table-badge").forEach(function(el){ el.remove(); });
+    document.querySelectorAll(".match-card.on-table").forEach(function(el){ el.classList.remove("on-table"); });
+    if(!current || !current.rounds) return;
+    var info = computeTables(current);
+    function cardOf(id){
+      var inp = document.querySelector('#roundsContainer .score-input[data-match="' + id + '"], #playoffBracket .score-input[data-po="' + id + '"]');
+      return inp ? inp.closest(".match-card") : null;
+    }
+    Object.keys(current.onTable || {}).forEach(function(id){
+      var card = cardOf(id); if(!card) return;
+      card.classList.add("on-table");
+      card.insertAdjacentHTML("afterbegin", '<div class="table-badge on">🎯 Tavolo ' + current.onTable[id] + ' · in corso</div>');
+    });
+    info.prep.forEach(function(id){
+      var card = cardOf(id); if(!card || card.classList.contains("on-table")) return;
+      card.insertAdjacentHTML("afterbegin", '<div class="table-badge prep">⏭️ Preparatevi</div>');
+    });
+  }
+  afterPersistHooks.push(refreshTableBadges);
+  (function(){
+    var _rr = renderRounds; renderRounds = function(){ _rr.apply(this, arguments); refreshTableBadges(); };
+    var _rp = renderPlayoffBracket; renderPlayoffBracket = function(){ _rp.apply(this, arguments); refreshTableBadges(); };
+    var inp = document.getElementById("tablesCount");
+    inp.value = tablesCount();
+    inp.addEventListener("change", function(){
+      var v = Math.max(1, Math.min(12, parseInt(inp.value, 10) || 1));
+      inp.value = v; safeSet(LS_TABLES, v);
+      if(current){ current.tables = v; current.onTable = {}; persistCurrent(); if(document.body.classList.contains("tv-on")) tvRender(); }
+      toast("Biliardini disponibili: " + v);
+    });
+    document.getElementById("drawBtn").addEventListener("click", function(){
+      setTimeout(function(){ if(current && current.rounds){ current.tables = tablesCount(); current.onTable = {}; persistCurrent(); } }, 0);
+    });
+    refreshTableBadges();
+  })();
+
+  // ---------- RITIRO DI UNA COPPIA ----------
+  function applyForfeits(){
+    if(!current || !current.retired || !current.retired.length) return false;
+    var changed = false;
+    function side(t){ return t && current.retired.indexOf(t.keeper.id) !== -1; }
+    // girone: partite ancora da giocare -> 7-0 all'avversario
+    current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){
+      if(isScored(m)) return;
+      var ra = side(m.teamA), rb = side(m.teamB);
+      if(!ra && !rb) return;
+      m.scoreA = ra ? 0 : 7; m.scoreB = ra ? 7 : 0;
+      if(ra && rb){ m.scoreA = 0; m.scoreB = 0; }
+      m.forfeit = (ra ? m.teamA : m.teamB).keeper.id; changed = true;
+    }); });
+    // fase finale: scontri non ancora decisi
+    for(var pass = 0; pass < 6; pass++){
+      var any = false;
+      forEachFasciaMatch(current, function(m, f){
+        if(m.voidSlot || m.bye || !m.teamA || !m.teamB) return;
+        var ra = side(m.teamA), rb = side(m.teamB);
+        if(!ra && !rb) return;
+        if(f.type === "triangle"){
+          if(legDone(m.legs[0])) return;
+          m.legs[0] = { scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }; m.forfeit = (ra ? m.teamA : m.teamB).keeper.id; any = true; return;
+        }
+        if(playoffWinner(m)) return;
+        m.legs = [{ scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }, { scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }, { scoreA: null, scoreB: null }];
+        m.forfeit = (ra ? m.teamA : m.teamB).keeper.id; any = true;
+      });
+      if(!any) break;
+      changed = true;
+      cascadePlayoffs();
+    }
+    return changed;
+  }
+  beforePersistHooks.unshift(function(){ applyForfeits(); });
+  function allFixedTeams(){
+    if(!current || !current.fixedTeams) return [];
+    var seen = {}, out = [];
+    (current.groups || []).forEach(function(g){ (g.teams || []).forEach(function(t){ if(!seen[t.keeper.id]){ seen[t.keeper.id] = 1; out.push(t); } }); });
+    (current.teams || []).forEach(function(t){ if(!seen[t.keeper.id]){ seen[t.keeper.id] = 1; out.push(t); } });
+    return out;
+  }
+  function renderRetireCard(){
+    var card = document.getElementById("retireCard");
+    if(!card) return;
+    var teams = allFixedTeams();
+    if(READ_ONLY_VIEW || !teams.length){ card.style.display = "none"; return; }
+    card.style.display = "";
+    var ret = current.retired || [];
+    var selEl = document.getElementById("retireSelect"), prevSel = selEl.value;
+    selEl.innerHTML = teams.filter(function(t){ return ret.indexOf(t.keeper.id) === -1; })
+      .map(function(t){ return '<option value="' + esc(t.keeper.id) + '">' + esc(pairLabel(t)) + '</option>'; }).join("");
+    if(prevSel && selEl.querySelector('option[value="' + prevSel + '"]')) selEl.value = prevSel;
+    document.getElementById("retireList").innerHTML = teams.filter(function(t){ return ret.indexOf(t.keeper.id) !== -1; })
+      .map(function(t){ return '<div class="rt-row"><span>🚫 ' + esc(pairLabel(t)) + ' — ritirata</span><button class="btn btn-ghost btn-sm" type="button" data-unretire="' + esc(t.keeper.id) + '">Annulla ritiro</button></div>'; }).join("");
+    document.querySelectorAll("[data-unretire]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var id = b.getAttribute("data-unretire");
+        showConfirm("Annullare il ritiro? Le partite date a tavolino tornano da giocare.", function(){
+          current.retired = (current.retired || []).filter(function(x){ return x !== id; });
+          current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){ if(m.forfeit === id){ m.scoreA = null; m.scoreB = null; delete m.forfeit; } }); });
+          forEachFasciaMatch(current, function(m){ if(m.forfeit === id){ m.legs = [{scoreA:null,scoreB:null},{scoreA:null,scoreB:null},{scoreA:null,scoreB:null}]; delete m.forfeit; } });
+          cascadePlayoffs();
+          persistCurrent(); renderRounds(); renderStandings(); if(current.playoffs) renderPlayoffBracket(); renderRetireCard();
+          toast("Ritiro annullato.");
+        });
+      });
+    });
+  }
+  document.getElementById("retireBtn").addEventListener("click", function(){
+    var id = document.getElementById("retireSelect").value;
+    var t = allFixedTeams().filter(function(x){ return x.keeper.id === id; })[0];
+    if(!t) return;
+    showConfirm("Ritirare " + pairLabel(t) + "? Le sue partite ancora da giocare andranno vinte 7-0 a tavolino agli avversari e non entrerà nella fase finale.", function(){
+      current.retired = (current.retired || []).concat([id]);
+      persistCurrent(); renderRounds(); renderStandings(); if(current.playoffs) renderPlayoffBracket(); renderRetireCard();
+      toast(pairLabel(t) + " ritirata.");
+    });
+  });
+  afterPersistHooks.push(renderRetireCard);
+  renderRetireCard();
+
+  // ---------- ANNULLA ULTIMA MODIFICA ----------
+  // Tiene in memoria gli stati precedenti del torneo (le modifiche fatte a
+  // pochi secondi di distanza, es. le cifre di un punteggio, contano come una).
+  var undoStack = [], lastSaved = null, lastPushAt = 0;
+  try{ lastSaved = localStorage.getItem(LS_CURRENT); }catch(e){}
+  function updateUndoBtn(){ var b = document.getElementById("undoBtn"); if(b) b.disabled = !undoStack.length; }
+  afterPersistHooks.push(function(){
+    var now = JSON.stringify(current);
+    if(now === lastSaved) return;
+    var t = Date.now();
+    if(lastSaved && t - lastPushAt > 2500){ undoStack.push(lastSaved); if(undoStack.length > 40) undoStack.shift(); lastPushAt = t; }
+    lastSaved = now; updateUndoBtn();
+  });
+  function rerenderAll(){
+    if(current && current.rounds && current.rounds.length){
+      document.getElementById("drawMode").value = current.drawMode || (current.fixedTeams ? "fixed" : "rotation");
+      updateDrawModeUI();
+      renderRounds(); renderStandings();
+      document.getElementById("playoffCard").style.display = "";
+      renderPlayoffBracket();
+    } else {
+      ["roundsContainer","groupStandingsContainer","playoffBracket","standingsBodyKeepers","standingsBodyAttackers"].forEach(function(id){ var el = document.getElementById(id); if(el) el.innerHTML = ""; });
+      ["standingsCard","standingsCardAtt","playoffCard"].forEach(function(id){ var el = document.getElementById(id); if(el) el.style.display = "none"; });
+      document.getElementById("drawSummary").textContent = "";
+    }
+    renderRetireCard(); updateStaleWarn();
+    if(document.body.classList.contains("tv-on")) tvRender();
+  }
+  document.getElementById("undoBtn").addEventListener("click", function(){
+    if(!undoStack.length) return;
+    var prev = undoStack.pop();
+    try{ current = relinkGroupRounds(JSON.parse(prev)); }catch(e){ return; }
+    lastSaved = prev; lastPushAt = 0;
+    safeSet(LS_CURRENT, current); scheduleLiveSync();
+    rerenderAll(); updateUndoBtn();
+    toast("↩️ Ultima modifica annullata.");
+  });
+
+  // ---------- AVVISO: TABELLONE NON AGGIORNATO ----------
+  function groupScoresSig(c){
+    if(!c || !c.rounds) return "";
+    var parts = [];
+    c.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){ parts.push(m.id + ":" + m.scoreA + "-" + m.scoreB); }); });
+    return parts.join("|") + "#" + (c.retired || []).join(",") + "#" + (c.qualifyPerGroup || "") + (c.firstsBye ? "b" + (c.byeSeconds || 0) : "");
+  }
+  beforePersistHooks.push(function(){
+    if(current && current.playoffs && !current.playoffs.basis) current.playoffs.basis = groupScoresSig(current);
+  });
+  function updateStaleWarn(){
+    var card = document.getElementById("playoffCard"); if(!card) return;
+    var el = document.getElementById("staleWarn");
+    var stale = !READ_ONLY_VIEW && current && current.playoffs && current.playoffs.basis && current.playoffs.basis !== groupScoresSig(current);
+    if(!stale){ if(el) el.remove(); return; }
+    if(el) return;
+    el = document.createElement("div"); el.id = "staleWarn"; el.className = "stale-warn";
+    el.innerHTML = "⚠️ <b>Hai cambiato risultati o impostazioni del girone dopo aver creato il tabellone.</b> Le coppie qualificate o gli accoppiamenti potrebbero essere diversi.<br>" +
+      '<button class="btn btn-primary btn-sm" type="button" id="staleRedoBtn">🔄 Rifai il tabellone</button>';
+    var bracket = document.getElementById("playoffBracket");
+    bracket.parentNode.insertBefore(el, bracket);
+    document.getElementById("staleRedoBtn").addEventListener("click", function(){ document.getElementById("genPlayoffBtn").click(); });
+  }
+  afterPersistHooks.push(updateStaleWarn);
+  (function(){ var _rp2 = renderPlayoffBracket; renderPlayoffBracket = function(){ _rp2.apply(this, arguments); updateStaleWarn(); }; })();
+  updateStaleWarn();
+
+  // ---------- ISCRIZIONI VELOCI E GIOCATORI ABITUALI ----------
+  var LS_ARCHIVE = "tg_player_archive_v1";
+  var archive = safeGet(LS_ARCHIVE, null);
+  function norm(n){ return String(n || "").trim().replace(/\s+/g, " ").toLowerCase(); }
+  function archiveRecord(kind, name){
+    var k = kind === "keeper" ? "keepers" : "attackers", key = norm(name);
+    if(!key) return;
+    archive[k][key] = { name: String(name).trim().replace(/\s+/g, " "), n: ((archive[k][key] || {}).n || 0) + 1 };
+  }
+  if(!archive || !archive.keepers){
+    // primo avvio: si parte dagli iscritti attuali e dallo storico
+    archive = { keepers: {}, attackers: {} };
+    (history || []).forEach(function(h){ (h.standings || []).forEach(function(r){ if(r && r.name) archiveRecord(r.role === "A" ? "attacker" : "keeper", r.name); }); });
+    players.keepers.forEach(function(p){ archiveRecord("keeper", p.name); });
+    players.attackers.forEach(function(p){ archiveRecord("attacker", p.name); });
+    safeSet(LS_ARCHIVE, archive);
+  }
+  function inRoster(kind, name){
+    var arr = kind === "keeper" ? players.keepers : players.attackers;
+    return arr.some(function(p){ return norm(p.name) === norm(name); });
+  }
+  function addNames(kind, names){
+    var arr = kind === "keeper" ? players.keepers : players.attackers, added = 0, skipped = 0, seen = {};
+    names.forEach(function(raw){
+      var name = String(raw).replace(/^\s*(\d+\s*[\.\)\-:]|[-•*·–—>])\s*/, "").trim().replace(/\s+/g, " ");
+      if(!name) return;
+      if(inRoster(kind, name) || seen[norm(name)]){ skipped++; return; }
+      seen[norm(name)] = 1;
+      arr.push({ id: uid(), name: name }); archiveRecord(kind, name); added++;
+    });
+    safeSet(LS_ARCHIVE, archive); persistPlayers(); renderRoster();
+    return { added: added, skipped: skipped };
+  }
+  function renderFavs(){
+    [["keeper","favKeepers","favKeepersWrap","keepers"],["attacker","favAttackers","favAttackersWrap","attackers"]].forEach(function(x){
+      var list = Object.keys(archive[x[3]]).map(function(k){ return archive[x[3]][k]; })
+        .filter(function(it){ return !inRoster(x[0], it.name); })
+        .sort(function(a, b){ return (b.n - a.n) || a.name.localeCompare(b.name); }).slice(0, 40);
+      var wrap = document.getElementById(x[2]), box = document.getElementById(x[1]);
+      if(!wrap || !box) return;
+      wrap.classList.toggle("hidden", !list.length);
+      box.innerHTML = list.map(function(it){ return '<span class="fav-chip" data-kind="' + x[0] + '" data-name="' + esc(it.name) + '">' + esc(it.name) + '<button class="fav-x" type="button" title="Togli dagli abituali">✕</button></span>'; }).join("");
+    });
+    document.querySelectorAll(".fav-chip").forEach(function(chip){
+      chip.addEventListener("click", function(e){
+        var kind = chip.getAttribute("data-kind"), name = chip.getAttribute("data-name");
+        if(e.target.classList.contains("fav-x")){
+          delete archive[kind === "keeper" ? "keepers" : "attackers"][norm(name)];
+          safeSet(LS_ARCHIVE, archive); renderFavs(); return;
+        }
+        addNames(kind, [name]);
+      });
+    });
+  }
+  (function(){
+    var _ap = addPlayer;
+    addPlayer = function(kind){
+      var input = document.getElementById(kind === "keeper" ? "newKeeper" : "newAttacker");
+      var name = input.value.trim();
+      if(name && inRoster(kind, name)){ toast(name + " è già negli iscritti."); return; }
+      _ap(kind);
+      if(name){ archiveRecord(kind, name); safeSet(LS_ARCHIVE, archive); renderFavs(); }
+    };
+    var _rr2 = renderRoster;
+    renderRoster = function(){ _rr2.apply(this, arguments); renderFavs(); renderLateCard(); };
+    // Pulisce una riga copiata da WhatsApp: "[30/09/26, 19:10] Nome: testo",
+    // grassetto *...*, corsivo _..._ e barrato ~...~.
+    function cleanWaLine(l){
+      return String(l).replace(/^\s*\[[^\]]*\]\s*[^:]{1,40}:\s*/, "").replace(/[*_~]/g, "").trim();
+    }
+    var RE_KEEP = /^(portier[ei]|portiere\/i|p)\b\s*:?\s*/i, RE_ATT = /^(attaccant[ei]|attaccante\/i|a)\b\s*:?\s*/i;
+    function isHeader(l, re){ var m = l.match(re); if(!m) return null; var rest = l.slice(m[0].length); if(/^\d/.test(rest)) return null; return m[1].length === 1 && rest ? null : rest; }
+    function splitRoles(text){
+      var out = { keeper: [], attacker: [] }, role = null, found = false;
+      String(text).split(/\r?\n/).forEach(function(raw){
+        var l = cleanWaLine(raw); if(!l) return;
+        var hk = isHeader(l, RE_KEEP), ha = hk === null ? isHeader(l, RE_ATT) : null;
+        if(hk !== null){ role = "keeper"; found = true; l = hk; }
+        else if(ha !== null){ role = "attacker"; found = true; l = ha; }
+        if(!role || !l) return;
+        l.split(/[,;]+/).forEach(function(n){ if(n.trim()) out[role].push(n); });
+      });
+      return found ? out : null;
+    }
+    document.getElementById("pasteAllBtn").addEventListener("click", function(){
+      var ta = document.getElementById("pasteNames");
+      var sp = splitRoles(ta.value);
+      if(!sp){ toast("Non trovo le intestazioni \"Portieri\" e \"Attaccanti\": usa i pulsanti qui sotto per aggiungere un ruolo alla volta."); return; }
+      var rk = addNames("keeper", sp.keeper), ra = addNames("attacker", sp.attacker);
+      if(rk.added || ra.added) ta.value = "";
+      var sk = rk.skipped + ra.skipped;
+      toast("Aggiunti " + rk.added + " portieri e " + ra.added + " attaccanti" + (sk ? " (" + sk + " già presenti)" : "") + ".");
+    });
+    function doPaste(kind){
+      var ta = document.getElementById("pasteNames");
+      var lines = ta.value.split(/\r?\n/).map(cleanWaLine).filter(function(l){ return l && isHeader(l, RE_KEEP) !== "" && isHeader(l, RE_ATT) !== ""; });
+      var r = addNames(kind, lines.join("\n").split(/[\n,;]+/));
+      if(r.added){ ta.value = ""; }
+      toast("Aggiunti " + r.added + (kind === "keeper" ? " portieri" : " attaccanti") + (r.skipped ? " (" + r.skipped + " già presenti)" : "") + ".");
+    }
+    document.getElementById("pasteKeepersBtn").addEventListener("click", function(){ doPaste("keeper"); });
+    document.getElementById("pasteAttackersBtn").addEventListener("click", function(){ doPaste("attacker"); });
+  })();
+
+  // ---------- COPPIA ARRIVATA IN RITARDO ----------
+  function renderLateCard(){
+    var card = document.getElementById("lateCard"); if(!card) return;
+    var ok = !READ_ONLY_VIEW && current && current.fixedTeams && current.groups && current.groups.length && !current.playoffs;
+    card.style.display = ok ? "" : "none";
+    if(!ok) return;
+    var gs = document.getElementById("lateGroup"), prev = gs.value;
+    gs.innerHTML = current.groups.map(function(g, gi){ return '<option value="' + gi + '">' + esc(g.label) + ' (' + g.teams.length + ' coppie)</option>'; }).join("");
+    if(prev && gs.querySelector('option[value="' + prev + '"]')) gs.value = prev;
+    var inTeam = {};
+    allFixedTeams().forEach(function(t){ inTeam[t.keeper.id] = 1; inTeam[t.attacker.id] = 1; });
+    document.getElementById("lateKeeperList").innerHTML = players.keepers.filter(function(p){ return !inTeam[p.id]; }).map(function(p){ return '<option value="' + esc(p.name) + '">'; }).join("");
+    document.getElementById("lateAttackerList").innerHTML = players.attackers.filter(function(p){ return !inTeam[p.id]; }).map(function(p){ return '<option value="' + esc(p.name) + '">'; }).join("");
+  }
+  document.getElementById("lateAddBtn").addEventListener("click", function(){
+    var kn = document.getElementById("lateKeeper").value.trim(), an = document.getElementById("lateAttacker").value.trim();
+    var gi = parseInt(document.getElementById("lateGroup").value, 10);
+    if(!kn || !an){ toast("Scrivi il nome del portiere e dell'attaccante."); return; }
+    var g = current && current.groups && current.groups[gi];
+    if(!g || current.playoffs){ toast("Non è più possibile aggiungere coppie."); return; }
+    function findOrCreate(kind, name){
+      var arr = kind === "keeper" ? players.keepers : players.attackers;
+      var p = arr.filter(function(x){ return norm(x.name) === norm(name); })[0];
+      if(!p){ p = { id: uid(), name: name.replace(/\s+/g, " ") }; arr.push(p); archiveRecord(kind, name); }
+      return p;
+    }
+    var k = findOrCreate("keeper", kn), a = findOrCreate("attacker", an);
+    var busy = allFixedTeams().some(function(t){ return t.keeper.id === k.id || t.attacker.id === a.id || t.keeper.id === a.id || t.attacker.id === k.id; });
+    if(busy){ toast("Uno dei due fa già parte di una coppia del torneo."); return; }
+    var team = { id: uid(), keeper: { id: k.id, name: k.name }, attacker: { id: a.id, name: a.name } };
+    var opponents = g.teams.slice();
+    g.teams.push(team);
+    if(current.teams) current.teams.push(team);
+    var r0 = g.rounds[0];
+    opponents.forEach(function(o){ r0.matches.push({ id: uid(), teamA: team, teamB: o, scoreA: null, scoreB: null }); });
+    if(current.benched) current.benched = current.benched.filter(function(p){ return p.id !== k.id && p.id !== a.id; });
+    if(current.drawMode === "manual"){ manualPairs[k.id] = a.id; persistManualPairs(); }
+    safeSet(LS_ARCHIVE, archive); persistPlayers();
+    persistCurrent(); renderRoster(); renderRounds(); renderStandings(); renderRetireCard();
+    document.getElementById("lateKeeper").value = ""; document.getElementById("lateAttacker").value = "";
+    toast(pairLabel(team) + " aggiunta al " + g.label + " (" + opponents.length + " partite in più).");
+  });
+  afterPersistHooks.push(renderLateCard);
+  renderFavs(); renderLateCard();
+
+  // ---------- IMMAGINE DEL PODIO ----------
+  function podiumData(){
+    var po = current && current.playoffs; if(!po) return null;
+    var out = [];
+    if(po.fasciaA){ var a = fasciaPodium(po.fasciaA); if(a) out.push({ label: po.fasciaB ? "FASCIA A" : "", pod: a }); }
+    if(po.fasciaB){ var b = fasciaPodium(po.fasciaB); if(b) out.push({ label: "FASCIA B", pod: b }); }
+    return out.length ? out : null;
+  }
+  function updatePodiumBtn(){ var b = document.getElementById("podiumImgBtn"); if(b) b.style.display = (!READ_ONLY_VIEW && podiumData()) ? "" : "none"; }
+  function drawPodiumImage(){
+    var data = podiumData(); if(!data) return null;
+    var W = 1080, H = 1350, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    var ctx = cv.getContext("2d");
+    var g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, "#0a2f7a"); g.addColorStop(0.55, "#0d2452"); g.addColorStop(1, "#1c5fe0");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    var rg = ctx.createRadialGradient(W*0.2, 0, 10, W*0.2, 0, 700); rg.addColorStop(0, "rgba(61,139,255,0.55)"); rg.addColorStop(1, "rgba(61,139,255,0)");
+    ctx.fillStyle = rg; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = "rgba(255,255,255,0.05)"; ctx.lineWidth = 3;
+    for(var y = 60; y < H; y += 90){ ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    ctx.strokeStyle = "#d4af37"; ctx.lineWidth = 10; ctx.strokeRect(24, 24, W - 48, H - 48);
+    var display = "'Titan One', 'Baloo 2', 'Arial Black', sans-serif", body = "-apple-system, 'Segoe UI', Roboto, Arial, sans-serif";
+    function fit(text, maxW, size, font, weight){
+      do { ctx.font = (weight || "") + " " + size + "px " + font; if(ctx.measureText(text).width <= maxW) break; size -= 2; } while(size > 18);
+      return size;
+    }
+    ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    if(!/^\s*goopho\s*26\s*$/i.test(current.name || "")){ ctx.fillStyle = "#ffd868"; ctx.font = "800 34px " + body; ctx.fillText("GOOPHO 26", W/2, 110); }
+    var name = (current.name || "Torneo").toUpperCase();
+    fit(name, W - 140, 76, display, "400");
+    ctx.shadowColor = "rgba(0,0,0,0.5)"; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+    ctx.fillStyle = "#ffffff"; ctx.fillText(name, W/2, 210);
+    ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+    var d = current.createdAt ? new Date(current.createdAt) : new Date();
+    ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.font = "600 30px " + body;
+    ctx.fillText(d.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long", year: "numeric" }), W/2, 262);
+    var y0 = 330, blockH = data.length > 1 ? 440 : 700;
+    data.forEach(function(sec, i){
+      var top = y0 + i * (blockH + 30);
+      ctx.fillStyle = "rgba(255,255,255,0.08)"; roundRect(ctx, 70, top, W - 140, blockH, 34); ctx.fill();
+      ctx.strokeStyle = "rgba(212,175,55,0.8)"; ctx.lineWidth = 4; roundRect(ctx, 70, top, W - 140, blockH, 34); ctx.stroke();
+      ctx.fillStyle = "#ffd868"; ctx.font = "900 " + (data.length > 1 ? 40 : 52) + "px " + body;
+      ctx.fillText("🏆 VINCITORI" + (sec.label ? " " + sec.label : ""), W/2, top + (data.length > 1 ? 72 : 100));
+      var rows = [["🥇", sec.pod.w, "#ffe9a8"], ["🥈", sec.pod.l, "#e6e9ec"], ["🥉", sec.pod.w3, "#ecc79c"]].filter(function(r){ return r[1]; });
+      var rowH = data.length > 1 ? 100 : 160, first = top + (data.length > 1 ? 150 : 230);
+      rows.forEach(function(r, j){
+        var cy = first + j * rowH;
+        var big = j === 0, fs = data.length > 1 ? (big ? 48 : 38) : (big ? 64 : 48);
+        ctx.font = (fs + 8) + "px " + body; ctx.textAlign = "left"; ctx.fillText(r[0], 120, cy);
+        ctx.fillStyle = r[2];
+        var label = r[1].keeper.name + " - " + r[1].attacker.name;
+        fit(label, W - 330, fs, body, "800");
+        ctx.textAlign = "left"; ctx.fillText(label, 120 + fs + 40, cy);
+        ctx.fillStyle = "#ffd868";
+      });
+      ctx.textAlign = "center";
+    });
+    ctx.fillStyle = "rgba(255,255,255,0.65)"; ctx.font = "600 26px " + body;
+    ctx.fillText("Grazie a tutti i giocatori! ⚽", W/2, H - 70);
+    return cv;
+  }
+  function roundRect(ctx, x, y, w, h, r){ ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+  document.getElementById("podiumImgBtn").addEventListener("click", function(){
+    var go = function(){
+      var cv = drawPodiumImage(); if(!cv){ toast("Il podio non è ancora completo."); return; }
+      var fname = "podio-" + (current.name || "torneo").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") + ".png";
+      cv.toBlob(function(blob){
+        try{
+          var file = new File([blob], fname, { type: "image/png" });
+          if(navigator.canShare && navigator.canShare({ files: [file] }) && /iPhone|iPad|Android/i.test(navigator.userAgent)){
+            navigator.share({ files: [file], title: current.name || "Podio" }).catch(function(){});
+            return;
+          }
+        }catch(e){}
+        var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fname;
+        document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+        toast("🖼️ Immagine del podio scaricata: la trovi nella cartella Download.");
+      }, "image/png");
+    };
+    try{ if(document.fonts && document.fonts.load){ document.fonts.load("76px 'Titan One'").then(go, go); return; } }catch(e){}
+    go();
+  });
+  afterPersistHooks.push(updatePodiumBtn);
+  (function(){ var _rp3 = renderPlayoffBracket; renderPlayoffBracket = function(){ _rp3.apply(this, arguments); updatePodiumBtn(); }; })();
+  updatePodiumBtn();
+
+  // ---------- CLASSIFICA DI STAGIONE E ALBO D'ORO ----------
+  // Calcolati dai tornei salvati nello storico ("Salva risultati torneo").
+  // Punti: 1° posto 10, 2° 7, 3° 5 (Fascia A o fase finale unica),
+  // vincitori Fascia B 3, +1 per ogni torneo giocato.
+  var seasonYear = "all";
+  function renderSeason(){
+    var box = document.getElementById("histStagione"); if(!box) return;
+    var list = (history || []).slice().sort(function(a, b){ return String(b.date || b.savedAt).localeCompare(String(a.date || a.savedAt)); });
+    var years = {}; list.forEach(function(h){ var y = String(h.date || h.savedAt || "").slice(0, 4); if(y) years[y] = 1; });
+    if(seasonYear !== "all" && !years[seasonYear]) seasonYear = "all";
+    var sel = list.filter(function(h){ return seasonYear === "all" || String(h.date || h.savedAt || "").slice(0, 4) === seasonYear; });
+    var stats = {};
+    function st(name){ var k = norm(name); if(!stats[k]) stats[k] = { name: name, t: 0, win: 0, pod: 0, pts: 0, v: 0 }; return stats[k]; }
+    var albo = [];
+    sel.forEach(function(h){
+      var seen = {};
+      (h.standings || []).forEach(function(r){ if(!r || !r.name) return; var s0 = st(r.name); if(!seen[norm(r.name)]){ s0.t++; s0.pts += 1; seen[norm(r.name)] = 1; } s0.v += (r.v || 0); });
+      var po = h.playoffs, podA = po && po.fasciaA ? fasciaPodium(po.fasciaA) : null, podB = po && po.fasciaB ? fasciaPodium(po.fasciaB) : null;
+      function give(t, pts, isWin){ if(!t) return; [t.keeper.name, t.attacker.name].forEach(function(n){ var s1 = st(n); s1.pts += pts; if(isWin) s1.win++; s1.pod++; }); }
+      if(podA){ give(podA.w, 10, true); give(podA.l, 7); give(podA.w3, 5); }
+      if(podB && podB.w){ [podB.w.keeper.name, podB.w.attacker.name].forEach(function(n){ st(n).pts += 3; }); }
+      var winTxt;
+      if(podA) winTxt = "🏆 " + esc(pairLabel(podA.w)) + (podB ? ' <span style="opacity:.7">· Fascia B: ' + esc(pairLabel(podB.w)) + '</span>' : "");
+      else {
+        var k = (h.standings || []).filter(function(r){ return r.role === "P"; })[0], a = (h.standings || []).filter(function(r){ return r.role === "A"; })[0];
+        winTxt = (k || a) ? "🥇 Miglior portiere: " + esc(k ? k.name : "-") + " · miglior attaccante: " + esc(a ? a.name : "-") : "Fase finale non giocata";
+      }
+      albo.push('<div class="albo-row"><span class="albo-date">' + esc(new Date(h.date || h.savedAt).toLocaleDateString("it-IT")) + '</span><div class="albo-main"><div class="albo-name">' + esc(h.name || "Torneo") + '</div><div class="albo-win">' + winTxt + '</div></div></div>');
+    });
+    var rows = Object.keys(stats).map(function(k){ return stats[k]; }).sort(function(a, b){ return (b.pts - a.pts) || (b.win - a.win) || (b.pod - a.pod) || (b.v - a.v) || a.name.localeCompare(b.name); });
+    var yearOpts = '<option value="all">Tutte le stagioni</option>' + Object.keys(years).sort().reverse().map(function(y){ return '<option value="' + y + '"' + (y === seasonYear ? " selected" : "") + '>' + y + '</option>'; }).join("");
+    box.innerHTML =
+      '<div class="card"><div class="season-year"><h2 style="margin:0;">🏆 Stagione</h2><select id="seasonYearSel">' + yearOpts + '</select></div>' +
+      '<p class="draw-summary" style="margin-top:8px;">Conta solo i tornei salvati con "💾 Salva risultati torneo" (' + sel.length + ' ' + (sel.length === 1 ? 'torneo' : 'tornei') + '). Punti: 1° posto 10, 2° 7, 3° 5, vincitori Fascia B 3, +1 per ogni torneo giocato.</p></div>' +
+      '<div class="card"><h2>👑 Albo d\'oro</h2>' + (albo.length ? albo.join("") : '<div class="empty-note">Nessun torneo salvato.</div>') + '</div>' +
+      '<div class="card"><h2>📊 Classifica giocatori</h2>' + (rows.length ?
+        '<div style="overflow-x:auto;"><table class="season"><thead><tr><th>#</th><th>Giocatore</th><th>Punti</th><th>Tornei</th><th>Vittorie</th><th>Podi</th><th>Partite vinte</th></tr></thead><tbody>' +
+        rows.map(function(r, i){ return '<tr><td>' + (RANK_MEDALS[i] || (i + 1)) + '</td><td><b>' + esc(r.name) + '</b></td><td class="pts">' + r.pts + '</td><td>' + r.t + '</td><td>' + r.win + '</td><td>' + r.pod + '</td><td>' + r.v + '</td></tr>'; }).join("") +
+        '</tbody></table></div>' : '<div class="empty-note">Nessun dato ancora.</div>') + '</div>';
+    document.getElementById("seasonYearSel").addEventListener("change", function(){ seasonYear = this.value; renderSeason(); });
+  }
+
+  // ---------- BACKUP: ESPORTA / IMPORTA DATI ----------
+  (function backup(){
+    var PREFIX = "tg_", FB_KEY = "tg_fb_live_v1";
+    function $(id){ return document.getElementById(id); }
+    function pad(n){ return n < 10 ? "0" + n : "" + n; }
+    function status(msg, cls){ var el = $("backupStatus"); el.innerHTML = msg; el.className = "fb-status" + (cls ? " " + cls : ""); }
+    $("exportDataBtn").addEventListener("click", function(){
+      var data = {};
+      try{
+        for(var i = 0; i < localStorage.length; i++){
+          var k = localStorage.key(i);
+          if(k && k.indexOf(PREFIX) === 0){ try{ data[k] = JSON.parse(localStorage.getItem(k)); }catch(e){ data[k] = localStorage.getItem(k); } }
+        }
+      }catch(e){ status("Impossibile leggere i dati salvati.", "err"); return; }
+      // l'accesso a Firebase non va nel backup: sull'altro computer ci si ricollega
+      if(data[FB_KEY] && typeof data[FB_KEY] === "object"){ delete data[FB_KEY].refreshToken; data[FB_KEY].enabled = false; }
+      var d = new Date();
+      var stamp = d.getFullYear() + "-" + pad(d.getMonth()+1) + "-" + pad(d.getDate());
+      var payload = { app: "GOOPHO 26", version: 1, exportedAt: d.toISOString(), data: data };
+      var blob = new Blob([JSON.stringify(payload, null, 1)], { type: "application/json" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "goopho26-backup-" + stamp + ".json";
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      var nPlayers = data.tg_players_v1 ? ((data.tg_players_v1.keepers || []).length + (data.tg_players_v1.attackers || []).length) : 0;
+      var nHist = (data.tg_history_v1 || []).length;
+      status("✅ Backup scaricato: <b>" + a.download + "</b> (" + nPlayers + " iscritti, " + nHist + " tornei nello storico). Lo trovi nella cartella Download: conservalo in un posto sicuro.", "on");
+    });
+    $("importDataBtn").addEventListener("click", function(){ $("importDataFile").value = ""; $("importDataFile").click(); });
+    $("importDataFile").addEventListener("change", function(){
+      var f = this.files && this.files[0];
+      if(!f) return;
+      var reader = new FileReader();
+      reader.onload = function(){
+        var payload;
+        try{ payload = JSON.parse(reader.result); }catch(e){ status("Questo file non è un backup valido.", "err"); return; }
+        if(!payload || payload.app !== "GOOPHO 26" || !payload.data){ status("Questo file non è un backup di GOOPHO 26.", "err"); return; }
+        var d = payload.data;
+        var nPlayers = d.tg_players_v1 ? ((d.tg_players_v1.keepers || []).length + (d.tg_players_v1.attackers || []).length) : 0;
+        var nHist = (d.tg_history_v1 || []).length;
+        var when = payload.exportedAt ? new Date(payload.exportedAt).toLocaleString("it-IT") : "data sconosciuta";
+        showConfirm("Importare il backup del " + when + " (" + nPlayers + " iscritti, " + nHist + " tornei nello storico)? I dati attuali di questo browser verranno sostituiti.", function(){
+          try{
+            var keepFb = null;
+            try{ keepFb = JSON.parse(localStorage.getItem(FB_KEY) || "null"); }catch(e){}
+            var toRemove = [];
+            for(var i = 0; i < localStorage.length; i++){ var k = localStorage.key(i); if(k && k.indexOf(PREFIX) === 0) toRemove.push(k); }
+            toRemove.forEach(function(k){ localStorage.removeItem(k); });
+            Object.keys(d).forEach(function(k){
+              if(k.indexOf(PREFIX) !== 0) return;
+              var v = d[k];
+              if(k === FB_KEY && v && typeof v === "object"){
+                // si tiene il collegamento a Firebase già attivo su questo computer
+                if(keepFb && keepFb.refreshToken){ v.refreshToken = keepFb.refreshToken; v.enabled = !!keepFb.enabled; }
+              }
+              localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v));
+            });
+          }catch(e){ status("Importazione non riuscita: spazio di salvataggio non disponibile.", "err"); return; }
+          toast("Backup importato ✅");
+          setTimeout(function(){ location.reload(); }, 600);
+        });
+      };
+      reader.readAsText(f);
+    });
+  })();
+
   // ---------- LIVE CON FIREBASE (app indipendente) ----------
   // Organizzatrice: accede con email/password (API REST di Firebase Auth, niente
   // librerie esterne), poi a ogni modifica invia l'intero torneo al Realtime
@@ -4109,6 +6448,12 @@
       var sep = base.indexOf("?") === -1 ? "?" : "&";
       return base + sep + "live=" + encodeURIComponent(cfg.liveId) + "&db=" + encodeURIComponent(cfg.dbUrl);
     }
+
+    // Link della diretta per il QR code della Modalità TV
+    window.__liveLink = function(){
+      if(window.__fbViewer) return location.href;
+      return (cfg.enabled && cfg.refreshToken && cfg.dbUrl) ? viewerLink() : "";
+    };
 
     // ----- viewer (giocatori) -----
     var qs = new URLSearchParams(location.search);
@@ -4153,7 +6498,7 @@
         });
       }).then(function(r){
         lastPushOk = !!(r && r.ok);
-        if(r && r.status === 401){ lastPushOk = false; status("Permesso negato dal database: controlla le <b>regole</b> di Firebase (vedi LEGGIMI).", "err"); return; }
+        if(r && r.status === 401){ lastPushOk = false; status("Permesso negato dal database: controlla le <b>regole</b> di Firebase (vedi GUIDA-LIVE), poi premi Scollega e ricollegati.", "err"); return; }
         refreshUi();
       }).catch(function(e){ lastPushOk = false; refreshUi(); });
     }
@@ -4217,7 +6562,7 @@
     function startViewer(liveId, db){
       window.__fbViewer = true;
       READ_ONLY_VIEW = true;
-      ["cardTournamentName","cardPlayers","cardMatchesPerPlayer","drawBtn","printRoundsBtn","topActionsBar","fbLiveCard","installBanner"].forEach(function(id){
+      ["cardTournamentName","cardPlayers","cardMatchesPerPlayer","drawBtn","printRoundsBtn","topActionsBar","fbLiveCard","backupCard","retireCard","lateCard","installBanner"].forEach(function(id){
         var el = document.getElementById(id); if(el) el.style.display = "none";
       });
       var tabs = document.querySelector("nav.tabs"); if(tabs) tabs.style.display = "none";
@@ -4472,14 +6817,80 @@
     return items;
   }
   function tvNextHtml(){
-    var items = tvUpcomingItems();
-    if(!items.length) return "";
-    var MAX = 16, shown = items.slice(0, MAX);
-    return '<div class="tv-next"><div class="tv-next-title">⏭️ Prossime partite</div><div class="tv-next-list">' +
-      shown.map(function(it){
-        return '<div class="tv-next-item"><span class="tv-next-tag">' + esc(it.tag) + '</span><span class="tv-next-teams">' + esc(it.a) + '<span class="tv-next-vs">vs</span>' + esc(it.b) + '</span>' + (it.note ? '<span class="tv-next-note">' + esc(it.note) + '</span>' : '') + '</div>';
-      }).join("") + '</div>' +
-      (items.length > MAX ? '<div class="tv-next-more">…e altre ' + (items.length - MAX) + ' partite</div>' : '') + '</div>';
+    if(!current || !current.rounds) return "";
+    var info = computeTables(current);
+    var onIds = Object.keys(current.onTable || {}).filter(function(id){ return info.byId[id]; })
+      .sort(function(a, b){ return current.onTable[a] - current.onTable[b]; });
+    if(!onIds.length && !info.pending.length) return "";
+    function item(it, tableNo){
+      return '<div class="tv-next-item' + (tableNo ? ' on' : '') + '">' +
+        (tableNo ? '<span class="tv-table-no">' + tableNo + '</span>' : '') +
+        '<span class="tv-next-tag">' + esc(it.tag) + '</span><span class="tv-next-teams">' + esc(pairLabel(it.a)) + '<span class="tv-next-vs">vs</span>' + esc(pairLabel(it.b)) + '</span>' +
+        (it.note ? '<span class="tv-next-note">' + esc(it.note) + '</span>' : '') + '</div>';
+    }
+    var html = '<div class="tv-next">';
+    if(onIds.length){
+      html += '<div class="tv-next-title">🎯 In campo ora</div><div class="tv-next-list">' + onIds.map(function(id){ return item(info.byId[id], current.onTable[id]); }).join("") + '</div>';
+    }
+    var prep = info.prep.filter(function(id){ return info.byId[id]; });
+    if(prep.length){
+      html += '<div class="tv-next-sub">⏭️ Preparatevi</div><div class="tv-next-list">' + prep.map(function(id){ return item(info.byId[id], 0); }).join("") + '</div>';
+    }
+    var rest = info.pending.length - onIds.length - prep.length;
+    if(rest > 0) html += '<div class="tv-next-more">…poi altre ' + rest + ' partite</div>';
+    return html + '</div>';
+  }
+  // ---------- TABELLONE GRAFICO (Modalità TV) ----------
+  function tvBracketCards(){
+    var po = current && current.playoffs; if(!po) return [];
+    var cards = [];
+    function legsWon(m){
+      var a = 0, b = 0;
+      (m.legs || []).forEach(function(l){ var w = legWinner(l); if(w === "A") a++; else if(w === "B") b++; });
+      return [a, b];
+    }
+    function box(m){
+      if(!m || m.voidSlot) return '<div class="tvb-empty"></div>';
+      var onT = current.onTable && current.onTable[m.id];
+      if(m.bye){
+        var t = m.teamA || m.teamB;
+        return '<div class="tvb-box"><div class="tvb-bye">' + (t ? esc(pairLabel(t)) + ' · riposo' : '<span class="tbd">riposo</span>') + '</div></div>';
+      }
+      var w = playoffWinner(m), sc = legsWon(m);
+      function row(t, n, side){
+        var cls = w ? (w === t ? " win" : " lose") : "";
+        return '<div class="tvb-row' + cls + '"><span>' + (t ? esc(pairLabel(t)) : '<span class="tbd">in attesa</span>') + '</span><span class="sc">' + (t && (sc[0] + sc[1]) ? n : "") + '</span></div>';
+      }
+      return '<div class="tvb-box' + (onT ? ' live' : '') + '">' + row(m.teamA, sc[0], "A") + row(m.teamB, sc[1], "B") + '</div>';
+    }
+    [["A", po.fasciaA], ["B", po.fasciaB]].forEach(function(fx){
+      var f = fx[1]; if(!f) return;
+      var card = document.createElement("div");
+      card.className = "card tvb-card" + (fx[0] === "B" ? " fb" : "");
+      var head = po.fasciaB ? (fx[0] === "A" ? "🅰️ Fascia A" : "🅱️ Fascia B") : "🏁 Fase finale";
+      var html = '<div class="tvb-head">' + head + '</div>';
+      if(f.type === "triangle"){
+        var ts = triangleStandings(f);
+        html += '<table class="tvb-tri"><tr><th>Triangolare</th><th>Pt</th><th>PG</th><th>DR</th></tr>' +
+          ts.rows.map(function(r, i){ return '<tr><td>' + (i+1) + '. ' + esc(pairLabel(r.team)) + '</td><td><b>' + r.pt + '</b></td><td>' + r.pg + '</td><td>' + (r.gf - r.gs) + '</td></tr>'; }).join("") + '</table>';
+      } else {
+        html += '<div class="tvb">';
+        f.rounds.forEach(function(r, ri){
+          html += '<div class="tvb-col"><div class="tvb-stage">' + esc(String(r.stage).replace(" di finale", "")) + '</div><div class="tvb-matches">' +
+            r.matches.map(box).join("") + '</div>';
+          if(ri === f.rounds.length - 1 && f.third){
+            html += '<div class="tvb-third"><div class="tvb-stage">3°/4° posto</div>' + box(f.third) + '</div>';
+          }
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+      var pod = fasciaPodium(f);
+      if(pod) html += '<div class="tvb-champ">🏆 ' + esc(pairLabel(pod.w)) + '</div>';
+      card.innerHTML = html;
+      cards.push(card);
+    });
+    return cards;
   }
   function tvRender(){
     // rilegge i dati più recenti salvati da un'altra finestra
@@ -4491,8 +6902,8 @@
     }
     if(current && current.rounds && current.rounds.length) renderStandings();
     var stage = document.getElementById("tvStage");
-    document.getElementById("tvTitle").textContent = ((current && current.name) || "Torneo") + " · Classifiche e prossime partite";
-    var cards = tvCollectCards();
+    document.getElementById("tvTitle").textContent = ((current && current.name) || "Torneo");
+    var cards = (current && current.playoffs) ? tvBracketCards() : tvCollectCards();
     stage.innerHTML = "";
     if(!cards.length){
       stage.style.gridTemplateColumns = "1fr";
@@ -4559,6 +6970,34 @@
   });
   window.addEventListener("resize", function(){ if(document.body.classList.contains("tv-on")) tvFit(); });
   window.addEventListener("storage", function(e){ if(e.key === LS_CURRENT && document.body.classList.contains("tv-on")) tvRender(); });
+
+  // La Modalità TV vive direttamente nel body, così resta visibile da qualsiasi scheda.
+  (function(){ var tv = document.getElementById("tvOverlay"); if(tv && tv.parentNode !== document.body) document.body.appendChild(tv); })();
+  // ---------- QR CODE DELLA DIRETTA (Modalità TV) ----------
+  // Se la Live è attiva, in basso a destra compare un QR code: chi è al
+  // torneo lo inquadra col telefono e segue risultati e classifiche.
+  var tvQrLink = null;
+  function tvUpdateQr(){
+    var box = document.getElementById("tvQr"), ov = document.getElementById("tvOverlay");
+    if(!box || !ov) return;
+    var link = "";
+    try{ link = (window.__liveLink && window.__liveLink()) || ""; }catch(e){}
+    if(!link || typeof GQR === "undefined"){ box.style.display = "none"; ov.classList.remove("has-qr"); tvQrLink = null; return; }
+    box.style.display = ""; ov.classList.add("has-qr");
+    if(link === tvQrLink) return;
+    try{
+      var q = new GQR.QRCode(-1, GQR.L); q.addData(link); q.make();
+      var n = q.getModuleCount(), quiet = 2, cell = 8, size = (n + quiet * 2) * cell;
+      var cv = document.getElementById("tvQrCanvas"); cv.width = size; cv.height = size;
+      var ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, size, size); ctx.fillStyle = "#000";
+      for(var r = 0; r < n; r++) for(var c = 0; c < n; c++) if(q.isDark(r, c)) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+      tvQrLink = link;
+    }catch(e){ box.style.display = "none"; ov.classList.remove("has-qr"); }
+  }
+  (function(){ var _tvr = tvRender; tvRender = function(){ tvUpdateQr(); return _tvr.apply(this, arguments); }; })();
+
+  // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
+  try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}
 })();
 </script>
 <script>
