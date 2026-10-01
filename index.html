@@ -75,13 +75,13 @@
   #tvOverlay .tv-back.tv-voice{ left:200px; }
   #tvOverlay .tv-eta{ display:inline-block; margin-bottom:10px; font-size:20px; font-weight:800; color:#fff; background:rgba(255,216,104,0.18); border:1px solid rgba(255,216,104,0.55); border-radius:999px; padding:4px 14px; margin-left:12px; }
   .tv-brand{ display:flex; align-items:center; gap:clamp(10px, 1.2vw, 22px); min-width:0; }
-  .tv-logo{ flex-shrink:0; width:clamp(40px, 4.6vw, 92px); height:clamp(40px, 4.6vw, 92px); display:inline-block; }
+  .tv-logo{ flex:0 0 auto; width:66px; height:66px; width:clamp(40px, 4.6vw, 92px); height:clamp(40px, 4.6vw, 92px); min-width:40px; min-height:40px; display:inline-block; }
   .tv-logo svg{ width:100%; height:100%; display:block; filter:drop-shadow(0 3px 10px rgba(0,0,0,0.4)); }
-  @media (min-width:1280px){
-    body .wrap{ max-width:min(1680px, 95vw); }
+  @media (min-width:1000px){
+    body .wrap{ max-width:96vw; }
     body #cardTournamentName{ min-height:min(31vw, 600px); background-position:center 35%; }
     #listKeepers, #listAttackers{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:0 8px; }
-    #roundsContainer{ display:grid; grid-template-columns:repeat(auto-fill, minmax(560px, 1fr)); gap:0 18px; align-items:start; }
+    #roundsContainer{ display:grid; grid-template-columns:repeat(auto-fit, minmax(520px, 1fr)); gap:0 18px; align-items:start; }
     #roundsContainer > .empty-note{ grid-column:1 / -1; }
   }
   .vx-feed-item > div{ min-width:0; overflow-wrap:anywhere; }
@@ -103,6 +103,9 @@
     #standingsCard .player-name, #standingsCardAtt .player-name, #groupStandingsContainer .player-name{ max-width:calc(100vw - 225px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; vertical-align:middle; font-size:13px !important; padding:4px 10px !important; }
     #standingsCard table.standings td, #standingsCardAtt table.standings td, #groupStandingsContainer table.standings td, #standingsCard table.standings th, #standingsCardAtt table.standings th, #groupStandingsContainer table.standings th{ padding-left:4px !important; padding-right:4px !important; }
   }
+  @media (max-width:700px){ #tvWinBtn{ display:none !important; } }
+  .tv-win-hint{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:20; max-width:620px; width:90%; background:rgba(10,24,52,0.94); color:#fff; border:3px solid #ffd868; border-radius:22px; padding:22px 26px; text-align:center; font-size:18px; line-height:1.45; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .tv-win-hint b{ color:#ffd868; } .tv-win-hint .btn{ margin-top:14px; font-size:17px; }
   #tvOverlay .tv-back, #gridOverlay .tv-back{ position:absolute; left:18px; bottom:14px; z-index:5; border:2px solid rgba(255,255,255,0.35); background:rgba(10,24,52,0.75); color:#fff; font-weight:800; font-size:15px; border-radius:999px; padding:8px 16px; cursor:pointer; opacity:.55; transition:opacity .2s, background .2s; }
   #tvOverlay .tv-back:hover, #gridOverlay .tv-back:hover{ opacity:1; background:#1c5fe0; }
   #tvOverlay .tv-exit{ opacity:.45 !important; }
@@ -228,7 +231,7 @@
   @media (min-width: 820px){
     #groupStandingsContainer:not(:empty){
       display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:16px; align-items:start;
-      position:relative; left:50%; transform:translateX(-50%); width:min(96vw, 1900px); margin-bottom:16px;
+      position:relative; left:50%; transform:translateX(-50%); width:96vw; margin-bottom:16px;
     }
     #groupStandingsContainer > .card{ margin-bottom:0; }
     #groupStandingsContainer .card.leaderboard-card{ padding:14px 12px; }
@@ -1145,6 +1148,7 @@
       <button class="btn btn-whatsapp" id="shareWhatsAppBtn" type="button">📤 Condividi su WhatsApp</button>
       <button class="btn btn-live" id="liveSyncToggleBtn" type="button" style="display:none">🔴 Live attivo · Disattiva</button>
       <button class="btn btn-primary" id="tvModeBtn" type="button">📺 Modalità TV</button>
+      <button class="btn btn-primary" id="tvWinBtn" type="button" title="Apre la Modalità TV in una finestra a parte da trascinare sul televisore: qui continui a lavorare normalmente">🖥️ TV sul secondo schermo</button>
       <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
       <button class="btn btn-electric" id="resetTournamentBtn">Nuovo torneo</button>
@@ -1155,7 +1159,7 @@
     <div class="note" id="tourNote" style="display:none;"></div>
     <div id="tvOverlay" style="display:none;" aria-label="Modalità TV">
       <div class="tv-head">
-        <div class="tv-brand"><span class="tv-logo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div class="tv-title" id="tvTitle">Classifiche</div></div>
+        <div class="tv-brand"><span class="tv-logo"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div class="tv-title" id="tvTitle">Classifiche</div></div>
         <div class="tv-clock" id="tvClock"></div>
       </div>
       <div class="tv-viewport" id="tvViewport"><div class="tv-stage" id="tvStage"></div></div>
@@ -7566,13 +7570,69 @@ module.exports = QRCode;
     try{ if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); }catch(e){}
   }
   document.getElementById("tvModeBtn").addEventListener("click", enterTvMode);
-  document.getElementById("tvExitBtn").addEventListener("click", exitTvMode);
-  document.getElementById("tvBackBtn").addEventListener("click", exitTvMode);
+  document.getElementById("tvExitBtn").addEventListener("click", function(){ exitTvMode(); });
+  document.getElementById("tvBackBtn").addEventListener("click", function(){ exitTvMode(); });
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape" && document.getElementById("tvOverlay").style.display !== "none") exitTvMode();
   });
   window.addEventListener("resize", function(){ if(document.body.classList.contains("tv-on")) tvFit(); });
   window.addEventListener("storage", function(e){ if(e.key === LS_CURRENT && document.body.classList.contains("tv-on")) tvRender(); });
+
+  // ---------- TV IN UNA FINESTRA A PARTE (secondo schermo) ----------
+  // La finestra TV rilegge da sola i dati salvati da questa finestra (stesso computer):
+  // tu lavori qui, il televisore mostra tutto in tempo reale.
+  var TV_WINDOW = (function(){ try{ return new URLSearchParams(location.search).get("tv") === "1"; }catch(e){ return false; } })();
+  function tvWinUrl(){ var u = location.href.split("#")[0].replace(/([?&])tv=1&?/, "$1").replace(/[?&]$/, ""); return u + (u.indexOf("?") === -1 ? "?" : "&") + "tv=1"; }
+  function openTvWindow(){
+    function plain(){
+      var w = null;
+      try{ w = window.open(tvWinUrl(), "goophoTV", "popup,width=1280,height=720"); }catch(e){}
+      if(!w){ toast("Il browser ha bloccato la finestra: consenti i popup per questo sito, oppure usa 📺 Modalità TV."); return; }
+      try{ w.focus(); }catch(e){}
+    }
+    // Chrome/Edge: se ci sono due schermi, la apre direttamente su quello esterno
+    if(window.getScreenDetails && window.screen && window.screen.isExtended){
+      window.getScreenDetails().then(function(sd){
+        var other = sd.screens.filter(function(x){ return x !== sd.currentScreen; })[0];
+        if(!other){ plain(); return; }
+        var w = window.open(tvWinUrl(), "goophoTV", "popup,left=" + other.availLeft + ",top=" + other.availTop + ",width=" + other.availWidth + ",height=" + other.availHeight);
+        if(!w) plain();
+      }).catch(plain);
+      return;
+    }
+    plain();
+  }
+  document.getElementById("tvWinBtn").addEventListener("click", openTvWindow);
+  function tvToggleFullscreen(){
+    var ov = document.getElementById("tvOverlay");
+    try{
+      if(document.fullscreenElement || document.webkitFullscreenElement){ (document.exitFullscreen || document.webkitExitFullscreen).call(document); }
+      else if(ov.requestFullscreen) ov.requestFullscreen().catch(function(){});
+      else if(ov.webkitRequestFullscreen) ov.webkitRequestFullscreen();
+    }catch(e){}
+  }
+  document.getElementById("tvOverlay").addEventListener("dblclick", function(e){ if(e.target.closest && e.target.closest("button")) return; tvToggleFullscreen(); });
+  if(TV_WINDOW && !window.__fbViewer){
+    document.title = "📺 TV · GOOPHO 26";
+    var tvb = document.getElementById("tvWinBtn"); if(tvb) tvb.style.display = "none";
+    setTimeout(function(){
+      enterTvMode();
+      var ov = document.getElementById("tvOverlay");
+      var hint = document.createElement("div"); hint.className = "tv-win-hint";
+      hint.innerHTML = '📺 <b>Finestra per il televisore</b><br>Trascinala sullo schermo della TV, poi premi il pulsante qui sotto (o fai <b>doppio clic</b> ovunque) per lo schermo intero.<br>Si aggiorna da sola mentre lavori nell\'altra finestra.<br><button class="btn btn-primary" type="button">⛶ Schermo intero</button>';
+      ov.appendChild(hint);
+      hint.querySelector("button").addEventListener("click", function(){ hint.remove(); tvToggleFullscreen(); });
+      function gone(){ if(document.fullscreenElement || document.webkitFullscreenElement) hint.remove(); }
+      document.addEventListener("fullscreenchange", gone); document.addEventListener("webkitfullscreenchange", gone);
+    }, 300);
+    // uscendo dalla TV questa finestra si chiude (si torna a quella di lavoro)
+    var _exitTv = exitTvMode;
+    exitTvMode = function(){
+      _exitTv.apply(this, arguments);
+      if(window.opener && !window.opener.closed){ try{ window.opener.focus(); }catch(e){} try{ window.close(); }catch(e){} }
+      setTimeout(function(){ if(!window.closed) location.href = location.href.replace(/([?&])tv=1&?/, "$1").replace(/[?&]$/, ""); }, 250);
+    };
+  }
 
   // La Modalità TV vive direttamente nel body, così resta visibile da qualsiasi scheda.
   (function(){ var tv = document.getElementById("tvOverlay"); if(tv && tv.parentNode !== document.body) document.body.appendChild(tv); })();
@@ -8472,7 +8532,8 @@ module.exports = QRCode;
       var b = document.createElement("button");
       b.className = "btn btn-primary"; b.id = "gridOpenBtn"; b.type = "button"; b.style.display = "none";
       b.textContent = "🔲 Reticolo";
-      tvb.parentNode.insertBefore(b, tvb.nextSibling);
+      var after = document.getElementById("tvWinBtn") || tvb;
+      after.parentNode.insertBefore(b, after.nextSibling);
       b.addEventListener("click", openGridWindow);
     }
     var vb = document.querySelector("#spectatorNote .fb-viewer-bar");
@@ -8519,7 +8580,7 @@ module.exports = QRCode;
   if(GRID_MODE){
     var gov = document.createElement("div");
     gov.id = "gridOverlay";
-    gov.innerHTML = '<div class="gx-top"><div class="tv-brand"><span class="tv-logo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div id="gxTitle"></div></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button><button type="button" class="tv-back" id="gxBack">⬅️ Torna all\'app</button>';
+    gov.innerHTML = '<div class="gx-top"><div class="tv-brand"><span class="tv-logo"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div id="gxTitle"></div></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button><button type="button" class="tv-back" id="gxBack">⬅️ Torna all\'app</button>';
     document.body.appendChild(gov);
     document.body.classList.add("grid-on");
     function gxLeave(){
@@ -9172,6 +9233,19 @@ module.exports = QRCode;
     var _vh = window.__viewerHook;
     window.__viewerHook = function(){ if(_vh) _vh(); try{ refresh(); enableInputs(); renderSignup(); }catch(e){} };
   })();
+
+  // Schermi larghi: i gironi del calendario si affiancano in colonne uguali, senza un girone "orfano" su metà riga.
+  function layoutGroupCols(){
+    var c = document.getElementById("roundsContainer"); if(!c) return;
+    var groups = current && current.fixedTeams && current.groups ? current.groups.length : 0;
+    if(!groups || window.innerWidth < 1000){ c.style.gridTemplateColumns = ""; return; }
+    var maxCols = Math.max(1, Math.floor((c.clientWidth + 18) / (420 + 18)));
+    var rows = Math.ceil(groups / maxCols), cols = Math.ceil(groups / rows);
+    c.style.gridTemplateColumns = "repeat(" + cols + ", minmax(0, 1fr))";
+  }
+  (function(){ var _rr = renderRounds; renderRounds = function(){ var r = _rr.apply(this, arguments); layoutGroupCols(); return r; }; })();
+  window.addEventListener("resize", layoutGroupCols);
+  layoutGroupCols();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
   try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}

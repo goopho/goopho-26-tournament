@@ -229,3 +229,15 @@ NOVITÀ (versione 21) - NOVE IDEE NUOVE
        non ci sono ancora risultati;
      · iscrizioni dal link: segnala chi è già iscritto (anche nell'altro
        ruolo); la scheda del giocatore sul telefono resta aperta.
+
+NOVITÀ (versione 23)
+   - Schermi larghi: l'app usa tutta la larghezza già da 1000 pixel (es.
+     MacBook) e senza limite sui monitor grandi; i gironi del calendario
+     si affiancano in colonne uguali, allineati alle classifiche sotto.
+
+NOVITÀ (versione 24)
+   - "🖥️ TV sul secondo schermo": apre la Modalità TV in una finestra a
+     parte. Trascinala sul televisore (Chrome, se ci sono due schermi, la
+     apre già lì), premi "Schermo intero" o fai doppio clic. Si aggiorna da
+     sola mentre lavori nell'altra finestra; "Torna all'app" la chiude.
+     Se non si apre, consenti i popup per il sito.
