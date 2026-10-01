@@ -886,6 +886,10 @@
   .podium-row.silver{ background: rgba(154,160,166,0.16); border-color: rgba(154,160,166,0.45); color:#e4e6e8; box-shadow: 0 0 12px rgba(154,160,166,0.25); }
   .podium-row.bronze{ background: rgba(176,114,47,0.18); border-color: rgba(176,114,47,0.45); color:#eec9a1; box-shadow: 0 0 12px rgba(176,114,47,0.3); }
   .top-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+  .final-setup{ margin-top:18px; padding:14px 16px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(212,175,55,0.16), rgba(26,77,255,0.08)); border:2px solid rgba(212,175,55,0.55); transition:box-shadow .3s; }
+  .final-setup .fs-title{ margin:0 0 6px; font-size:16px; color:var(--pitch); } .final-setup .fs-title span{ font-weight:600; font-size:13px; color:var(--ink-soft); }
+  .final-setup.fs-flash{ box-shadow:0 0 0 4px #ffd868, 0 0 30px rgba(255,216,104,0.8); }
+  .fs-link{ margin:8px 0 4px; }
   /* pulsanti raggruppati per significato: un colore = un tipo di azione */
   .ta-group{ flex:1 1 100%; display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; }
   .ta-label{ flex:1 1 100%; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin:8px 2px -2px; }
@@ -1345,7 +1349,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 30</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 31</span></div>
 
 </div>
 
@@ -4771,6 +4775,7 @@ module.exports = QRCode;
   // 4 se non indicato).
   function qualifyPerGroup(){
     var q = current && parseInt(current.qualifyPerGroup, 10);
+    if(!(q > 0)) q = parseInt(finalPrefs().qualifyPerGroup, 10);
     return q > 0 ? q : 4;
   }
   // Indice del girone di una coppia (per evitare scontri tra coppie dello
@@ -4791,7 +4796,11 @@ module.exports = QRCode;
   // avversario con quello di un'altra partita SOLO se i due hanno lo stesso
   // piazzamento nel girone (es. una 3ª con un'altra 3ª), così il merito è
   // rispettato. Se non esiste uno scambio del genere, resta il merito puro.
-  function avoidRematchOn(){ return !current || current.avoidRematch !== false; }
+  function avoidRematchOn(){ if(current && current.avoidRematch !== undefined && current.avoidRematch !== null) return current.avoidRematch !== false; return finalPrefs().avoidRematch !== false; }
+  // Impostazioni della fase finale scelte PRIMA del sorteggio (valgono per il prossimo torneo)
+  var LS_FINALP = "tg_final_prefs_v1";
+  function finalPrefs(){ try{ return JSON.parse(localStorage.getItem(LS_FINALP) || "{}") || {}; }catch(e){ return {}; } }
+  function setFinalPref(k, v){ var p = finalPrefs(); if(v === null || v === undefined) delete p[k]; else p[k] = v; try{ localStorage.setItem(LS_FINALP, JSON.stringify(p)); }catch(e){} }
   function avoidSameGroupFirstRound(teams){
     var t = teams.slice();
     if(!avoidRematchOn() || !current || !current.groups) return t;
@@ -9079,13 +9088,74 @@ module.exports = QRCode;
   }
 
   // Opzione Fascia B: ripresa dal torneo in corso
+  // un torneo appena sorteggiato prende le scelte fatte prima del sorteggio
+  function applyFinalPrefs(){
+    if(!current || !current.rounds || !current.rounds.length || current._fp) return;
+    var p = finalPrefs();
+    if(current.qualifyPerGroup == null && p.qualifyPerGroup) current.qualifyPerGroup = p.qualifyPerGroup;
+    if(current.avoidRematch == null && p.avoidRematch === false) current.avoidRematch = false;
+    if(current.firstsBye == null && p.byeSeconds != null){ current.firstsBye = true; current.byeSeconds = p.byeSeconds; }
+    if(!current.fasciaBMode && p.fasciaBMode) current.fasciaBMode = p.fasciaBMode;
+    if(current.fasciaBCount == null && p.fasciaBCount) current.fasciaBCount = p.fasciaBCount;
+    if(current.fasciaACount == null && p.fasciaACount) current.fasciaACount = p.fasciaACount;
+    current._fp = true;
+  }
+  beforePersistHooks.push(applyFinalPrefs);
   function restoreFasciaUI(){
-    var el = document.getElementById("fasciaBMode"); if(el) el.value = (current && current.fasciaBMode) || "yes";
-    var bc = document.getElementById("fasciaBCount"); if(bc) bc.value = (current && current.fasciaBCount) || 2;
-    var ac = document.getElementById("fasciaACount"); if(ac) ac.value = (current && current.fasciaACount) || "";
+    applyFinalPrefs();
+    var p = finalPrefs(), drawn = !!(current && current.rounds && current.rounds.length);
+    var el = document.getElementById("fasciaBMode"); if(el) el.value = (drawn && current.fasciaBMode) || p.fasciaBMode || "yes";
+    var bc = document.getElementById("fasciaBCount"); if(bc) bc.value = (drawn && current.fasciaBCount) || p.fasciaBCount || 2;
+    var ac = document.getElementById("fasciaACount"); if(ac) ac.value = (drawn && current.fasciaACount) || p.fasciaACount || "";
     syncFasciaUI();
   }
+  (function(){
+    var card = document.getElementById("cardMatchesPerPlayer"); if(!card) return;
+    var box = document.createElement("div"); box.id = "finalSetup"; box.className = "final-setup";
+    box.innerHTML = '<h3 class="fs-title">🏁 Fase finale <span>— decidi prima del sorteggio</span></h3><div class="draw-summary" id="finalSetupNote">Quante coppie vanno avanti e se si gioca la Fascia B. Puoi cambiarle anche dopo, finché non premi "Sorteggia Fase Finale".</div>';
+    ["fasciaAWrap", "qualifyWrap", "fasciaBWrap"].forEach(function(id){ var e = document.getElementById(id); if(e) box.appendChild(e); });
+    card.appendChild(box);
+    var pc = document.getElementById("playoffIntro");
+    if(pc){
+      var go = document.createElement("div"); go.className = "fs-link"; go.id = "finalSetupLink";
+      go.innerHTML = '<button class="btn btn-ghost btn-sm" type="button">⚙️ Qualificate e Fascia B: impostazioni in "Modalità di svolgimento"</button>';
+      go.querySelector("button").addEventListener("click", function(){ var t = document.getElementById("finalSetup"); if(t){ t.scrollIntoView({ behavior: "smooth", block: "center" }); t.classList.add("fs-flash"); setTimeout(function(){ t.classList.remove("fs-flash"); }, 1600); } });
+      pc.parentNode.insertBefore(go, pc.nextSibling);
+    }
+  })();
+  // cosa mostrare prima del sorteggio (in base alla modalità scelta) e dopo (in base al torneo)
+  function updFinalSetup(){
+    var drawn = !!(current && current.rounds && current.rounds.length);
+    var giallo = drawn ? !current.fixedTeams : document.getElementById("drawMode").value === "rotation";
+    var aw = document.getElementById("fasciaAWrap"), qw = document.getElementById("qualifyWrap");
+    if(aw) aw.style.display = (giallo && !READ_ONLY_VIEW) ? "" : "none";
+    if(qw) qw.style.display = (!giallo && !READ_ONLY_VIEW) ? "" : "none";
+    if(!drawn){
+      var p = finalPrefs();
+      document.getElementById("qualifyPerGroup").value = p.qualifyPerGroup || 4;
+      document.getElementById("avoidRematchToggle").checked = p.avoidRematch !== false;
+      var nG = parseInt(document.getElementById("manualGroupCount").value, 10) || 4, bm = document.getElementById("byeMode");
+      var opts = '<option value="none">Nessuno (tabellone normale)</option><option value="0">Le prime di ogni girone</option>';
+      for(var k = 1; k < Math.max(2, nG); k++) opts += '<option value="' + k + '">Le prime + ' + (k === 1 ? 'la miglior seconda' : 'le ' + k + ' migliori seconde') + '</option>';
+      bm.innerHTML = opts; bm.value = p.byeSeconds != null ? String(Math.min(p.byeSeconds, Math.max(1, nG) - 1)) : "none";
+    }
+    var lb = document.getElementById("fasciaBCountLabel"); if(lb) lb.textContent = giallo ? "Coppie in Fascia B" : "Coppie per girone in Fascia B (dopo le qualificate)";
+    var oy = document.querySelector('#fasciaBMode option[value="yes"]'); if(oy) oy.textContent = giallo ? "🅱️ Sì, con tutte le altre coppie possibili" : "🅱️ Sì, con tutte le non qualificate";
+    var lk = document.getElementById("finalSetupLink"); if(lk) lk.style.display = READ_ONLY_VIEW ? "none" : "";
+    var fs = document.getElementById("finalSetup"); if(fs) fs.style.display = READ_ONLY_VIEW ? "none" : "";
+  }
+  (function(){ var _sf = syncFasciaUI; syncFasciaUI = function(){ var r = _sf.apply(this, arguments); updFinalSetup(); return r; }; })();
+  document.getElementById("drawMode").addEventListener("change", function(){ setTimeout(function(){ syncFasciaUI(); }, 0); });
+  document.getElementById("manualGroupCount").addEventListener("input", function(){ if(!(current && current.rounds && current.rounds.length)) updFinalSetup(); });
+  // ogni scelta viene ricordata anche per il prossimo sorteggio
+  document.getElementById("qualifyPerGroup").addEventListener("change", function(){ setFinalPref("qualifyPerGroup", Math.max(1, Math.min(16, parseInt(this.value, 10) || 4))); });
+  document.getElementById("avoidRematchToggle").addEventListener("change", function(){ setFinalPref("avoidRematch", this.checked); });
+  document.getElementById("byeMode").addEventListener("change", function(){ setFinalPref("byeSeconds", this.value === "none" ? null : (parseInt(this.value, 10) || 0)); });
+  document.getElementById("fasciaBMode").addEventListener("change", function(){ setFinalPref("fasciaBMode", this.value); });
+  document.getElementById("fasciaBCount").addEventListener("input", function(){ setFinalPref("fasciaBCount", fasciaBCountVal()); });
+  document.getElementById("fasciaACount").addEventListener("input", function(){ setFinalPref("fasciaACount", fasciaACountVal()); });
   restoreFasciaUI();
+  setTimeout(updFinalSetup, 0); window.addEventListener("load", function(){ updFinalSetup(); });
   (function(){ var _rr5 = renderRounds; renderRounds = function(){ _rr5.apply(this, arguments); restoreFasciaUI(); }; })();
 
   // ---------- QR CODE DELLA DIRETTA (Modalità TV) ----------

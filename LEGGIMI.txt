@@ -257,3 +257,25 @@ NOVITÀ (versione 26)
 NOVITÀ (versione 27)
    - Corretto il riquadro Live: le due opzioni "Risultati anche dal
      telefono" e "Iscrizioni dal link" si leggono di nuovo bene.
+
+NOVITÀ (versione 28)
+   - Sfondo blu più scuro ed elettrico (anche in Modalità TV e nella barra
+     dell'app installata).
+
+NOVITÀ (versione 29)
+   - Aggiornamenti più affidabili: l'app controlla da sola se c'è una versione
+     nuova (all'avvio e quando ci torni) e mostra "✨ È pronta una nuova
+     versione · Aggiorna". In fondo alla pagina c'è scritto il numero della
+     versione in uso.
+
+NOVITÀ (versione 30)
+   - Più colore: Modalità TV rossa (scritta bianca) e TV sul secondo schermo
+     rossa (scritta blu); Reticolo e Stampe azzurri; Annulla viola; Azzera e
+     Nuovo torneo arancioni. I riquadri in fondo hanno ognuno il suo colore
+     (ritardo verde, ritiro arancio, backup blu, Live rosso, guida viola).
+
+NOVITÀ (versione 31)
+   - Le scelte sulla fase finale (quante coppie passano, Fascia A, Fascia B
+     e quante coppie, chi salta il primo turno) sono ora in "Modalità di
+     svolgimento", PRIMA del pulsante Sorteggia partite. Restano modificabili
+     fino a "Sorteggia Fase Finale" e vengono ricordate per il torneo dopo.
