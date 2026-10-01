@@ -37,6 +37,8 @@
   #tvOverlay .tv-exit:hover{ opacity:1; }
   #tvOverlay .tv-empty{ font-size:clamp(16px, 2.4vw, 44px); opacity:.8; text-align:center; padding-top:20vh; width:80vw; }
   body.tv-on{ overflow:hidden; }
+  .score-input.score-warn{ border-color:#f5a623 !important; background:#fff4d6 !important; box-shadow:0 0 0 2px rgba(245,166,35,0.35); }
+  .score-hint{ margin-top:8px; font-size:12.5px; font-weight:700; color:#8a5a00; background:#fff4d6; border:1px solid #f5a623; border-radius:10px; padding:6px 10px; }
   #tvOverlay .tv-qr{ position:absolute; right:2vw; bottom:4.5vh; width:min(30vh, 17vw); background:#fff; color:#0d2452; border-radius:14px; padding:10px 10px 8px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.45); border:3px solid #d4af37; }
   #tvOverlay .tv-qr canvas{ display:block; width:100%; height:auto; image-rendering:pixelated; }
   #tvOverlay .tv-qr-label{ font-size:clamp(11px, 1.15vw, 24px); font-weight:900; margin-bottom:6px; line-height:1.2; }
@@ -108,10 +110,10 @@
   /* ---------- LIVE (Firebase) ---------- */
   #fbLiveCard .rules-body label.field{ margin-top:10px; }
   #fbLiveCard .rules-body input{ width:100%; box-sizing:border-box; }
-  #fbLiveCard .fb-row, #backupCard .fb-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  #fbLiveCard .fb-row, #backupCard .fb-row, #subCard .fb-row{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   #fbLiveCard .fb-row .btn, #backupCard .fb-row .btn{ flex:1 1 180px; }
-  #fbLiveCard .fb-status, #backupCard .fb-status{ margin-top:12px; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.07); font-size:13.5px; line-height:1.45; }
-  #fbLiveCard .fb-status.on, #backupCard .fb-status.on{ background:rgba(34,160,80,0.14); }
+  #fbLiveCard .fb-status, #backupCard .fb-status, #subCard .fb-status{ margin-top:12px; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.07); font-size:13.5px; line-height:1.45; }
+  #fbLiveCard .fb-status.on, #backupCard .fb-status.on, #subCard .fb-status.on{ background:rgba(34,160,80,0.14); }
   #fbLiveCard .fb-status.err, #backupCard .fb-status.err{ background:rgba(193,68,59,0.14); }
   #fbLiveCard .fb-link{ word-break:break-all; font-family:var(--mono); font-size:12px; margin-top:6px; }
   .fb-viewer-bar{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
@@ -1010,6 +1012,11 @@
     <div class="card" id="playoffCard" style="">
       <h2>🏁 Fase Finale</h2>
       <div id="playoffIntro" class="draw-summary">Fascia A: i primi 8 portieri e i primi 8 attaccanti in classifica formano le squadre in modo meritocratico incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Anche gli accoppiamenti del tabellone (Quarti di finale → Semifinale → Finale) seguono la classifica: il 1° incontra l'ultimo del girone, il 2° il penultimo, e così via, per tenere separati i migliori fino ai turni successivi. Ogni incontro, dagli ottavi/quarti fino alla finale, si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.</div>
+      <div id="fasciaAWrap" style="display:none; margin-top:10px;">
+        <label class="field" for="fasciaACount">Coppie in Fascia A</label>
+        <input type="number" id="fasciaACount" min="2" max="32" placeholder="Automatico (8, oppure 4 o 2 se siete in pochi)">
+        <div class="draw-summary" style="margin-top:6px;">Le coppie si formano incrociando la classifica (1° portiere con 2° attaccante, 2° portiere con 1° attaccante…). Con un numero diverso da 2, 4, 8, 16 si gioca un primo turno con ripescaggio.</div>
+      </div>
       <div id="qualifyWrap" style="display:none; margin-top:10px;">
         <label class="field" for="qualifyPerGroup">Coppie che passano da ogni girone</label>
         <input type="number" id="qualifyPerGroup" min="1" max="16" value="4">
@@ -1020,6 +1027,19 @@
         <label class="field" for="byeMode" style="margin-top:12px;">Chi salta il primo turno</label>
         <select id="byeMode"></select>
         <div class="draw-summary" style="margin-top:6px;">Chi salta il turno entra direttamente al turno successivo; le altre qualificate giocano il primo turno tra loro e tutte le coppie non qualificate vanno in Fascia B.</div>
+      </div>
+      <div id="fasciaBWrap" style="margin-top:12px;">
+        <label class="field" for="fasciaBMode">Fascia B</label>
+        <select id="fasciaBMode">
+          <option value="yes">🅱️ Sì, con tutte le altre</option>
+          <option value="count">🔢 Sì, scelgo quante coppie</option>
+          <option value="no">❌ No: chi non va in Fascia A è eliminato</option>
+        </select>
+        <div id="fasciaBCountWrap" style="display:none; margin-top:10px;">
+          <label class="field" for="fasciaBCount" id="fasciaBCountLabel">Coppie in Fascia B</label>
+          <input type="number" id="fasciaBCount" min="1" max="32" value="2">
+        </div>
+        <div class="draw-summary" style="margin-top:6px;" id="fasciaBHint">Chi non entra né in Fascia A né in Fascia B è eliminato. Se per la Fascia B resta una sola coppia, viene ripescata in Fascia A.</div>
       </div>
       <button class="btn btn-primary btn-block" id="genPlayoffBtn" style="margin-top:8px;">🎲 Sorteggia Fase Finale</button>
       <div id="playoffBracket"><div><div class="stage-subtitle">Quarti di finale</div><div class="match-card"><span class="match-label">1ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="1" data-side="B" value="5"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">alfonso - nello</span></div></div><div class="match-card"><span class="match-label">2ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="0" data-side="B" value="4"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="1" data-side="B" value="4"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - jelena</span></div></div><div class="match-card"><span class="match-label">3ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="1" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gardo - stefano</span></div></div><div class="match-card"><span class="match-label">4ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="1" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">bianco - andrea b</span></div></div><div class="stage-subtitle">Semifinale</div><div class="match-card"><span class="match-label">1ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="1" data-side="A" value="4"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - nello</span></div></div><div class="match-card"><span class="match-label">2ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="0" data-side="B" value="3"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="1" data-side="B" value="0"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">bianco - stefano</span></div></div><div class="stage-subtitle">Finale</div><div class="match-card"><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="1" data-side="B" value="5"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - nello</span></div></div><div class="stage-subtitle">Finale 3°/4° posto</div><div class="match-card"><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="1" data-side="B" value="3"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">alfonso - jelena</span></div></div><div class="podium-box"><div class="podium-title">🏆 VINCITORI</div><div class="podium-row gold"><span class="podium-medal">🥇</span><span class="podium-names">gufo - nello</span></div><div class="podium-row silver"><span class="podium-medal">🥈</span><span class="podium-names">bianco - stefano</span></div><div class="podium-row bronze"><span class="podium-medal">🥉</span><span class="podium-names">alfonso - jelena</span></div></div></div></div>
@@ -1059,6 +1079,22 @@
           <label class="field" for="lateGroup">Girone</label>
           <select id="lateGroup"></select>
           <div class="fb-row"><button class="btn btn-primary" id="lateAddBtn" type="button">➕ Aggiungi al girone</button></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card rules-card" id="subCard" style="display:none;">
+      <details id="subDetails">
+        <summary>🔁 Sostituisci un giocatore (chi se ne va o chi arriva tardi)</summary>
+        <div class="rules-body">
+          <p>Nelle partite <b>ancora da giocare</b> il giocatore che esce viene sostituito da quello che entra; le partite già giocate restano com'erano. Va bene anche per chi arriva tardi: fallo entrare al posto della <b>Talpa</b> o di chi lo sostituiva. Se chi se ne va non ha un sostituto, scegli <b>Talpa</b>: il compagno continua a giocare e a fare punti, la Talpa no.</p>
+          <label class="field" for="subOut">Chi esce</label>
+          <select id="subOut"></select>
+          <label class="field" for="subIn" style="margin-top:10px;">Chi entra</label>
+          <select id="subIn"></select>
+          <input type="text" id="subNewName" placeholder="Nome del nuovo giocatore" style="display:none; margin-top:8px;">
+          <div class="fb-row"><button class="btn btn-electric" id="subBtn" type="button">🔁 Sostituisci</button></div>
+          <div class="fb-status" id="subStatus" style="display:none;"></div>
         </div>
       </details>
     </div>
@@ -3008,13 +3044,45 @@ module.exports = QRCode;
   }
   document.getElementById("printRosterBtn").addEventListener("click", printRoster);
 
+  // ---------- TALPA / JOLLY: chi gioca due volte nella stessa giornata ----------
+  // Un giocatore può comparire più volte nella stessa giornata (ruoli in numero
+  // diverso, numero dispari di coppie). Conta solo la PRIMA partita: nelle
+  // successive fa da "Talpa" (non prende punti) e, se è tutta la coppia a
+  // giocare di nuovo, quella coppia fa da "jolly" in quella partita.
+  function talpaIdsOf(m){
+    var a = (m && m.talpaIds) ? m.talpaIds.slice() : [];
+    if(m && m.talpaPlayerId && a.indexOf(m.talpaPlayerId) === -1) a.push(m.talpaPlayerId);
+    return a;
+  }
+  function isTalpaIn(m, id){ return talpaIdsOf(m).indexOf(id) !== -1; }
+  function markRepeatAppearances(matches){
+    var seen = {};
+    matches.forEach(function(m){
+      if(m.jollySide){ ["A","B"].forEach(function(sd){ if(sd !== m.jollySide){ var t = m["team" + sd]; seen[t.keeper.id] = 1; seen[t.attacker.id] = 1; } }); return; }
+      var tal = talpaIdsOf(m), jolly = null;
+      ["A","B"].forEach(function(sd){
+        var t = m["team" + sd];
+        if(sd === "B"){ if(t.keeper.id === m.teamA.keeper.id && tal.indexOf(t.keeper.id) === -1) tal.push(t.keeper.id); if(t.attacker.id === m.teamA.attacker.id && tal.indexOf(t.attacker.id) === -1) tal.push(t.attacker.id); }
+        var kRep = !!seen[t.keeper.id] || tal.indexOf(t.keeper.id) !== -1, aRep = !!seen[t.attacker.id] || tal.indexOf(t.attacker.id) !== -1;
+        if(kRep && aRep && !jolly){ jolly = sd; return; }
+        if(kRep && tal.indexOf(t.keeper.id) === -1) tal.push(t.keeper.id);
+        if(aRep && tal.indexOf(t.attacker.id) === -1) tal.push(t.attacker.id);
+      });
+      if(jolly) m.jollySide = jolly;
+      if(tal.length){ m.talpaPlayerId = tal[0]; if(tal.length > 1) m.talpaIds = tal; else delete m.talpaIds; }
+      else { delete m.talpaPlayerId; delete m.talpaIds; }
+      ["A","B"].forEach(function(sd){ if(sd === m.jollySide) return; var t = m["team" + sd]; seen[t.keeper.id] = 1; seen[t.attacker.id] = 1; });
+    });
+    return matches;
+  }
+
   function printRounds(){
     if(!current || !current.rounds || !current.rounds.length) return;
     var tName = (current.name || nameInput.value || "Torneo").trim();
     var dateStr = new Date().toLocaleDateString("it-IT", { day:"2-digit", month:"2-digit", year:"numeric" });
-    function teamHtml(team, isJolly, talpaId){
-      var kName = esc(team.keeper.name) + (talpaId && team.keeper.id === talpaId ? ' (Talpa)' : '');
-      var aName = esc(team.attacker.name) + (talpaId && team.attacker.id === talpaId ? ' (Talpa)' : '');
+    function teamHtml(team, isJolly, mm){
+      var kName = esc(team.keeper.name) + (isTalpaIn(mm, team.keeper.id) ? ' (Talpa)' : '');
+      var aName = esc(team.attacker.name) + (isTalpaIn(mm, team.attacker.id) ? ' (Talpa)' : '');
       return '<b class="pr-p">' + kName + '</b> <span class="pr-role">P</span> / <b class="pr-a">' + aName + '</b> <span class="pr-role">A</span>' + (isJolly ? ' <span class="pr-jolly">(jolly)</span>' : '');
     }
     function matchRow(m){
@@ -3022,9 +3090,9 @@ module.exports = QRCode;
         ? '<span class="pr-vs">vs</span>'
         : '<span class="pr-score">' + m.scoreA + ' - ' + m.scoreB + '</span>';
       return '<div class="pr-match">' +
-        '<div class="pr-team">' + teamHtml(m.teamA, m.jollySide==="A", m.talpaPlayerId) + '</div>' +
+        '<div class="pr-team">' + teamHtml(m.teamA, m.jollySide==="A", m) + '</div>' +
         '<div class="pr-mid">' + scoreTxt + '</div>' +
-        '<div class="pr-team pr-team-r">' + teamHtml(m.teamB, m.jollySide==="B", m.talpaPlayerId) + '</div>' +
+        '<div class="pr-team pr-team-r">' + teamHtml(m.teamB, m.jollySide==="B", m) + '</div>' +
         '</div>';
     }
     var roundsHtml = current.rounds.map(function(rnd, ri){
@@ -3334,9 +3402,7 @@ module.exports = QRCode;
       [m.teamA.keeper.id, m.teamA.attacker.id, m.teamB.keeper.id, m.teamB.attacker.id].forEach(function(pid){
         matchesPlayed[pid] = (matchesPlayed[pid]||0) + 1;
       });
-      if(m.talpaPlayerId && talpaCounts){
-        talpaCounts[m.talpaPlayerId] = (talpaCounts[m.talpaPlayerId]||0) + 1;
-      }
+      if(talpaCounts) talpaIdsOf(m).forEach(function(tid){ talpaCounts[tid] = (talpaCounts[tid]||0) + 1; });
     });
     (bestAttempt.byes || []).forEach(function(p){
       restCounts[p.id] = (restCounts[p.id]||0) + 1;
@@ -3398,7 +3464,8 @@ module.exports = QRCode;
   // già affrontato quella coppia.
   function pickOpponentForExtra(teams, opponentSet, extraTeam){
     if(!teams || !teams.length) return null;
-    var pool = shuffle(teams);
+    var pool = shuffle(teams).filter(function(t){ return t.keeper.id !== extraTeam.keeper.id && t.attacker.id !== extraTeam.attacker.id; });
+    if(!pool.length) return null;
     for(var i=0;i<pool.length;i++){
       if(!teamsHaveFaced(extraTeam, pool[i], opponentSet)) return pool[i];
     }
@@ -3462,16 +3529,23 @@ module.exports = QRCode;
     var teamPool = shuffle(teams);
     var matches = [];
     var used = {};
+    // Uno stesso giocatore (raddoppiato) non può trovarsi in entrambe le squadre della stessa partita.
+    function sharePlayer(t1, t2){ return t1.keeper.id === t2.keeper.id || t1.attacker.id === t2.attacker.id; }
     for(var i=0;i<teamPool.length;i++){
       if(used[i]) continue;
       var best = -1;
       for(var j=i+1;j<teamPool.length;j++){
-        if(used[j]) continue;
+        if(used[j] || sharePlayer(teamPool[i], teamPool[j])) continue;
         if(!teamsHaveFaced(teamPool[i], teamPool[j], opponentSet)){ best = j; break; }
       }
       if(best === -1){
         for(var j2=i+1;j2<teamPool.length;j2++){
-          if(!used[j2]){ best = j2; violations++; break; }
+          if(!used[j2] && !sharePlayer(teamPool[i], teamPool[j2])){ best = j2; violations++; break; }
+        }
+      }
+      if(best === -1){
+        for(var j3=i+1;j3<teamPool.length;j3++){
+          if(!used[j3]){ best = j3; violations += 5; break; }
         }
       }
       if(best !== -1){
@@ -3534,6 +3608,7 @@ module.exports = QRCode;
       }
     }
 
+    markRepeatAppearances(matches);
     return { teams: teams, matches: matches, byes: byes, violations: violations };
   }
 
@@ -3585,16 +3660,18 @@ module.exports = QRCode;
         if(seen[id]){ reps.push(id); info.dup[sl[0]] = 1; }
       });
       MR_SLOTS.forEach(function(sl, si){ if(vals[si]) seen[vals[si]] = (seen[vals[si]] || 0) + 1; });
-      if(reps.length > 1){ res.errors.push("Partita " + (mi + 1) + ": più di un giocatore sta già giocando in questa giornata (al massimo una Talpa per partita)."); MR_SLOTS.forEach(function(sl){ if(info.dup[sl[0]]) info.bad[sl[0]] = 1; }); }
-      else if(reps.length === 1){
-        info.talpa = reps[0];
-        var pl = mrPlayerById(reps[0], "P") || mrPlayerById(reps[0], "A");
-        res.notes.push("Partita " + (mi + 1) + ": " + (pl ? pl.name : "?") + " gioca di nuovo e fa da Talpa (non fa punteggio in questa partita).");
+      if(reps.length){
+        var nm = function(id){ var pl = mrPlayerById(id, "P") || mrPlayerById(id, "A"); return pl ? pl.name : "?"; };
+        var teamRep = null;
+        if(info.dup.kA && info.dup.aA) teamRep = [vals[0], vals[1]];
+        else if(info.dup.kB && info.dup.aB) teamRep = [vals[2], vals[3]];
+        if(teamRep){
+          res.notes.push("Partita " + (mi + 1) + ": la coppia " + nm(teamRep[0]) + " - " + nm(teamRep[1]) + " gioca di nuovo e fa da jolly (questa partita non le dà punti).");
+          reps = reps.filter(function(id){ return teamRep.indexOf(id) === -1; });
+        }
+        reps.forEach(function(id){ res.notes.push("Partita " + (mi + 1) + ": " + nm(id) + " gioca di nuovo e fa da Talpa (questa partita non gli dà punti)."); });
       }
       res.matchInfo.push(info);
-    });
-    Object.keys(res.used).forEach(function(id){
-      if(res.used[id] > 2){ var pl = mrPlayerById(id, "P") || mrPlayerById(id, "A"); res.errors.push((pl ? pl.name : "?") + " compare " + res.used[id] + " volte nella stessa giornata."); }
     });
     return res;
   }
@@ -3685,11 +3762,11 @@ module.exports = QRCode;
       t.matches.forEach(function(m, mi){
         if(!an.matchInfo[mi].complete) return;
         var mm = { id: uid(), teamA: { keeper: mrPlayerById(m.kA, "P"), attacker: mrPlayerById(m.aA, "A") }, teamB: { keeper: mrPlayerById(m.kB, "P"), attacker: mrPlayerById(m.aB, "A") }, scoreA: null, scoreB: null, mrPos: ti + ":" + mi };
-        if(an.matchInfo[mi].talpa) mm.talpaPlayerId = an.matchInfo[mi].talpa;
         matches.push(mm);
       });
       if(!matches.length) return;
       var byes = players.keepers.concat(players.attackers).filter(function(pl){ return !an.used[pl.id]; });
+      markRepeatAppearances(matches);
       out.push({ matches: matches, byes: byes, recovery: false, violations: 0 });
     });
     if(!out.length) return { error: "Inserisci almeno una partita completa (2 portieri e 2 attaccanti)." };
@@ -3702,7 +3779,7 @@ module.exports = QRCode;
     Object.keys(old).forEach(function(pos){
       var m = old[pos], target = byPos[pos];
       if(!target){ if(mrIsScored(m)) lost++; return; }
-      Object.keys(m).forEach(function(k){ if(k !== "teamA" && k !== "teamB" && k !== "talpaPlayerId" && k !== "mrPos") target[k] = m[k]; });
+      Object.keys(m).forEach(function(k){ if(k !== "teamA" && k !== "teamB" && k !== "talpaPlayerId" && k !== "talpaIds" && k !== "jollySide" && k !== "mrPos") target[k] = m[k]; });
     });
     return lost;
   }
@@ -3802,6 +3879,7 @@ module.exports = QRCode;
   updateDrawModeUI();
 
   // ---------- DRAW BUTTON ----------
+  var drawImbalanceOk = false;
   document.getElementById("drawBtn").addEventListener("click", function(){
     if(players.keepers.length < 2 || players.attackers.length < 2){
       toast("Aggiungi almeno 2 portieri e 2 attaccanti prima di sorteggiare.");
@@ -3815,6 +3893,21 @@ module.exports = QRCode;
     var isFixed = mode === "fixed" || isManual;
     var rounds, fixedTeamsList = null, benchedPlayers = [], groupsList = null;
     var manualRounds = !isFixed && mrIsManual();
+    // Giallo con ruoli molto sbilanciati: avvisa prima di sorteggiare.
+    if(!isFixed && !manualRounds && !drawImbalanceOk){
+      var nK = players.keepers.length, nA = players.attackers.length;
+      var big = Math.max(nK, nA), small = Math.min(nK, nA);
+      if(big >= small * 1.5 && big - small >= 2){
+        var shortRole = nK < nA ? "portieri" : "attaccanti", longRole = nK < nA ? "attaccanti" : "portieri";
+        var perRound = Math.ceil(big / small);
+        var move = Math.floor((big - small) / 2);
+        showConfirm("Hai " + nK + " portieri e " + nA + " attaccanti. Per far giocare tutti, molti " + shortRole + " dovranno giocare fino a " + perRound + " partite per giornata (le partite in più non danno punti, ma la serata si allunga). Per pareggiare potresti spostare " + move + " " + longRole + " tra i " + shortRole + ". Vuoi sorteggiare lo stesso?", function(){
+          drawImbalanceOk = true;
+          try{ document.getElementById("drawBtn").click(); } finally { drawImbalanceOk = false; }
+        });
+        return;
+      }
+    }
     if(manualRounds && mrLinked()){ mrApplyToCurrent(); return; }
     if(isFixed){
       var built = isManual ? buildManualTeams() : buildFixedTeams(players.keepers, players.attackers);
@@ -4055,9 +4148,13 @@ module.exports = QRCode;
       var hasJolly = recoveryRound.matches.some(function(m){ return m.jollySide; });
       notes.push("al termine dei turni, le coppie che hanno riposato durante il girone giocano un'unica giornata di recupero per completare le proprie partite" + (hasJolly ? "; con un numero dispari di coppie da recuperare, ne è stata sorteggiata una \"jolly\" tra chi ha già finito tutte le sue partite — quella coppia non guadagna punti in questo incontro, mentre l'avversaria che recupera fa punteggio normalmente in base al risultato" : "") + ".");
     }
-    var anyTalpa = current.rounds.some(function(r){ return r.matches.some(function(m){ return m.talpaPlayerId; }); });
+    var anyTalpa = current.rounds.some(function(r){ return r.matches.some(function(m){ return talpaIdsOf(m).length; }); });
+    var anyRoundJolly = current.rounds.some(function(r){ return !r.recovery && r.matches.some(function(m){ return m.jollySide; }); });
+    if(anyRoundJolly){
+      notes.push("con un numero dispari di coppie nessuno riposa: a ogni giornata una coppia gioca una partita in più come \"jolly\" e quella partita non le dà punti (per lei conta solo la prima), mentre l'altra coppia fa punteggio normalmente.");
+    }
     if(anyTalpa){
-      notes.push("quando il numero di portieri e attaccanti è diverso, chi resta senza compagno gioca comunque: a ogni giornata un giocatore dell'altro ruolo (già impegnato nella sua partita normale) viene scelto a rotazione per fargli da \"Talpa\" in una partita extra — il suo nome compare in rosso nel tabellone e non guadagna punti per quella partita extra, mentre il compagno reale fa punteggio normalmente.");
+      notes.push("quando il numero di portieri e attaccanti è diverso, chi resta senza compagno gioca comunque: un giocatore già impegnato nella sua partita normale gioca anche una partita in più facendo da \"Talpa\" — il suo nome compare in rosso e quella partita in più non gli dà punti (gli conta solo la prima), mentre il compagno fa punteggio normalmente.");
     }
     if(notes.length){
       note.style.display = "";
@@ -4083,13 +4180,13 @@ module.exports = QRCode;
     var div = document.createElement("div");
     div.className = "match-card";
     var jollyA = m.jollySide === "A", jollyB = m.jollySide === "B";
-    var talpaId = m.talpaPlayerId || null;
+    var talpaId = talpaIdsOf(m).length ? true : null;
     function playerHtml(p, roleClass, roleLabel){
-      var isTalpaPlayer = talpaId && p.id === talpaId;
+      var isTalpaPlayer = isTalpaIn(m, p.id);
       return '<b class="' + roleClass + (isTalpaPlayer ? ' talpa-name' : '') + '">' + esc(p.name) + '</b> <span class="role">' + roleLabel + '</span>';
     }
     div.innerHTML =
-      (talpaId ? '<div class="talpa-tag" style="margin-bottom:6px;">🕳️ Partita extra: il nome in rosso fa da Talpa e non fa punteggio in questa partita; il compagno reale sì.</div>' : '') +
+      (talpaId ? '<div class="talpa-tag" style="margin-bottom:6px;">🕳️ Partita extra: il nome in rosso fa da Talpa e non fa punteggio in questa partita; gli altri sì.</div>' : '') +
       '<div class="match-teams">' +
         '<div class="team">' +
           '<div class="players">' + playerHtml(m.teamA.keeper, "name-p", "P") + '<br>' + playerHtml(m.teamA.attacker, "name-a", "A") + '</div>' +
@@ -4166,24 +4263,25 @@ module.exports = QRCode;
         // non guadagna nessuna statistica per QUESTA partita, mentre il
         // resto dei giocatori coinvolti (compreso il suo compagno reale in
         // esubero, e la squadra avversaria) fa punteggio normalmente.
-        var talpaId = m.talpaPlayerId || null;
-        if(!skipA) teamAp.forEach(function(s){ if(s.id !== talpaId){ s.pg++; s.gf+=sa; s.gs+=sb; } });
-        if(!skipB) teamBp.forEach(function(s){ if(s.id !== talpaId){ s.pg++; s.gf+=sb; s.gs+=sa; } });
+        var talpaList = talpaIdsOf(m);
+        function noT(s){ return talpaList.indexOf(s.id) === -1; }
+        if(!skipA) teamAp.forEach(function(s){ if(noT(s)){ s.pg++; s.gf+=sa; s.gs+=sb; } });
+        if(!skipB) teamBp.forEach(function(s){ if(noT(s)){ s.pg++; s.gf+=sb; s.gs+=sa; } });
         // Punteggio a scarto: 1 gol di differenza vale 2-1, 2 gol o più vale 3-0.
         // Un pareggio non dovrebbe verificarsi in questo gioco, ma per sicurezza
         // resta gestito come 1 punto a testa nel caso capiti per errore di inserimento.
         var diff = Math.abs(sa - sb);
         if(sa > sb){
           var ptsWinA = diff === 1 ? 2 : 3, ptsLoseB = diff === 1 ? 1 : 0;
-          if(!skipA) teamAp.forEach(function(s){ if(s.id !== talpaId){ s.v++; s.pt+=ptsWinA; } });
-          if(!skipB) teamBp.forEach(function(s){ if(s.id !== talpaId){ s.p++; s.pt+=ptsLoseB; } });
+          if(!skipA) teamAp.forEach(function(s){ if(noT(s)){ s.v++; s.pt+=ptsWinA; } });
+          if(!skipB) teamBp.forEach(function(s){ if(noT(s)){ s.p++; s.pt+=ptsLoseB; } });
         } else if(sb > sa){
           var ptsWinB = diff === 1 ? 2 : 3, ptsLoseA = diff === 1 ? 1 : 0;
-          if(!skipB) teamBp.forEach(function(s){ if(s.id !== talpaId){ s.v++; s.pt+=ptsWinB; } });
-          if(!skipA) teamAp.forEach(function(s){ if(s.id !== talpaId){ s.p++; s.pt+=ptsLoseA; } });
+          if(!skipB) teamBp.forEach(function(s){ if(noT(s)){ s.v++; s.pt+=ptsWinB; } });
+          if(!skipA) teamAp.forEach(function(s){ if(noT(s)){ s.p++; s.pt+=ptsLoseA; } });
         } else {
-          if(!skipA) teamAp.forEach(function(s){ if(s.id !== talpaId){ s.n++; s.pt+=1; } });
-          if(!skipB) teamBp.forEach(function(s){ if(s.id !== talpaId){ s.n++; s.pt+=1; } });
+          if(!skipA) teamAp.forEach(function(s){ if(noT(s)){ s.n++; s.pt+=1; } });
+          if(!skipB) teamBp.forEach(function(s){ if(noT(s)){ s.n++; s.pt+=1; } });
         }
       });
     });
@@ -4371,6 +4469,12 @@ module.exports = QRCode;
     }).join("");
   }
 
+  function groupBNote(){
+    var m = typeof fasciaBModeVal === "function" ? fasciaBModeVal() : "yes";
+    if(m === "no") return "le altre (nome sbiadito) sono eliminate.";
+    if(m === "count" && fasciaBCountVal()) return "le successive " + fasciaBCountVal() + " giocano la Fascia B, le altre sono eliminate.";
+    return "le altre (nome sbiadito) giocano la Fascia B.";
+  }
   function renderGroupStandings(){
     var wrap = document.getElementById("groupStandingsContainer");
     wrap.innerHTML = "";
@@ -4384,7 +4488,7 @@ module.exports = QRCode;
       var letter = (g.label || "").replace(/^Girone\s*/i, "") || String.fromCharCode(65 + gi);
       card.innerHTML =
         '<h2 class="leaderboard-title lt-' + col + '"><span class="lb-emoji"><span class="lb-letter">' + esc(letter) + '</span></span><span class="lb-text">Leaderboard ' + esc(g.label) + '</span></h2>' +
-        '<div class="group-qualify-note">Le prime ' + qualifyCount + ' (nome in bianco) vanno in Fascia A' + (current.firstsBye ? ' (la 1ª' + (current.byeSeconds ? ' e le migliori seconde saltano' : ' salta') + ' il primo turno)' : '') + '; le altre (nome sbiadito) giocano la Fascia B.</div>' +
+        '<div class="group-qualify-note">Le prime ' + qualifyCount + ' (nome in bianco) vanno in Fascia A' + (current.firstsBye ? ' (la 1ª' + (current.byeSeconds ? ' e le migliori seconde saltano' : ' salta') + ' il primo turno)' : '') + '; ' + groupBNote() + '</div>' +
         '<div style="overflow-x:auto;"><table class="standings"><thead><tr>' +
         '<th>Squadra</th><th class="num pt-cell">Pt</th><th class="num">PG</th><th class="num">V</th><th class="num">P</th>' +
         '<th class="num">GF</th><th class="num">GS</th><th class="num">DR</th>' +
@@ -4551,7 +4655,8 @@ module.exports = QRCode;
         bm.value = current.firstsBye ? String(Math.min(current.byeSeconds || 0, nG-1)) : "none";
       }
     }
-    var n = isGrouped ? computeQualifiers().length : Math.min(keeperRows.length, attackerRows.length, 20);
+    syncFasciaUI();
+    var n = isGrouped ? computeQualifiers().length : Math.min(keeperRows.length, attackerRows.length, 32);
     if(n < 2){
       el.textContent = isGrouped ? "Gioca le partite dei gironi per generare la fase finale." : "Inserisci i risultati di almeno 2 portieri e 2 attaccanti per generare la fase finale.";
       document.getElementById("genPlayoffBtn").disabled = true;
@@ -4578,21 +4683,30 @@ module.exports = QRCode;
     } else if(current && current.fixedTeams){
       msg = "Fascia A: le prime " + primarySize + " coppie fisse in classifica entrano nel tabellone (" + stageA.join(" → ") + ") mantenendo la stessa coppia portiere+attaccante sorteggiata a inizio torneo, fino alla fine della fase finale. Gli accoppiamenti seguono la classifica: la 1ª incontra l'ultima del girone, la 2ª la penultima, e così via.";
     } else {
-      msg = "Fascia A: i primi " + primarySize + " portieri e i primi " + primarySize + " attaccanti in classifica formano le squadre in modo meritocratico incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Anche gli accoppiamenti del tabellone (" + stageA.join(" → ") + ") seguono la classifica: il 1° incontra l'ultimo del girone, il 2° il penultimo, e così via, per tenere separati i migliori fino ai turni successivi.";
+      var gz = gialloSizes(n);
+      msg = "Fascia A: " + gz.a + " coppie, formate dai primi " + gz.a + " portieri e dai primi " + gz.a + " attaccanti in classifica incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Gli accoppiamenti del tabellone seguono la classifica: la 1ª coppia incontra l'ultima, la 2ª la penultima, e così via" + (isPow2(gz.a) ? "." : " (non essendo 2, 4, 8, 16 o 32, si gioca un primo turno con ripescaggio delle migliori perdenti).");
+      msg += gz.b >= 2 ? " Fascia B: le successive " + gz.b + " coppie, con la stessa logica." : " Nessuna Fascia B.";
+      if(gz.out > 0) msg += " Restano fuori gli ultimi " + gz.out + " portieri e " + gz.out + " attaccanti in classifica.";
     }
     if(isGrouped){
       var totalGroupTeams = current.groups.reduce(function(acc, g){ return acc + g.teams.length; }, 0);
       var crossed = current.groups.length === 2 && qualifyPerGroup() === 4 && n === 8;
-      var bTot = totalGroupTeams - n;
-      if(bTot >= 2) msg += " Fascia B: le " + bTot + " coppie non qualificate (dalla " + (qualifyPerGroup()+1) + "ª posizione in giù)" + (bTot === 3 ? ": giocano un triangolare (ognuna contro le altre due, partita secca)." : ", con tabellone per classifica: nessuno viene eliminato e nessuno riposa (se servono, ripescaggio delle migliori perdenti).");
-      else if(bTot === 1) msg += " Resta fuori 1 coppia (una sola non basta per formare la Fascia B).";
-    } else if(secondarySize >= 2){
+      var bTot = totalGroupTeams - n, outG = 0;
+      if(fasciaBOn() && fasciaBModeVal() === "count" && fasciaBCountVal()){
+        var bReal = nonQualifiedTeams(current.groups.map(computeTeamGroupStandings), qualifyPerGroup()).length;
+        outG = bTot - bReal; bTot = bReal;
+        if(outG > 0) msg += " Le " + outG + (outG === 1 ? " coppia dopo la Fascia B è eliminata." : " coppie dopo la Fascia B sono eliminate.");
+      }
+      if(bTot >= 1 && !fasciaBOn()) msg += " Nessuna Fascia B: le " + bTot + (bTot === 1 ? " coppia non qualificata è eliminata." : " coppie non qualificate sono eliminate.");
+      else if(bTot >= 2) msg += " Fascia B: le " + bTot + " coppie non qualificate (dalla " + (qualifyPerGroup()+1) + "ª posizione in giù)" + (bTot === 3 ? ": giocano un triangolare (ognuna contro le altre due, partita secca)." : ", con tabellone per classifica: nessuno viene eliminato e nessuno riposa (se servono, ripescaggio delle migliori perdenti).");
+      else if(bTot === 1) msg += " Resta fuori 1 sola coppia: non basta per una Fascia B, quindi viene ripescata in Fascia A.";
+    } else if(current && current.fixedTeams && secondarySize >= 2 && fasciaBOn()){
       var stageB = STAGE_NAMES.slice(STAGE_NAMES.length - Math.log2(secondarySize));
       msg += " Fascia B: le successive " + secondarySize + " qualificate, con la stessa logica (" + stageB.join(" → ") + ").";
       if(remaining > secondarySize){
         msg += " Restano fuori dal tabellone le ultime " + (remaining - secondarySize) + " qualificate.";
       }
-    } else if(remaining > 0){
+    } else if(current && current.fixedTeams && remaining > 0){
       msg += " Le ultime " + remaining + " qualificate non entrano nel tabellone (troppo poche per formare una Fascia B).";
     }
     msg += " Ogni incontro, dagli ottavi/quarti fino alla finale, si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.";
@@ -4930,13 +5044,64 @@ module.exports = QRCode;
     renderStandings();
     if(current.playoffs) toast("Formato cambiato: premi \"Sorteggia Fase Finale\" per rifare il tabellone.");
   });
+  function fasciaBModeVal(){ var el = document.getElementById("fasciaBMode"); return el ? el.value : "yes"; }
+  function fasciaBOn(){ return fasciaBModeVal() !== "no"; }
+  function fasciaBCountVal(){ var v = parseInt((document.getElementById("fasciaBCount") || {}).value, 10); return v > 0 ? v : null; }
+  function fasciaACountVal(){ var v = parseInt((document.getElementById("fasciaACount") || {}).value, 10); return v >= 2 ? v : null; }
+  // Coppie non qualificate che vanno in Fascia B (gironi): tutte, un numero per girone, o nessuna.
+  function nonQualifiedTeams(perGroup, qn){
+    if(!fasciaBOn()) return [];
+    var to = (fasciaBModeVal() === "count" && fasciaBCountVal()) ? qn + fasciaBCountVal() : 99;
+    return rankedByPlacement(perGroup, qn, to).map(function(r){ return r.team; });
+  }
+  // Giallo: quante coppie in Fascia A e in Fascia B (n = coppie formabili dalla classifica).
+  function gialloSizes(n){
+    var a = fasciaACountVal() ? Math.min(fasciaACountVal(), n) : powerOfTwoFloor(n, 8);
+    var rem = n - a, b = 0, mode = fasciaBModeVal();
+    if(mode === "yes") b = Math.min(rem, 32); else if(mode === "count") b = Math.min(fasciaBCountVal() || 0, rem);
+    if(b === 1){ a += 1; b = 0; }
+    return { a: a, b: b, out: n - a - b };
+  }
+  function rankedCrossTeams(kS, aS){
+    var t = [];
+    for(var i = 0; i < kS.length; i += 2){
+      if(i + 1 < kS.length){ t.push(seedTeam(kS[i], aS[i+1], i+1)); t.push(seedTeam(kS[i+1], aS[i], i+2)); }
+      else t.push(seedTeam(kS[i], aS[i], i+1));
+    }
+    return t;
+  }
+  function buildAnyFascia(teamsRanked, prefix){
+    var N = teamsRanked.length;
+    if(N < 2) return null;
+    if(isPow2(N)){ var order = seedOrder(N); return buildFascia(order.map(function(seed){ return teamsRanked[seed-1]; }), prefix); }
+    return buildNoRestFascia(teamsRanked, prefix);
+  }
+  function syncFasciaUI(){
+    var grouped = !!(current && current.fixedTeams && current.groups);
+    var aw = document.getElementById("fasciaAWrap"); if(aw) aw.style.display = (current && !current.fixedTeams && !READ_ONLY_VIEW) ? "" : "none";
+    var cw = document.getElementById("fasciaBCountWrap"); if(cw) cw.style.display = fasciaBModeVal() === "count" ? "" : "none";
+    var lb = document.getElementById("fasciaBCountLabel"); if(lb) lb.textContent = grouped ? "Coppie per girone in Fascia B (dopo le qualificate)" : "Coppie in Fascia B";
+    var o = document.querySelector('#fasciaBMode option[value="yes"]'); if(o) o.textContent = grouped ? "🅱️ Sì, con tutte le non qualificate" : "🅱️ Sì, con tutte le altre coppie possibili";
+  }
+  ["fasciaACount","fasciaBCount"].forEach(function(id){
+    document.getElementById(id).addEventListener("input", function(){
+      if(!current) return;
+      current.fasciaACount = fasciaACountVal(); current.fasciaBCount = fasciaBCountVal();
+      persistCurrent(); try{ renderStandings(); }catch(e){}
+    });
+  });
+  document.getElementById("fasciaBMode").addEventListener("change", function(){
+    syncFasciaUI();
+    if(current){ current.fasciaBMode = this.value; persistCurrent(); try{ renderStandings(); }catch(e){} }
+  });
   document.getElementById("genPlayoffBtn").addEventListener("click", function(){
     if(!current) return;
+    current.fasciaBMode = fasciaBModeVal(); current.fasciaBCount = fasciaBCountVal(); current.fasciaACount = fasciaACountVal();
     var isGrouped = !!(current.fixedTeams && current.groups);
     var rows = computeStandings(current.rounds);
     var kRows = rows.filter(function(r){ return r.role === "P"; });
     var aRows = rows.filter(function(r){ return r.role === "A"; });
-    var n = isGrouped ? computeQualifiers().length : Math.min(kRows.length, aRows.length, 20);
+    var n = isGrouped ? computeQualifiers().length : Math.min(kRows.length, aRows.length, 32);
     if(n < 2){ toast(isGrouped ? "Gioca le partite dei gironi prima di generare la fase finale." : "Servono almeno 2 portieri e 2 attaccanti con partite giocate."); return; }
     function doGenerate(){
       var primarySize = powerOfTwoFloor(n, 8);
@@ -4958,12 +5123,12 @@ module.exports = QRCode;
           var fA = buildFirstsByeFascia(perGroup, qn, "A", current.byeSeconds || 0);
           if(!fA){ toast("Con questo numero di qualificate non c'è nessun primo turno da giocare: aumenta le coppie che passano da ogni girone."); return; }
           if(fA.error){ toast(fA.error); return; }
-          var restB = rankedByPlacement(perGroup, qn, 99).map(function(r){ return r.team; });
-          var fB = buildNoRestFascia(restB, "B");
+          var restB = nonQualifiedTeams(perGroup, qn);
+          var fB = fasciaBOn() ? buildNoRestFascia(restB, "B") : null;
           current.playoffs = { fasciaA: fA, fasciaB: fB, totalTeams: current.teams.length };
           persistCurrent();
           renderPlayoffBracket();
-          toast("Tabellone creato! " + byeModeLabel() + " saltano il primo turno.");
+          toast("Tabellone creato! " + byeModeLabel() + " saltano il primo turno." + (restB.length === 1 && fasciaBOn() ? " Attenzione: resta fuori una sola coppia (" + pairLabel(restB[0]) + "), troppo poche per una Fascia B." : ""));
           return;
         }
         if(isGrouped && current.groups.length === 2 && qualifyPerGroup() === 4){
@@ -4971,8 +5136,11 @@ module.exports = QRCode;
           var qB = computeTeamGroupStandings(current.groups[1]).slice(0,4).map(function(r){ return r.team; });
           if(qA.length === 4 && qB.length === 4){
             var crossedFasciaA = buildCrossedFascia(qA, qB, "A");
-            var restCrossed = rankedByPlacement(current.groups.map(computeTeamGroupStandings), 4, 99).map(function(r){ return r.team; });
-            current.playoffs = { fasciaA: crossedFasciaA, fasciaB: buildNoRestFascia(restCrossed, "B"), totalTeams: n };
+            var restCrossed = nonQualifiedTeams(current.groups.map(computeTeamGroupStandings), 4);
+            if(restCrossed.length === 1 && fasciaBOn()) crossedFasciaA = null; // coppia sola: si ripesca col tabellone normale
+          }
+          if(qA.length === 4 && qB.length === 4 && crossedFasciaA){
+            current.playoffs = { fasciaA: crossedFasciaA, fasciaB: fasciaBOn() ? buildNoRestFascia(restCrossed, "B") : null, totalTeams: n };
             persistCurrent();
             renderPlayoffBracket();
             toast("Sorteggio del tabellone completato! Accoppiamenti incrociati tra i due gironi.");
@@ -5005,13 +5173,16 @@ module.exports = QRCode;
         }
         if(isGrouped){
           var perGroupAll = current.groups.map(computeTeamGroupStandings);
+          var nonQ = nonQualifiedTeams(perGroupAll, qualifyPerGroup());
+          var fished = null;
+          if(nonQ.length === 1 && fasciaBOn()){ fished = nonQ[0]; rankedTeams = rankedTeams.concat(nonQ); nonQ = []; }
           var gA = buildNoRestFascia(rankedTeams, "A");
-          var nonQ = rankedByPlacement(perGroupAll, qualifyPerGroup(), 99).map(function(r){ return r.team; });
-          var gB = buildNoRestFascia(nonQ, "B");
+          var gB = fasciaBOn() ? buildNoRestFascia(nonQ, "B") : null;
           current.playoffs = { fasciaA: gA, fasciaB: gB, totalTeams: n };
           persistCurrent();
           renderPlayoffBracket();
-          toast("Sorteggio del tabellone completato! Fascia A: " + Math.min(rankedTeams.length, 32) + " qualificate" + (gB ? ", Fascia B: " + nonQ.length + " coppie" : "") + ".");
+          var totT = current.groups.reduce(function(acc, g){ return acc + g.teams.length; }, 0), outT = totT - Math.min(rankedTeams.length, 32) - (gB ? nonQ.length : 0);
+          toast("Sorteggio del tabellone completato! Fascia A: " + Math.min(rankedTeams.length, 32) + " coppie" + (fished ? " (ripescata " + pairLabel(fished) + ")" : "") + (gB ? ", Fascia B: " + nonQ.length + " coppie" : ", nessuna Fascia B") + (outT > 0 ? " · " + outT + (outT === 1 ? " eliminata" : " eliminate") : "") + ".");
           return;
         }
         var fixedTeamsA = seedFixedTeams(rankedTeams.slice(0, primarySize));
@@ -5053,18 +5224,14 @@ module.exports = QRCode;
         return order.map(function(seed){ return teams[seed-1]; });
       }
 
-      var teamsA = drawFasciaTeams(kRows.slice(0, primarySize), aRows.slice(0, primarySize));
-      var fasciaA = buildFascia(teamsA, "A");
-      var fasciaB = null;
-      if(secondarySize >= 2){
-        var teamsB = drawFasciaTeams(kRows.slice(primarySize, primarySize+secondarySize), aRows.slice(primarySize, primarySize+secondarySize));
-        fasciaB = buildFascia(teamsB, "B");
-      }
+      var gsz = gialloSizes(n);
+      var fasciaA = buildAnyFascia(rankedCrossTeams(kRows.slice(0, gsz.a), aRows.slice(0, gsz.a)), "A");
+      var fasciaB = gsz.b >= 2 ? buildAnyFascia(rankedCrossTeams(kRows.slice(gsz.a, gsz.a + gsz.b), aRows.slice(gsz.a, gsz.a + gsz.b)), "B") : null;
 
       current.playoffs = { fasciaA: fasciaA, fasciaB: fasciaB, totalTeams: n };
       persistCurrent();
       renderPlayoffBracket();
-      toast("Sorteggio del tabellone completato!");
+      toast("Sorteggio del tabellone completato! Fascia A: " + gsz.a + " coppie" + (fasciaB ? ", Fascia B: " + gsz.b + " coppie" : ", nessuna Fascia B") + ".");
     }
     if(current.playoffs && confirmNeeded(current.playoffs)){
       showConfirm("Rigenerare la fase finale rifà il sorteggio e cancella i risultati già inseriti nel tabellone. Continuare?", doGenerate);
@@ -6169,6 +6336,7 @@ module.exports = QRCode;
     }
     document.getElementById("pasteAllBtn").addEventListener("click", function(){
       var ta = document.getElementById("pasteNames");
+      if(!ta.value.trim()){ toast("Il riquadro è vuoto: incolla prima il messaggio di WhatsApp (Cmd+V), poi premi il pulsante."); ta.focus(); return; }
       var sp = splitRoles(ta.value);
       if(!sp){ toast("Non trovo le intestazioni \"Portieri\" e \"Attaccanti\": usa i pulsanti qui sotto per aggiungere un ruolo alla volta."); return; }
       var rk = addNames("keeper", sp.keeper), ra = addNames("attacker", sp.attacker);
@@ -6178,6 +6346,7 @@ module.exports = QRCode;
     });
     function doPaste(kind){
       var ta = document.getElementById("pasteNames");
+      if(!ta.value.trim()){ toast("Il riquadro è vuoto: incolla prima i nomi (Cmd+V), poi premi il pulsante."); ta.focus(); return; }
       var lines = ta.value.split(/\r?\n/).map(cleanWaLine).filter(function(l){ return l && isHeader(l, RE_KEEP) !== "" && isHeader(l, RE_ATT) !== ""; });
       var r = addNames(kind, lines.join("\n").split(/[\n,;]+/));
       if(r.added){ ta.value = ""; }
@@ -6562,7 +6731,7 @@ module.exports = QRCode;
     function startViewer(liveId, db){
       window.__fbViewer = true;
       READ_ONLY_VIEW = true;
-      ["cardTournamentName","cardPlayers","cardMatchesPerPlayer","drawBtn","printRoundsBtn","topActionsBar","fbLiveCard","backupCard","retireCard","lateCard","installBanner"].forEach(function(id){
+      ["cardTournamentName","cardPlayers","cardMatchesPerPlayer","drawBtn","printRoundsBtn","topActionsBar","fbLiveCard","backupCard","retireCard","lateCard","subCard","installBanner"].forEach(function(id){
         var el = document.getElementById(id); if(el) el.style.display = "none";
       });
       var tabs = document.querySelector("nav.tabs"); if(tabs) tabs.style.display = "none";
@@ -6607,6 +6776,7 @@ module.exports = QRCode;
         }
         var pr = document.getElementById("printRoundsBtn"); if(pr) pr.style.display = "none";
         if(document.body.classList.contains("tv-on")) tvRender();
+        if(window.__viewerHook) window.__viewerHook();
       }
       function fetchNow(){
         return fetch(url, { cache: "no-store" }).then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
@@ -6973,6 +7143,858 @@ module.exports = QRCode;
 
   // La Modalità TV vive direttamente nel body, così resta visibile da qualsiasi scheda.
   (function(){ var tv = document.getElementById("tvOverlay"); if(tv && tv.parentNode !== document.body) document.body.appendChild(tv); })();
+  // ---------- AVVISO PUNTEGGI STRANI ----------
+  // Si gioca "a chi arriva prima a 7": se nessuno arriva a 7, se finisce 7-7
+  // o se c'è un numero oltre 7, il risultato viene evidenziato (si può
+  // comunque lasciare così, è solo un avviso).
+  function scoreProblem(a, b){
+    if(a === "" || b === "") return "";
+    a = +a; b = +b;
+    if(a > 7 || b > 7) return "più di 7 gol: errore di battitura?";
+    if(a === 7 && b === 7) return "7-7: chi ha vinto davvero? Un pareggio non decide la partita.";
+    if(a < 7 && b < 7) return "nessuno è arrivato a 7: risultato giusto?";
+    return "";
+  }
+  function scorePartner(inp){
+    var ds = inp.dataset, other = ds.side === "A" ? "B" : "A";
+    if(ds.match) return document.querySelector('.score-input[data-match="' + ds.match + '"][data-side="' + other + '"]');
+    if(ds.po) return document.querySelector('.score-input[data-po="' + ds.po + '"][data-leg="' + ds.leg + '"][data-side="' + other + '"]');
+    return null;
+  }
+  function checkScoreInput(inp){
+    if(READ_ONLY_VIEW || !inp || !inp.dataset || !inp.dataset.side) return;
+    var mate = scorePartner(inp); if(!mate) return;
+    var a = inp.dataset.side === "A" ? inp : mate, b = inp.dataset.side === "A" ? mate : inp;
+    var msg = scoreProblem(a.value.trim(), b.value.trim());
+    var key = "sh_" + (a.dataset.match || (a.dataset.po + "_" + a.dataset.leg)).replace(/[^a-zA-Z0-9_]/g, "");
+    [a, b].forEach(function(x){ x.classList.toggle("score-warn", !!msg); });
+    var card = a.closest(".match-card") || a.parentNode;
+    var hint = document.getElementById(key);
+    if(!msg){ if(hint) hint.remove(); return; }
+    if(!hint){ hint = document.createElement("div"); hint.id = key; hint.className = "score-hint"; card.appendChild(hint); }
+    var leg = a.dataset.leg !== undefined && a.dataset.po ? (["Andata","Ritorno","Bella"][+a.dataset.leg] || "") : "";
+    hint.textContent = "⚠️ " + (leg ? leg + ": " : "Controlla: ") + msg;
+  }
+  function checkAllScores(){
+    document.querySelectorAll('#roundsContainer .score-input[data-side="A"], #playoffBracket .score-input[data-side="A"]').forEach(checkScoreInput);
+  }
+  document.addEventListener("input", function(e){
+    if(e.target && e.target.classList && e.target.classList.contains("score-input")){ var t = e.target; setTimeout(function(){ checkScoreInput(t); }, 0); }
+  }, true);
+  (function(){
+    var _rr6 = renderRounds; renderRounds = function(){ _rr6.apply(this, arguments); checkAllScores(); };
+    var _rp6 = renderPlayoffBracket; renderPlayoffBracket = function(){ _rp6.apply(this, arguments); checkAllScores(); };
+  })();
+  setTimeout(checkAllScores, 0);
+
+  // ---------- SOSTITUISCI UN GIOCATORE (Giallo) ----------
+  function subPlayersInCalendar(){
+    var map = {};
+    if(!current || !current.rounds) return map;
+    current.rounds.forEach(function(r){ r.matches.forEach(function(m){
+      [["P", m.teamA.keeper], ["A", m.teamA.attacker], ["P", m.teamB.keeper], ["A", m.teamB.attacker]].forEach(function(x){
+        var pl = x[1]; if(!map[pl.id]) map[pl.id] = { p: pl, role: x[0], left: 0 };
+        if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined) map[pl.id].left++;
+      });
+    }); });
+    return map;
+  }
+  function renderSubCard(){
+    var card = document.getElementById("subCard"); if(!card) return;
+    var ok = !READ_ONLY_VIEW && current && current.rounds && current.rounds.length && !current.fixedTeams;
+    card.style.display = ok ? "" : "none";
+    if(!ok) return;
+    var map = subPlayersInCalendar(), outSel = document.getElementById("subOut"), prev = outSel.value;
+    var ids = Object.keys(map).sort(function(a, b){ return (map[a].role + map[a].p.name).localeCompare(map[b].role + map[b].p.name); });
+    outSel.innerHTML = ids.map(function(id){ var x = map[id]; return '<option value="' + esc(id) + '"' + (id === prev ? " selected" : "") + '>' + (x.role === "P" ? "🧤 " : "⚽ ") + esc(x.p.name) + ' — ' + (x.left ? x.left + (x.left === 1 ? " partita da giocare" : " partite da giocare") : "nessuna partita da giocare") + '</option>'; }).join("");
+    renderSubIn();
+  }
+  function renderSubIn(){
+    var map = subPlayersInCalendar(), outId = document.getElementById("subOut").value, inSel = document.getElementById("subIn"), prev = inSel.value;
+    var x = map[outId]; if(!x){ inSel.innerHTML = ""; return; }
+    var list = (x.role === "P" ? players.keepers : players.attackers).filter(function(pl){ return pl.id !== outId; });
+    var opts = '<option value="__new">➕ Nuovo giocatore…</option>';
+    opts += list.map(function(pl){ return '<option value="' + esc(pl.id) + '"' + (pl.id === prev ? " selected" : "") + '>' + esc(pl.name) + (map[pl.id] ? " (già in calendario)" : "") + '</option>'; }).join("");
+    if(!list.some(function(pl){ return isTalpa(pl); })) opts += '<option value="__talpa"' + (prev === "__talpa" ? " selected" : "") + '>🕳️ Talpa (nessun sostituto, non fa punti)</option>';
+    inSel.innerHTML = opts;
+    if(prev && inSel.querySelector('option[value="' + prev + '"]')) inSel.value = prev;
+    document.getElementById("subNewName").style.display = inSel.value === "__new" ? "" : "none";
+  }
+  document.getElementById("subOut").addEventListener("change", renderSubIn);
+  document.getElementById("subIn").addEventListener("change", function(){ document.getElementById("subNewName").style.display = this.value === "__new" ? "" : "none"; });
+  document.getElementById("subBtn").addEventListener("click", function(){
+    var map = subPlayersInCalendar(), outId = document.getElementById("subOut").value, x = map[outId];
+    if(!x) return;
+    if(!x.left){ toast(x.p.name + " non ha più partite da giocare."); return; }
+    var roleKey = x.role === "P" ? "keepers" : "attackers", inVal = document.getElementById("subIn").value, incoming = null;
+    if(inVal === "__new"){
+      var nm = document.getElementById("subNewName").value.trim().replace(/\s+/g, " ");
+      if(!nm){ toast("Scrivi il nome di chi entra."); return; }
+      incoming = players[roleKey].filter(function(pl){ return norm(pl.name) === norm(nm); })[0] || null;
+      if(!incoming){ incoming = { id: uid(), name: nm }; players[roleKey].push(incoming); persistPlayers(); }
+    } else if(inVal === "__talpa"){
+      incoming = players[roleKey].filter(function(pl){ return isTalpa(pl); })[0] || null;
+      if(!incoming){ incoming = { id: uid(), name: "Talpa" }; players[roleKey].push(incoming); persistPlayers(); }
+    } else {
+      incoming = players[roleKey].filter(function(pl){ return pl.id === inVal; })[0];
+    }
+    if(!incoming){ toast("Scegli chi entra."); return; }
+    showConfirm("Nelle " + x.left + (x.left === 1 ? " partita ancora da giocare" : " partite ancora da giocare") + ", " + x.p.name + " viene sostituito da " + incoming.name + ". Le partite già giocate non cambiano. Confermi?", function(){
+      var changed = 0;
+      current.rounds.forEach(function(r){
+        var touched = false;
+        r.matches.forEach(function(m){
+          var played = !(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined);
+          if(played) return;
+          ["teamA","teamB"].forEach(function(t){ ["keeper","attacker"].forEach(function(role){
+            if(m[t][role].id === outId){ m[t] = Object.assign({}, m[t]); m[t][role] = incoming; changed++; touched = true; }
+          }); });
+        });
+        if(touched && !r.recovery){
+          r.matches.forEach(function(m){ delete m.talpaPlayerId; delete m.talpaIds; delete m.jollySide; });
+          markRepeatAppearances(r.matches);
+        }
+        if(touched && r.byes){
+          var inRound = {};
+          r.matches.forEach(function(m){ [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(pl){ inRound[pl.id] = 1; }); });
+          r.byes = players.keepers.concat(players.attackers).filter(function(pl){ return !inRound[pl.id]; });
+        }
+      });
+      if(current.manualRounds && typeof mrLoadFromCurrent === "function") mrLoadFromCurrent();
+      persistCurrent(); renderRoster(); renderRounds(); renderStandings();
+      document.getElementById("subNewName").value = "";
+      renderSubCard();
+      var st = document.getElementById("subStatus"); st.style.display = ""; st.className = "fb-status on";
+      st.textContent = "✅ " + incoming.name + " sostituisce " + x.p.name + " in " + changed + (changed === 1 ? " partita." : " partite.");
+      toast("🔁 Sostituzione fatta.");
+    });
+  });
+  afterPersistHooks.push(function(){ var d = document.getElementById("subDetails"); if(d && !d.open) renderSubCard(); });
+  (function(){ var _rr7 = renderRounds; renderRounds = function(){ _rr7.apply(this, arguments); renderSubCard(); }; })();
+  renderSubCard();
+
+  // ---------- LIVE SUL TELEFONO (solo per chi segue con il link) ----------
+  // "Chi sei?" con la scheda personale e l'avviso "tocca a te", cronaca in
+  // diretta, frecce in classifica, avanzamento del torneo, menu in basso con
+  // tabellone grafico, statistiche curiose e festa finale con il podio.
+  (function(){
+    if(!window.__fbViewer) return;
+    var LS_ME = "tg_viewer_me_v1", LS_TAB = "tg_viewer_tab_v1", LS_PARTY = "tg_viewer_party_v1";
+    var TABS = [["incampo","🎯","In campo"],["classifiche","🏆","Classifiche"],["partite","🗓️","Partite"],["tabellone","📊","Tabellone"]];
+    var me = null; try{ me = localStorage.getItem(LS_ME); }catch(e){}
+    var tab = "incampo"; try{ tab = localStorage.getItem(LS_TAB) || "incampo"; }catch(e){}
+    var lastStatusKind = null;
+    function $(id){ return document.getElementById(id); }
+    function scored(m){ return m && m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined; }
+    function hhmm(t){ if(!t) return ""; var d = new Date(t); return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+    function ago(t){
+      if(!t) return "";
+      var s = Math.max(0, Math.round((Date.now() - t) / 1000));
+      if(s < 60) return "adesso";
+      var m = Math.round(s / 60); if(m < 60) return m === 1 ? "1 minuto fa" : m + " minuti fa";
+      var h = Math.floor(m / 60); return h === 1 ? "1 ora fa" : h + " ore fa";
+    }
+    function isGrouped(){ return !!(current && current.fixedTeams && current.groups && current.groups.length); }
+    function isMeName(n){ return !!me && me !== "__none" && norm(n) === norm(me); }
+    function teamHasMe(t){ return !!t && (isMeName(t.keeper && t.keeper.name) || isMeName(t.attacker && t.attacker.name)); }
+    function allPlayers(){
+      var map = {};
+      if(!current || !current.rounds) return [];
+      current.rounds.forEach(function(r){ r.matches.forEach(function(m){
+        [[m.teamA.keeper,"P"],[m.teamA.attacker,"A"],[m.teamB.keeper,"P"],[m.teamB.attacker,"A"]].forEach(function(x){
+          if(x[0] && !isTalpa(x[0])) map[norm(x[0].name)] = { name: x[0].name, role: x[1] };
+        });
+      }); });
+      return Object.keys(map).map(function(k){ return map[k]; }).sort(function(a, b){ return a.name.localeCompare(b.name); });
+    }
+    function groupOfMatch(m){
+      if(!isGrouped()) return -1;
+      for(var gi = 0; gi < current.groups.length; gi++){
+        var g = current.groups[gi];
+        for(var r = 0; r < g.rounds.length; r++) if(g.rounds[r].matches.indexOf(m) !== -1) return gi;
+      }
+      return -1;
+    }
+    function teamName(t){ return t ? pairLabel(t) : "?"; }
+
+    // ----- struttura: schede, menu in basso, contenitori -----
+    var css = document.createElement("style");
+    css.textContent =
+      "body.vx-on{ padding-bottom:84px; overflow-x:hidden; } html{ overflow-x:hidden; } body.vx-on #playoffBracket{ overflow-x:auto; }" +
+      ".vx-bracket-scroll .tvb-head{ font-size:17px; margin-bottom:8px; } .vx-bracket-scroll .tvb{ gap:14px; } .vx-bracket-scroll .tvb-col{ min-width:150px; }" +
+      ".vx-bracket-scroll .tvb-row{ font-size:12.5px; padding:5px 8px; } .vx-bracket-scroll .tvb-stage{ font-size:11px; margin-bottom:6px; } .vx-bracket-scroll .tvb-champ{ font-size:16px; }" +
+      ".vx-bracket-scroll .tvb-tri{ font-size:13px; min-width:0; } .vx-bracket-scroll .tvb-card{ padding:12px; }" +
+      TABS.map(function(t){ return "body.vx-on.vx-t-" + t[0] + " [data-vx-tab]:not([data-vx-tab='" + t[0] + "']){ display:none !important; }"; }).join("") +
+      ".vx-nav{ position:fixed; left:0; right:0; bottom:0; z-index:9000; display:flex; background:rgba(10,24,52,0.97); backdrop-filter:blur(8px); border-top:2px solid #d4af37; padding:6px 4px calc(6px + env(safe-area-inset-bottom)); }" +
+      ".vx-nav button{ flex:1; background:none; border:0; color:rgba(255,255,255,0.65); font-size:11.5px; font-weight:800; display:flex; flex-direction:column; align-items:center; gap:2px; padding:4px 0; border-radius:10px; cursor:pointer; }" +
+      ".vx-nav button .ic{ font-size:21px; line-height:1; }" +
+      ".vx-nav button.on{ color:#ffd868; background:rgba(255,216,104,0.12); }" +
+      ".vx-nav button .dot{ width:7px; height:7px; border-radius:50%; background:#ff5a4a; display:none; margin-top:-2px; }" +
+      ".vx-nav button.new .dot{ display:block; }" +
+      ".vx-card{ margin-bottom:14px; }" +
+      ".vx-me h2, .vx-feed h2, .vx-now h2, .vx-stats h2{ margin-bottom:10px; }" +
+      ".vx-me-row{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }" +
+      ".vx-me-name{ font-size:20px; font-weight:900; color:var(--pitch); }" +
+      ".vx-me-sub{ font-size:13px; color:var(--ink-soft); font-weight:700; }" +
+      ".vx-me-stats{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }" +
+      ".vx-pill{ background:rgba(20,41,74,0.08); border-radius:12px; padding:6px 10px; text-align:center; min-width:62px; }" +
+      ".vx-pill b{ display:block; font-size:18px; color:var(--pitch); }" +
+      ".vx-pill span{ font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; }" +
+      ".vx-status{ margin-top:12px; border-radius:14px; padding:12px 14px; font-weight:800; font-size:15.5px; line-height:1.35; background:rgba(20,41,74,0.07); }" +
+      ".vx-status.now{ background:linear-gradient(135deg,#1f9a3f,#2fbf5a); color:#fff; animation:vxPulse 1.4s ease-in-out infinite; }" +
+      ".vx-status.soon{ background:#ffd868; color:#1a2233; }" +
+      ".vx-status small{ display:block; font-weight:600; font-size:12.5px; opacity:.85; margin-top:3px; }" +
+      "@keyframes vxPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(47,191,90,0.55);} 50%{ box-shadow:0 0 0 10px rgba(47,191,90,0);} }" +
+      ".vx-link{ background:none; border:0; color:var(--ink-soft); text-decoration:underline; font-size:12.5px; cursor:pointer; padding:0; }" +
+      ".vx-pick{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; } .vx-pick select{ flex:1 1 180px; }" +
+      ".vx-prog{ margin-bottom:14px; padding:12px 14px; }" +
+      ".vx-prog-top{ display:flex; justify-content:space-between; gap:8px; font-size:13px; font-weight:800; color:var(--pitch); flex-wrap:wrap; }" +
+      ".vx-bar{ height:10px; border-radius:999px; background:rgba(20,41,74,0.12); margin-top:8px; overflow:hidden; }" +
+      ".vx-bar > div{ height:100%; border-radius:999px; background:linear-gradient(90deg,#1c5fe0,#2fbf5a); transition:width .6s ease; }" +
+      ".vx-prog-sub{ font-size:12px; color:var(--ink-soft); font-weight:600; margin-top:6px; }" +
+      ".vx-now-item{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:rgba(31,154,63,0.12); border:1px solid rgba(31,154,63,0.35); margin-bottom:8px; font-weight:700; font-size:14px; }" +
+      ".vx-now-item.prep{ background:rgba(255,216,104,0.22); border-color:rgba(212,175,55,0.6); }" +
+      ".vx-now-item .tn{ flex:0 0 30px; height:30px; border-radius:50%; background:#1f9a3f; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; }" +
+      ".vx-now-item.prep .tn{ background:#d4af37; }" +
+      ".vx-now-item .tg{ font-size:11px; font-weight:800; background:#fff; border-radius:6px; padding:2px 6px; color:var(--pitch); }" +
+      ".vx-now-item .vs{ color:var(--ink-soft); font-weight:900; font-size:11px; margin:0 4px; }" +
+      ".vx-sub{ font-size:13px; font-weight:900; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin:12px 0 8px; }" +
+      ".vx-feed-item{ display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--line); font-size:14px; line-height:1.35; }" +
+      ".vx-feed-item:first-of-type{ border-top:0; }" +
+      ".vx-feed-time{ flex:0 0 42px; font-size:12px; font-weight:800; color:var(--ink-soft); padding-top:2px; }" +
+      ".vx-feed-item.special{ background:rgba(255,216,104,0.18); border-radius:10px; padding:9px 8px; border-top:0; margin:4px 0; }" +
+      ".vx-feed-item.fresh{ animation:vxFresh 2.5s ease-out 1; }" +
+      "@keyframes vxFresh{ 0%{ background:rgba(47,191,90,0.35);} 100%{ background:transparent;} }" +
+      ".vx-score{ font-weight:900; color:var(--pitch); white-space:nowrap; }" +
+      ".vx-arrow{ display:inline-block; font-size:11px; font-weight:900; margin-left:6px; padding:1px 5px; border-radius:6px; vertical-align:middle; }" +
+      ".vx-arrow.up{ color:#fff; background:#1f9a3f; } .vx-arrow.down{ color:#fff; background:#c1443b; }" +
+      ".vx-me-hl{ background:#ffd868 !important; color:#1a2233 !important; border-radius:6px; padding:0 4px; box-shadow:0 0 0 2px #d4af37; }" +
+      ".vx-stats-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }" +
+      ".vx-stat{ background:rgba(20,41,74,0.06); border-radius:14px; padding:10px 12px; }" +
+      ".vx-stat .ic{ font-size:22px; } .vx-stat .lb{ font-size:11px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.04em; margin-top:2px; }" +
+      ".vx-stat .vl{ font-size:14.5px; font-weight:800; color:var(--pitch); margin-top:4px; line-height:1.3; word-break:break-word; } .vx-stat .vl small{ font-weight:700; color:var(--ink-soft); }" +
+      ".vx-bracket-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px; }" +
+      ".vx-bracket-scroll .tvb-card{ display:inline-block; margin:0 0 12px; min-width:max-content; }" +
+      ".vx-party{ position:fixed; inset:0; z-index:9500; display:flex; align-items:center; justify-content:center; padding:20px; overflow-y:auto; background:radial-gradient(circle at 50% 0%, #2a6ff0 0%, transparent 60%), linear-gradient(165deg, #0a2f7a, #0d2452 70%); }" +
+      ".vx-party canvas{ position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }" +
+      ".vx-party-box{ position:relative; width:100%; max-width:380px; text-align:center; color:#fff; }" +
+      ".vx-party-title{ font-size:30px; font-weight:900; color:#ffd868; text-shadow:0 0 18px rgba(255,216,104,0.7); }" +
+      ".vx-party-sub{ font-size:14px; opacity:.85; margin:4px 0 16px; font-weight:700; }" +
+      ".vx-pod{ background:rgba(255,255,255,0.1); border:2px solid #d4af37; border-radius:16px; padding:12px; margin-bottom:12px; text-align:left; }" +
+      ".vx-pod-h{ font-size:13px; font-weight:900; color:#ffd868; text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }" +
+      ".vx-pod-r{ font-size:16px; font-weight:800; padding:4px 0; } .vx-pod-r.g{ font-size:19px; color:#ffe9a8; }" +
+      ".vx-party .btn{ margin-top:8px; }";
+    document.head.appendChild(css);
+    document.body.classList.add("vx-on");
+
+    function el(tag, id, cls, tabName){ var e = document.createElement(tag); if(id) e.id = id; if(cls) e.className = cls; if(tabName) e.setAttribute("data-vx-tab", tabName); return e; }
+    var anchor = $("spectatorNote");
+    var meCard = el("div", "vxMe", "card vx-card vx-me");
+    var prog = el("div", "vxProgress", "card vx-prog");
+    var nowCard = el("div", "vxNow", "card vx-card vx-now", "incampo");
+    var feedCard = el("div", "vxFeed", "card vx-card vx-feed", "incampo");
+    var statsCard = el("div", "vxStats", "card vx-card vx-stats", "classifiche");
+    var brCard = el("div", "vxBracket", "card vx-card", "tabellone");
+    anchor.parentNode.insertBefore(feedCard, anchor.nextSibling);
+    anchor.parentNode.insertBefore(nowCard, anchor.nextSibling);
+    anchor.parentNode.insertBefore(prog, anchor.nextSibling);
+    anchor.parentNode.insertBefore(meCard, anchor.nextSibling);
+    var gsc = $("groupStandingsContainer"); gsc.parentNode.insertBefore(statsCard, gsc.nextSibling);
+    var poc = $("playoffCard"); poc.parentNode.insertBefore(brCard, poc);
+    [["standingsCard","classifiche"],["standingsCardAtt","classifiche"],["groupStandingsContainer","classifiche"],
+     ["drawSummary","partite"],["roundsContainer","partite"],["tourNote","partite"],["playoffCard","tabellone"]].forEach(function(x){ var e = $(x[0]); if(e) e.setAttribute("data-vx-tab", x[1]); });
+    var nav = el("nav", "vxNav", "vx-nav");
+    nav.innerHTML = TABS.map(function(t){ return '<button type="button" data-t="' + t[0] + '"><span class="ic">' + t[1] + '</span>' + t[2] + '<span class="dot"></span></button>'; }).join("");
+    document.body.appendChild(nav);
+    function setTab(t){
+      tab = t; try{ localStorage.setItem(LS_TAB, t); }catch(e){}
+      TABS.forEach(function(x){ document.body.classList.toggle("vx-t-" + x[0], x[0] === t); });
+      nav.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b.dataset.t === t); if(b.dataset.t === t) b.classList.remove("new"); });
+    }
+    nav.addEventListener("click", function(e){ var b = e.target.closest("button"); if(!b) return; setTab(b.dataset.t); window.scrollTo({ top: 0, behavior: "smooth" }); });
+    setTab(tab);
+
+    // ----- classifiche: posizioni (per frecce, scheda personale, sorprese) -----
+    function rankMaps(){
+      var out = {};
+      if(!current || !current.rounds) return out;
+      if(isGrouped()){
+        current.groups.forEach(function(g, gi){ computeTeamGroupStandings(g).forEach(function(r, i){ out["g" + gi + ":" + r.team.keeper.id] = i + 1; }); });
+      } else {
+        var rows = computeStandings(current.rounds);
+        ["P","A"].forEach(function(role){ rows.filter(function(r){ return r.role === role; }).forEach(function(r, i){ out[role + ":" + r.id] = i + 1; }); });
+      }
+      return out;
+    }
+    function lastScoredRoundMatch(){
+      var best = null;
+      (current && current.rounds || []).forEach(function(r){ r.matches.forEach(function(m){ if(scored(m) && m.playedAt && (!best || m.playedAt > best.playedAt)) best = m; }); });
+      return best;
+    }
+    function rankDelta(){
+      var now = rankMaps(), last = lastScoredRoundMatch();
+      if(!last) return { now: now, prev: null };
+      var sa = last.scoreA, sb = last.scoreB;
+      last.scoreA = null; last.scoreB = null;
+      var prev; try{ prev = rankMaps(); } finally { last.scoreA = sa; last.scoreB = sb; }
+      return { now: now, prev: prev, match: last };
+    }
+    function arrowHtml(key, d){
+      if(!d.prev || d.prev[key] === undefined || d.now[key] === undefined) return "";
+      var diff = d.prev[key] - d.now[key];
+      if(!diff) return "";
+      return '<span class="vx-arrow ' + (diff > 0 ? "up" : "down") + '">' + (diff > 0 ? "▲" : "▼") + Math.abs(diff) + '</span>';
+    }
+    function addArrows(d){
+      if(!current || !current.rounds) return;
+      if(isGrouped()){
+        var cards = document.querySelectorAll("#groupStandingsContainer > .card");
+        current.groups.forEach(function(g, gi){
+          var rows = computeTeamGroupStandings(g), trs = cards[gi] ? cards[gi].querySelectorAll("tbody tr") : [];
+          rows.forEach(function(r, i){ var td = trs[i] && trs[i].querySelector("td"); if(td && !td.querySelector(".vx-arrow")) td.insertAdjacentHTML("beforeend", arrowHtml("g" + gi + ":" + r.team.keeper.id, d)); });
+        });
+      } else {
+        var rows = computeStandings(current.rounds);
+        [["P","standingsBodyKeepers"],["A","standingsBodyAttackers"]].forEach(function(x){
+          var trs = document.querySelectorAll("#" + x[1] + " tr");
+          rows.filter(function(r){ return r.role === x[0]; }).forEach(function(r, i){ var td = trs[i] && trs[i].querySelector("td"); if(td && !td.querySelector(".vx-arrow")) td.insertAdjacentHTML("beforeend", arrowHtml(x[0] + ":" + r.id, d)); });
+        });
+      }
+    }
+
+    // ----- "Chi sei?" e scheda personale -----
+    function myStanding(){
+      if(!current || !current.rounds) return null;
+      if(isGrouped()){
+        for(var gi = 0; gi < current.groups.length; gi++){
+          var g = current.groups[gi], rows = computeTeamGroupStandings(g);
+          for(var i = 0; i < rows.length; i++) if(teamHasMe(rows[i].team)) return { pos: i + 1, of: rows.length, row: rows[i], where: g.label, team: rows[i].team };
+          var t = g.teams.filter(teamHasMe)[0]; if(t) return { pos: null, of: g.teams.length, row: null, where: g.label, team: t };
+        }
+        return null;
+      }
+      var all = computeStandings(current.rounds);
+      var roles = ["P","A"];
+      for(var ri = 0; ri < roles.length; ri++){
+        var role = roles[ri], rows = all.filter(function(r){ return r.role === role; });
+        for(var j = 0; j < rows.length; j++) if(isMeName(rows[j].name)) return { pos: j + 1, of: rows.length, row: rows[j], where: role === "P" ? "Portieri" : "Attaccanti" };
+      }
+      return null;
+    }
+    function myStatus(){
+      if(!current || !current.rounds) return null;
+      var tb = computeTables(current), mineNow = null, k;
+      for(k in tb.onTable){ var it = tb.byId[k]; if(it && (teamHasMe(it.a) || teamHasMe(it.b))){ mineNow = { it: it, t: tb.onTable[k] }; break; } }
+      function vsTxt(it){ var mine = teamHasMe(it.a) ? it.a : it.b, opp = mine === it.a ? it.b : it.a; return "con " + esc(teamName(mine).split(" - ").filter(function(n){ return !isMeName(n); })[0] || "") + " contro " + esc(teamName(opp)) + (it.tag ? " · " + esc(it.tag) : "") + (it.note ? " (" + esc(it.note) + ")" : ""); }
+      if(mineNow) return { kind: "now", html: "🎯 Tocca a te! Vai al Tavolo " + mineNow.t + "<small>" + vsTxt(mineNow.it) + "</small>" };
+      var pIdx = -1, before = 0;
+      for(var i = 0; i < tb.pending.length; i++){
+        var p = tb.pending[i];
+        if(teamHasMe(p.a) || teamHasMe(p.b)){ pIdx = i; break; }
+        if(!tb.onTable[p.id]) before++;
+      }
+      if(pIdx !== -1){
+        var nx = tb.pending[pIdx];
+        if(tb.prep.indexOf(nx.id) !== -1) return { kind: "soon", html: "⏭️ Preparati: giochi appena si libera un tavolo<small>" + vsTxt(nx) + "</small>" };
+        return { kind: "wait", html: "⏳ Tocca a te tra circa " + (before <= 1 ? "1 partita" : before + " partite") + "<small>" + vsTxt(nx) + "</small>" };
+      }
+      // nessuna partita in attesa
+      var po = current.playoffs;
+      if(po){
+        var res = null;
+        [["A", po.fasciaA], ["B", po.fasciaB]].forEach(function(fx){
+          var f = fx[1]; if(!f || res) return;
+          var pod = fasciaPodium(f), lbl = po.fasciaB ? " della Fascia " + fx[0] : "";
+          if(pod){
+            if(teamHasMe(pod.w)) res = "🏆 Hai vinto" + lbl + "! Complimenti!";
+            else if(teamHasMe(pod.l)) res = "🥈 Secondo posto" + lbl + "!";
+            else if(pod.w3 && teamHasMe(pod.w3)) res = "🥉 Terzo posto" + lbl + "!";
+          }
+          if(!res && (f.teams || []).some(function(t){ return teamHasMe(t); })) res = pod ? "🏁 La tua fase finale è conclusa." : "⏳ Aspetta che si definisca il tuo prossimo avversario nel tabellone.";
+        });
+        if(res) return { kind: "done", html: res };
+        return { kind: "done", html: "🏁 Hai finito le tue partite: segui il tabellone!" };
+      }
+      return { kind: "done", html: "✅ Hai finito le partite del girone: aspetta il tabellone della fase finale." };
+    }
+    function renderMe(){
+      var players = allPlayers();
+      if(!current || !current.rounds || !players.length){ meCard.style.display = "none"; return; }
+      meCard.style.display = "";
+      var known = me && me !== "__none" && players.some(function(p){ return isMeName(p.name); });
+      if(!known){
+        if(me === "__none"){ meCard.innerHTML = '<div class="vx-me-row"><span class="vx-me-sub">👀 Stai seguendo come spettatore.</span><button class="vx-link" type="button" id="vxPickAgain">Sono un giocatore</button></div>'; }
+        else {
+          meCard.innerHTML = '<h2>👋 Chi sei?</h2><div class="vx-me-sub">Scegli il tuo nome: vedrai la tua posizione e quando tocca a te.</div>' +
+            '<div class="vx-pick"><select id="vxPickSel"><option value="">Il mio nome…</option>' + players.map(function(p){ return '<option value="' + esc(p.name) + '">' + esc(p.name) + (p.role === "P" ? " (portiere)" : " (attaccante)") + '</option>'; }).join("") + '</select>' +
+            '<button class="btn btn-primary btn-sm" type="button" id="vxPickOk">Sono io</button></div>' +
+            '<div style="margin-top:8px;"><button class="vx-link" type="button" id="vxPickNone">Sono solo spettatore</button></div>';
+        }
+        bindMe(); return;
+      }
+      var st = myStanding(), stt = myStatus(), myName = players.filter(function(p){ return isMeName(p.name); })[0];
+      var html = '<div class="vx-me-row"><div style="flex:1;"><div class="vx-me-name">⭐ ' + esc(myName.name) + '</div><div class="vx-me-sub">' +
+        (st && st.team ? "In coppia con " + esc(teamName(st.team).split(" - ").filter(function(n){ return !isMeName(n); })[0] || "") + " · " : "") + esc(st ? st.where : (myName.role === "P" ? "Portiere" : "Attaccante")) + '</div></div>' +
+        '<button class="vx-link" type="button" id="vxChange">Cambia</button></div>';
+      if(st && st.row){
+        html += '<div class="vx-me-stats"><div class="vx-pill"><b>' + st.pos + '°</b><span>su ' + st.of + '</span></div><div class="vx-pill"><b>' + st.row.pt + '</b><span>punti</span></div>' +
+          '<div class="vx-pill"><b>' + st.row.pg + '</b><span>giocate</span></div><div class="vx-pill"><b>' + st.row.v + '</b><span>vinte</span></div><div class="vx-pill"><b>' + (st.row.gf - st.row.gs > 0 ? "+" : "") + (st.row.gf - st.row.gs) + '</b><span>diff. reti</span></div></div>';
+      }
+      if(stt) html += '<div class="vx-status ' + stt.kind + '">' + stt.html + '</div>';
+      meCard.innerHTML = html;
+      if(stt && stt.kind === "now" && lastStatusKind && lastStatusKind !== "now"){ try{ if(navigator.vibrate) navigator.vibrate([300, 150, 300]); }catch(e){} }
+      lastStatusKind = stt ? stt.kind : null;
+      bindMe();
+    }
+    function saveMe(v){ me = v; try{ localStorage.setItem(LS_ME, v); }catch(e){} lastStatusKind = null; renderAll(); }
+    function bindMe(){
+      var ok = $("vxPickOk"); if(ok) ok.addEventListener("click", function(){ var v = $("vxPickSel").value; if(v) saveMe(v); });
+      var no = $("vxPickNone"); if(no) no.addEventListener("click", function(){ saveMe("__none"); });
+      var ag = $("vxPickAgain"); if(ag) ag.addEventListener("click", function(){ saveMe(""); });
+      var ch = $("vxChange"); if(ch) ch.addEventListener("click", function(){ saveMe(""); });
+    }
+
+    // ----- avanzamento -----
+    function lastEventTime(){
+      var t = 0;
+      (current && current.rounds || []).forEach(function(r){ r.matches.forEach(function(m){ if(m.playedAt > t) t = m.playedAt; }); });
+      forEachFasciaMatch(current, function(m){ if(m.lastAt > t) t = m.lastAt; });
+      return t;
+    }
+    function renderProgress(){
+      if(!current || !current.rounds || !current.rounds.length){ prog.style.display = "none"; return; }
+      prog.style.display = "";
+      var total = 0, done = 0, label, sub = "";
+      current.rounds.forEach(function(r){ r.matches.forEach(function(m){ total++; if(scored(m)) done++; }); });
+      if(current.playoffs){
+        var pt = 0, pd = 0, stage = null;
+        forEachFasciaMatch(current, function(m, f, letter, r){
+          if(m.voidSlot || m.bye) return;
+          pt++;
+          var fin = f.type === "triangle" ? legDone(m.legs && m.legs[0]) : !!playoffWinner(m);
+          if(fin) pd++; else if(!stage && letter === "A" && m.teamA && m.teamB) stage = r.stage;
+        });
+        label = "🏁 Fase finale" + (stage ? ": " + String(stage).replace(" (con ripescaggio)", "").replace(" (le prime riposano)", "") : (pd === pt ? ": conclusa" : ""));
+        total = pt; done = pd; sub = "Incontri decisi: " + pd + " su " + pt;
+      } else {
+        label = done === total ? "✅ Gironi conclusi: arriva il tabellone" : (isGrouped() ? "🏟️ Gironi in corso" : "🏟️ Giornate in corso");
+        sub = "Partite giocate: " + done + " su " + total;
+      }
+      var lt = lastEventTime();
+      prog.innerHTML = '<div class="vx-prog-top"><span>' + esc(label) + '</span><span>' + Math.round(total ? done * 100 / total : 0) + '%</span></div>' +
+        '<div class="vx-bar"><div style="width:' + (total ? done * 100 / total : 0) + '%"></div></div>' +
+        '<div class="vx-prog-sub">' + esc(sub) + (lt ? ' · Ultimo risultato: <span id="vxAgo" data-t="' + lt + '">' + ago(lt) + '</span>' : '') + '</div>';
+    }
+
+    // ----- in campo adesso -----
+    function renderNow(){
+      if(!current || !current.rounds || !current.rounds.length){ nowCard.innerHTML = '<h2>🎯 In campo</h2><div class="empty-note">Il torneo non è ancora iniziato.</div>'; return; }
+      var tb = computeTables(current), html = '<h2>🎯 In campo adesso</h2>';
+      function item(it, t, prep){
+        var hl = teamHasMe(it.a) || teamHasMe(it.b);
+        return '<div class="vx-now-item' + (prep ? ' prep' : '') + '"' + (hl ? ' style="box-shadow:0 0 0 2px #d4af37;"' : '') + '><span class="tn">' + (prep ? "⏭" : t) + '</span><div style="flex:1;">' +
+          (it.tag ? '<span class="tg">' + esc(it.tag) + (it.note ? " · " + esc(it.note) : "") + '</span><br>' : '') +
+          '<span class="vx-pair">' + esc(teamName(it.a)) + '</span><span class="vs">VS</span><span class="vx-pair">' + esc(teamName(it.b)) + '</span></div></div>';
+      }
+      var ids = Object.keys(tb.onTable).sort(function(a, b){ return tb.onTable[a] - tb.onTable[b]; });
+      if(ids.length) html += ids.map(function(id){ return item(tb.byId[id], tb.onTable[id], false); }).join("");
+      else html += '<div class="empty-note">Nessuna partita in corso.</div>';
+      if(tb.prep.length){ html += '<div class="vx-sub">⏭️ Preparatevi</div>' + tb.prep.map(function(id){ return item(tb.byId[id], 0, true); }).join(""); }
+      var rest = tb.pending.length - ids.length - tb.prep.length;
+      if(rest > 0) html += '<div class="vx-prog-sub">…poi altre ' + rest + (rest === 1 ? " partita" : " partite") + '. L\'elenco completo è in 🗓️ Partite.</div>';
+      nowCard.innerHTML = html;
+    }
+
+    // ----- cronaca in diretta -----
+    var feedSeen = null;
+    function buildFeed(){
+      var items = [];
+      if(!current || !current.rounds) return items;
+      var list = [];
+      current.rounds.forEach(function(r, ri){ r.matches.forEach(function(m){ if(scored(m) && !m.forfeit) list.push({ m: m, t: m.playedAt || 0, ri: ri, gi: groupOfMatch(m) }); }); });
+      list.sort(function(a, b){ return a.t - b.t; });
+      var grouped = isGrouped();
+      var streak = {}, leaders = {}, prefix = {};
+      list.forEach(function(x, idx){
+        var m = x.m, aWin = m.scoreA > m.scoreB, w = aWin ? m.teamA : m.teamB, l = aWin ? m.teamB : m.teamA;
+        var hi = Math.max(m.scoreA, m.scoreB), lo = Math.min(m.scoreA, m.scoreB);
+        var where = grouped && x.gi >= 0 ? current.groups[x.gi].label.replace(/^Girone\s*/i, "Gir. ") : (current.rounds[x.ri].recovery ? "Recupero" : "G" + (x.ri + 1));
+        var base = '<span class="vx-score">' + esc(teamName(w)) + ' ' + hi + '-' + lo + ' ' + esc(teamName(l)) + '</span> <span class="vx-me-sub">· ' + esc(where) + '</span>';
+        var grpId = items.length;
+        items.push({ t: x.t, html: "⚽ " + base, key: m.id, grp: grpId });
+        var push0 = items.push.bind(items);
+        var addSp = function(o){ o.grp = grpId; push0(o); };
+        if(hi === 7 && lo === 0) addSp({ t: x.t, html: "🧹 <b>Cappotto!</b> " + esc(teamName(w)) + " lascia a zero " + esc(teamName(l)), special: true, key: m.id + "c" });
+        else if(hi === 7 && lo === 6) addSp({ t: x.t, html: "🥵 <b>All'ultimo gol!</b> " + esc(teamName(w)) + " la spunta 7-6 su " + esc(teamName(l)), special: true, key: m.id + "t" });
+        // classifica prima e dopo (per sorprese e nuovo primo)
+        var scope = grouped ? "g" + x.gi : "all";
+        var before = prefix[scope] || [];
+        var after = before.concat([m]);
+        prefix[scope] = after;
+        if(grouped && x.gi >= 0){
+          var g = current.groups[x.gi];
+          var fakeB = { label: g.label, teams: g.teams, rounds: [{ matches: before }] }, fakeA = { label: g.label, teams: g.teams, rounds: [{ matches: after }] };
+          var rb = before.length ? computeTeamGroupStandings(fakeB) : [], ra = computeTeamGroupStandings(fakeA);
+          var posB = {}; rb.forEach(function(r, i){ posB[r.team.keeper.id] = i + 1; });
+          var size = g.teams.length;
+          if(before.length >= size && posB[w.keeper.id] && posB[l.keeper.id] && posB[w.keeper.id] - posB[l.keeper.id] >= Math.max(2, Math.ceil(size / 2)))
+            addSp({ t: x.t, html: "😱 <b>Sorpresa!</b> " + esc(teamName(w)) + " (" + posB[w.keeper.id] + "ª) batte " + esc(teamName(l)) + " (" + posB[l.keeper.id] + "ª)", special: true, key: m.id + "s" });
+          var allPlayed = ra.length >= size && ra.every(function(r){ return r.pg > 0; });
+          var lead = allPlayed && ra[0] ? ra[0].team.keeper.id : null;
+          if(lead && leaders[scope] && leaders[scope] !== lead) addSp({ t: x.t, html: "👑 " + esc(teamName(ra[0].team)) + " è <b>in testa al " + esc(g.label) + "</b>", special: true, key: m.id + "l" });
+          if(lead) leaders[scope] = lead;
+          // serie di vittorie (coppie)
+          var kw = w.keeper.id, kl = l.keeper.id;
+          streak[kw] = (streak[kw] || 0) + 1; streak[kl] = 0;
+          if(streak[kw] >= 3) addSp({ t: x.t, html: "🔥 " + esc(teamName(w)) + ": <b>" + streak[kw] + " vittorie di fila</b>", special: true, key: m.id + "f" });
+        } else {
+          var rowsA = computeStandings([{ matches: after }]);
+          var firstRoundSize = current.rounds[0] ? current.rounds[0].matches.length : 1;
+          ["P","A"].forEach(function(role){
+            var rr = rowsA.filter(function(r){ return r.role === role; }), lead = (after.length >= firstRoundSize && rr[0]) ? rr[0].id : null;
+            if(lead && leaders[role] && leaders[role] !== lead) addSp({ t: x.t, html: "👑 " + esc(rr[0].name) + " è <b>il nuovo primo tra " + (role === "P" ? "i portieri" : "gli attaccanti") + "</b>", special: true, key: m.id + "l" + role });
+            if(lead) leaders[role] = lead;
+          });
+          var tal = talpaIdsOf(m);
+          [w.keeper, w.attacker].forEach(function(p){ if(tal.indexOf(p.id) !== -1 || isTalpa(p)) return; streak[p.id] = (streak[p.id] || 0) + 1; if(streak[p.id] >= 3) addSp({ t: x.t, html: "🔥 " + esc(p.name) + ": <b>" + streak[p.id] + " vittorie di fila</b>", special: true, key: m.id + "f" + p.id }); });
+          [l.keeper, l.attacker].forEach(function(p){ streak[p.id] = 0; });
+        }
+      });
+      // fase finale
+      var po = current.playoffs;
+      forEachFasciaMatch(current, function(m, f, letter, r){
+        if(m.voidSlot || m.bye || !m.teamA || !m.teamB) return;
+        var t = m.lastAt || 0, st = String(r.stage || "").replace(" (con ripescaggio)", "").replace(" (le prime riposano)", "");
+        var pre = po.fasciaB ? "Fascia " + letter + " · " : "";
+        (m.legs || []).forEach(function(lg, li){
+          if(!legDone(lg)) return;
+          var nm = f.type === "triangle" ? "" : " (" + (["andata","ritorno","bella"][li] || "") + ")";
+          items.push({ t: t, html: "🏁 <span class=\"vx-score\">" + esc(teamName(m.teamA)) + " " + lg.scoreA + "-" + lg.scoreB + " " + esc(teamName(m.teamB)) + "</span> <span class=\"vx-me-sub\">· " + esc(pre + st + nm) + "</span>", key: m.id + "L" + li });
+        });
+        var w = f.type === "triangle" ? null : playoffWinner(m);
+        if(w){
+          var isFinal = f.rounds[f.rounds.length - 1].matches.indexOf(m) !== -1;
+          if(isFinal) items.push({ t: t + 1, html: "🏆 <b>" + esc(teamName(w)) + " vince " + (po.fasciaB ? "la Fascia " + letter : "il torneo") + "!</b>", special: true, key: m.id + "W" });
+          else if(m !== f.third) items.push({ t: t, html: "✅ " + esc(teamName(w)) + " <b>passa il turno</b> (" + esc(pre + st) + ")", special: true, key: m.id + "Q" });
+          else items.push({ t: t, html: "🥉 " + esc(teamName(w)) + " <b>conquista il 3° posto</b>" + (po.fasciaB ? " (Fascia " + letter + ")" : ""), special: true, key: m.id + "3" });
+        }
+      });
+      items.forEach(function(it, i){ it.seq = i; });
+      items.sort(function(a, b){
+        if(b.t !== a.t) return b.t - a.t;
+        var ga = a.grp !== undefined ? a.grp : a.seq, gb = b.grp !== undefined ? b.grp : b.seq;
+        if(ga !== gb) return gb - ga;
+        return a.seq - b.seq;
+      });
+      return items;
+    }
+    function renderFeed(){
+      var items = buildFeed();
+      if(!items.length){ feedCard.innerHTML = '<h2>📣 Cronaca in diretta</h2><div class="empty-note">I risultati compariranno qui appena si gioca.</div>'; feedSeen = {}; return; }
+      var fresh = {};
+      if(feedSeen){ items.forEach(function(it){ if(!feedSeen[it.key]) fresh[it.key] = 1; }); }
+      var newCount = Object.keys(fresh).length;
+      feedSeen = {}; items.forEach(function(it){ feedSeen[it.key] = 1; });
+      feedCard.innerHTML = '<h2>📣 Cronaca in diretta</h2>' + items.slice(0, 40).map(function(it){
+        return '<div class="vx-feed-item' + (it.special ? ' special' : '') + (fresh[it.key] ? ' fresh' : '') + '"><span class="vx-feed-time">' + hhmm(it.t) + '</span><div>' + it.html + '</div></div>';
+      }).join("") + (items.length > 40 ? '<div class="vx-prog-sub">…e altri ' + (items.length - 40) + ' risultati più vecchi.</div>' : '');
+      if(newCount && tab !== "incampo"){ var b = nav.querySelector('button[data-t="incampo"]'); if(b) b.classList.add("new"); }
+    }
+
+    // ----- statistiche curiose -----
+    function renderStats(){
+      if(!current || !current.rounds){ statsCard.style.display = "none"; return; }
+      var ms = [];
+      current.rounds.forEach(function(r){ r.matches.forEach(function(m){ if(scored(m) && !m.forfeit) ms.push(m); }); });
+      if(!ms.length){ statsCard.style.display = "none"; return; }
+      statsCard.style.display = "";
+      var grouped = isGrouped(), entities = {};
+      function ent(key, name){ if(!entities[key]) entities[key] = { name: name, gf: 0, gs: 0, pg: 0, capp: 0, best: 0, cur: 0 }; return entities[key]; }
+      ms.slice().sort(function(a, b){ return (a.playedAt || 0) - (b.playedAt || 0); }).forEach(function(m){
+        var tal = talpaIdsOf(m);
+        [["A", m.teamA, m.scoreA, m.scoreB], ["B", m.teamB, m.scoreB, m.scoreA]].forEach(function(x){
+          if(m.jollySide === x[0]) return;
+          var subjects = grouped ? [[x[1].keeper.id, teamName(x[1])]] : [[x[1].keeper.id, x[1].keeper.name, x[1].keeper], [x[1].attacker.id, x[1].attacker.name, x[1].attacker]];
+          subjects.forEach(function(sj){
+            if(sj[2] && (isTalpa(sj[2]) || tal.indexOf(sj[0]) !== -1)) return;
+            var e = ent(sj[0], sj[1]); e.pg++; e.gf += x[2]; e.gs += x[3];
+            if(x[2] > x[3]){ e.cur++; if(e.cur > e.best) e.best = e.cur; if(x[2] === 7 && x[3] === 0) e.capp++; } else e.cur = 0;
+          });
+        });
+      });
+      var arr = Object.keys(entities).map(function(k){ return entities[k]; }).filter(function(e){ return e.pg > 0; });
+      function top(fn, cmp){ var s = arr.slice().sort(cmp); var b = s[0]; if(!b) return null; var v = fn(b); var tied = s.filter(function(e){ return fn(e) === v; }); return { names: tied.slice(0, 3).map(function(e){ return e.name; }), extra: tied.length - 3, v: v }; }
+      var att = top(function(e){ return e.gf; }, function(a, b){ return b.gf - a.gf || a.pg - b.pg; });
+      var def = top(function(e){ return Math.round(e.gs / e.pg * 10) / 10; }, function(a, b){ return a.gs / a.pg - b.gs / b.pg || b.pg - a.pg; });
+      var cap = top(function(e){ return e.capp; }, function(a, b){ return b.capp - a.capp; });
+      var str = top(function(e){ return e.best; }, function(a, b){ return b.best - a.best; });
+      var close = ms.filter(function(m){ return Math.max(m.scoreA, m.scoreB) === 7 && Math.min(m.scoreA, m.scoreB) === 6; });
+      var totGoals = ms.reduce(function(s, m){ return s + m.scoreA + m.scoreB; }, 0);
+      function namesTxt(t){ return t ? esc(t.names.join(", ")) + (t.extra > 0 ? " e altri " + t.extra : "") : "—"; }
+      var who = grouped ? "coppia" : "giocatore";
+      var cells = [
+        ["💥", "Miglior attacco", att ? namesTxt(att) + " <small>" + att.v + " gol fatti</small>" : "—"],
+        ["🧱", "Miglior difesa", def ? namesTxt(def) + " <small>" + def.v + " subiti a partita</small>" : "—"],
+        ["🧹", "Più cappotti (7-0)", cap && cap.v ? namesTxt(cap) + " <small>" + cap.v + "</small>" : "Nessun cappotto finora"],
+        ["🔥", "Serie più lunga", str && str.v >= 2 ? namesTxt(str) + " <small>" + str.v + " vittorie di fila</small>" : "—"],
+        ["🥵", "Finite 7-6", close.length ? close.length + (close.length === 1 ? " partita" : " partite") + " <small>all'ultimo gol</small>" : "Nessuna finora"],
+        ["⚽", "Gol segnati", totGoals + " <small>in " + ms.length + " partite</small>"]
+      ];
+      statsCard.innerHTML = '<h2>📈 Curiosità del torneo</h2><div class="vx-stats-grid">' + cells.map(function(c){ return '<div class="vx-stat"><div class="ic">' + c[0] + '</div><div class="lb">' + c[1] + '</div><div class="vl">' + c[2] + '</div></div>'; }).join("") + '</div>' +
+        '<div class="vx-prog-sub" style="margin-top:8px;">Calcolate sulle partite del girone (per ' + who + ').</div>';
+    }
+
+    // ----- tabellone grafico -----
+    function renderBracket(){
+      if(!current || !current.playoffs){ brCard.innerHTML = '<h2>📊 Tabellone</h2><div class="empty-note">Il tabellone della fase finale comparirà qui alla fine dei gironi.</div>'; return; }
+      brCard.innerHTML = '<h2>📊 Tabellone</h2><div class="vx-me-sub" style="margin-bottom:8px;">Scorri di lato per vedere tutti i turni ↔</div><div class="vx-bracket-scroll" id="vxBrScroll"></div>' +
+        (podiumData() ? '<button class="btn btn-primary btn-block" type="button" id="vxPartyAgain">🎉 Rivedi la festa del podio</button>' : '');
+      var sc = $("vxBrScroll");
+      try{ tvBracketCards().forEach(function(c){ sc.appendChild(c); }); }catch(e){}
+      var pa = $("vxPartyAgain"); if(pa) pa.addEventListener("click", function(){ showParty(true); });
+    }
+
+    // ----- festa finale -----
+    var partyTimer = null;
+    function showParty(force){
+      var data = podiumData(); if(!data || !current) return;
+      var done = {}; try{ done = JSON.parse(localStorage.getItem(LS_PARTY) || "{}"); }catch(e){}
+      if(!force && done[current.id]) return;
+      done[current.id] = 1; try{ localStorage.setItem(LS_PARTY, JSON.stringify(done)); }catch(e){}
+      var ov = $("vxParty"); if(ov) ov.remove();
+      ov = el("div", "vxParty", "vx-party");
+      ov.innerHTML = '<canvas id="vxConfetti"></canvas><div class="vx-party-box"><div class="vx-party-title">🏆 ' + esc(current.name || "Torneo") + '</div><div class="vx-party-sub">Il torneo è finito: ecco il podio!</div>' +
+        data.map(function(sec){
+          return '<div class="vx-pod">' + (sec.label ? '<div class="vx-pod-h">' + esc(sec.label) + '</div>' : '') +
+            '<div class="vx-pod-r g">🥇 ' + esc(teamName(sec.pod.w)) + '</div>' + (sec.pod.l ? '<div class="vx-pod-r">🥈 ' + esc(teamName(sec.pod.l)) + '</div>' : '') + (sec.pod.w3 ? '<div class="vx-pod-r">🥉 ' + esc(teamName(sec.pod.w3)) + '</div>' : '') + '</div>';
+        }).join("") +
+        '<button class="btn btn-primary btn-block" type="button" id="vxPartyImg">🖼️ Salva l\'immagine del podio</button>' +
+        '<button class="btn btn-ghost btn-ghost-onpitch btn-block" type="button" id="vxPartyClose">Chiudi</button></div>';
+      document.body.appendChild(ov);
+      $("vxPartyImg").addEventListener("click", function(){ var b = $("podiumImgBtn"); if(b) b.click(); });
+      $("vxPartyClose").addEventListener("click", function(){ clearInterval(partyTimer); ov.remove(); });
+      try{ if(navigator.vibrate) navigator.vibrate([100, 60, 100, 60, 300]); }catch(e){}
+      confetti($("vxConfetti"));
+    }
+    function confetti(cv){
+      var ctx = cv.getContext("2d"), W, H, parts = [], colors = ["#ffd868","#d4af37","#2fbf5a","#3d8bff","#ff5a4a","#ffffff","#e02a18"];
+      function size(){ W = cv.width = cv.offsetWidth * (window.devicePixelRatio || 1); H = cv.height = cv.offsetHeight * (window.devicePixelRatio || 1); }
+      size();
+      for(var i = 0; i < 160; i++) parts.push({ x: Math.random() * W, y: -Math.random() * H, w: 6 + Math.random() * 8, h: 10 + Math.random() * 10, c: colors[i % colors.length], vy: 2 + Math.random() * 4, vx: -1.5 + Math.random() * 3, r: Math.random() * 6, vr: -0.2 + Math.random() * 0.4 });
+      var frames = 0;
+      clearInterval(partyTimer);
+      partyTimer = setInterval(function(){
+        if(!document.body.contains(cv)){ clearInterval(partyTimer); return; }
+        frames++; ctx.clearRect(0, 0, W, H);
+        parts.forEach(function(p){
+          p.y += p.vy * (window.devicePixelRatio || 1); p.x += p.vx; p.r += p.vr;
+          if(p.y > H && frames < 420){ p.y = -20; p.x = Math.random() * W; }
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+        });
+        if(frames > 700) clearInterval(partyTimer);
+      }, 33);
+    }
+
+    // ----- evidenzia il mio nome ovunque -----
+    function highlightMe(){
+      document.querySelectorAll(".vx-me-hl").forEach(function(e){ e.classList.remove("vx-me-hl"); });
+      if(!me || me === "__none") return;
+      document.querySelectorAll("#panel-torneo .player-name, #panel-torneo b.name-p, #panel-torneo b.name-a, #panel-torneo .quali-name, #panel-torneo .podium-names, #vxBrScroll .tvb-row > span:first-child, #vxNow .vx-pair").forEach(function(e){
+        var txt = e.textContent || "";
+        if(isMeName(txt) || txt.split(" - ").some(function(p){ return isMeName(p); })) e.classList.add("vx-me-hl");
+      });
+    }
+
+    function renderAll(){
+      try{
+        renderMe(); renderProgress(); renderNow(); renderFeed(); renderStats(); renderBracket();
+        addArrows(rankDelta());
+        highlightMe();
+        if(current && podiumData()) showParty(false);
+      }catch(e){ console.error(e); }
+    }
+    window.__viewerHook = renderAll;
+    setInterval(function(){ var a = $("vxAgo"); if(a) a.textContent = ago(+a.dataset.t); }, 30000);
+    renderAll();
+  })();
+
+  // ---------- RETICOLO DEI GIRONI (si apre in un'altra finestra) ----------
+  // Per ogni girone una tabella "tutti contro tutti": in ogni casella il
+  // risultato della coppia della riga contro quella della colonna.
+  var GRID_MODE = /[?&]grid=1/.test(location.search);
+  var GRID_COLORS = ["#1c5fe0","#e02a18","#1f9a3f","#7b3fe0","#f08a1c","#12a6c4","#d8307f","#c9a227"];
+  function gridUrl(){
+    var u = location.href.replace(/[?&]grid=1/, "");
+    return u + (u.indexOf("?") === -1 ? "?" : "&") + "grid=1";
+  }
+  function openGridWindow(){
+    var w = null;
+    try{ w = window.open(gridUrl(), "goophoGrid", "width=1280,height=800"); }catch(e){}
+    if(!w) location.href = gridUrl();
+  }
+  function gridAvailable(){ return !!(current && current.fixedTeams && current.groups && current.groups.length); }
+  function updateGridButtons(){
+    var ok = gridAvailable();
+    var b = document.getElementById("gridOpenBtn"); if(b) b.style.display = ok ? "" : "none";
+    var v = document.getElementById("vxGridBtn"); if(v) v.style.display = ok ? "" : "none";
+  }
+  (function(){
+    var bar = document.getElementById("topActionsBar"), tvb = document.getElementById("tvModeBtn");
+    if(bar && tvb){
+      var b = document.createElement("button");
+      b.className = "btn btn-primary"; b.id = "gridOpenBtn"; b.type = "button"; b.style.display = "none";
+      b.textContent = "🔲 Reticolo gironi";
+      tvb.parentNode.insertBefore(b, tvb.nextSibling);
+      b.addEventListener("click", openGridWindow);
+    }
+    // anche per chi segue la Live
+    var vb = document.querySelector("#spectatorNote .fb-viewer-bar");
+    if(vb && window.__fbViewer){
+      var g = document.createElement("button");
+      g.className = "btn btn-primary btn-sm"; g.id = "vxGridBtn"; g.type = "button"; g.style.display = "none";
+      g.textContent = "🔲 Reticolo";
+      vb.appendChild(g);
+      g.addEventListener("click", openGridWindow);
+    }
+    afterPersistHooks.push(updateGridButtons);
+    var _rrG = renderRounds; renderRounds = function(){ _rrG.apply(this, arguments); updateGridButtons(); };
+    updateGridButtons();
+  })();
+
+  function gridCellHtml(rowTeam, colTeam, matches){
+    if(rowTeam.keeper.id === colTeam.keeper.id) return '<td class="gx-diag"></td>';
+    var m = null;
+    for(var i = 0; i < matches.length; i++){
+      var x = matches[i];
+      if((x.teamA.keeper.id === rowTeam.keeper.id && x.teamB.keeper.id === colTeam.keeper.id) || (x.teamB.keeper.id === rowTeam.keeper.id && x.teamA.keeper.id === colTeam.keeper.id)){ m = x; break; }
+    }
+    if(!m) return '<td class="gx-none">–</td>';
+    var mineA = m.teamA.keeper.id === rowTeam.keeper.id;
+    if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined){
+      var tn = current.onTable && current.onTable[m.id];
+      return tn ? '<td class="gx-live">🎯 T' + tn + '</td>' : '<td class="gx-todo">·</td>';
+    }
+    var own = mineA ? m.scoreA : m.scoreB, opp = mineA ? m.scoreB : m.scoreA;
+    return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '">' + own + '-' + opp + (m.forfeit ? '<sup>*</sup>' : '') + '</td>';
+  }
+  function gridRender(){
+    if(!GRID_MODE) return;
+    var ov = document.getElementById("gridOverlay"); if(!ov) return;
+    var title = document.getElementById("gxTitle"); if(title) title.textContent = ((current && current.name) || "GOOPHO 26") + " · Reticolo dei gironi";
+    var stage = document.getElementById("gxStage");
+    if(!gridAvailable()){
+      stage.innerHTML = '<div class="gx-empty">' + (current && current.rounds && current.rounds.length ? "Il reticolo è disponibile per i tornei a gironi (coppie fisse)." : "In attesa che il torneo inizi…") + '</div>';
+      gridFit(); return;
+    }
+    var G = current.groups.length, cols = gridNarrow() ? 1 : (G <= 3 ? G : (G === 4 ? 2 : (G <= 6 ? 3 : 4)));
+    var anyForfeit = false;
+    var html = '<div class="gx-grid" style="grid-template-columns:repeat(' + cols + ', auto);">';
+    current.groups.forEach(function(g, gi){
+      var color = GRID_COLORS[gi % GRID_COLORS.length];
+      var rows = computeTeamGroupStandings(g), order = rows.map(function(r){ return r.team; });
+      g.teams.forEach(function(t){ if(!order.some(function(o){ return o.keeper.id === t.keeper.id; })) order.push(t); });
+      var rowById = {}; rows.forEach(function(r){ rowById[r.team.keeper.id] = r; });
+      var matches = []; g.rounds.forEach(function(r){ r.matches.forEach(function(m){ matches.push(m); if(m.forfeit) anyForfeit = true; }); });
+      var q = Math.min(qualifyPerGroup(), order.length);
+      html += '<div class="gx-card" style="--gc:' + color + ';"><div class="gx-head">' + esc(g.label) + '</div><table class="gx-table"><thead><tr><th class="gx-corner"></th>' +
+        order.map(function(t, j){ return '<th class="gx-colh"><span class="gx-num">' + (j + 1) + '</span></th>'; }).join("") +
+        '<th class="gx-sum">Pt</th><th class="gx-sum">G</th><th class="gx-sum">DR</th></tr></thead><tbody>' +
+        order.map(function(t, i){
+          var r = rowById[t.keeper.id] || { pt: 0, pg: 0, gf: 0, gs: 0 };
+          var dr = r.gf - r.gs;
+          return '<tr class="' + (i < q ? "gx-q" : "gx-nq") + (i === q - 1 ? " gx-cut" : "") + '"><th class="gx-rowh"><span class="gx-num">' + (i + 1) + '</span><span class="gx-name">' + esc(t.keeper.name) + ' - ' + esc(t.attacker.name) + '</span></th>' +
+            order.map(function(c){ return gridCellHtml(t, c, matches); }).join("") +
+            '<td class="gx-pt">' + r.pt + '</td><td class="gx-s">' + r.pg + '</td><td class="gx-s">' + (dr > 0 ? "+" : "") + dr + '</td></tr>';
+        }).join("") + '</tbody></table></div>';
+    });
+    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span>' + (anyForfeit ? '<span>* a tavolino</span>' : '') + '<span>Il risultato si legge dalla parte della coppia della riga · la linea dorata separa chi va in Fascia A</span></div>';
+    stage.innerHTML = html;
+    gridFit();
+  }
+  function gridNarrow(){ return window.innerWidth < 700 && window.innerWidth < window.innerHeight; }
+  function gridFit(){
+    var vp = document.getElementById("gxViewport"), st = document.getElementById("gxStage");
+    if(!vp || !st) return;
+    if(gridNarrow()){
+      // telefono in verticale: un girone sotto l'altro, si scorre
+      vp.style.overflowY = "auto"; st.style.position = "relative"; st.style.left = "0"; st.style.top = "0"; st.style.transform = "none"; st.style.zoom = 1;
+      var nat = st.scrollWidth, z = Math.min(1, (vp.clientWidth - 16) / nat);
+      st.style.zoom = z; st.style.margin = "0 8px"; return;
+    }
+    vp.style.overflowY = "hidden"; st.style.position = "absolute"; st.style.left = "50%"; st.style.zoom = 1; st.style.margin = "0";
+    st.style.transform = "translateX(-50%) scale(1)";
+    var w = st.scrollWidth, h = st.scrollHeight;
+    var sc = Math.min(vp.clientWidth * 0.97 / w, vp.clientHeight * 0.97 / h, 2.2);
+    if(!isFinite(sc) || sc <= 0) sc = 1;
+    st.style.transform = "translateX(-50%) scale(" + sc + ")";
+    st.style.top = Math.max(0, (vp.clientHeight - h * sc) / 2) + "px";
+  }
+  if(GRID_MODE){
+    var gcss = document.createElement("style");
+    gcss.textContent =
+      "#gridOverlay{ position:fixed; inset:0; z-index:9998; display:flex; flex-direction:column; color:#fff; background:radial-gradient(circle at 15% 0%, #2a6ff0 0%, transparent 45%), linear-gradient(165deg, #0a2f7a, #0d2452 70%); }" +
+      "#gridOverlay .gx-top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:1.4vh 56px 0.6vh 2vw; }" +
+      "#gxTitle{ font-size:clamp(16px, 2.4vw, 46px); font-weight:900; text-shadow:0 3px 14px rgba(0,0,0,0.35); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }" +
+      "#gxClock{ font-size:clamp(14px, 2vw, 40px); font-weight:700; opacity:.9; font-variant-numeric:tabular-nums; }" +
+      "#gxClose{ position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.14); color:#fff; font-size:16px; cursor:pointer; opacity:.4; } #gxClose:hover{ opacity:1; }" +
+      "#gxViewport{ flex:1; position:relative; overflow:hidden; }" +
+      "#gxStage{ position:absolute; left:50%; top:0; transform-origin:top center; }" +
+      ".gx-grid{ display:grid; gap:22px; align-items:start; }" +
+      ".gx-card{ background:rgba(255,255,255,0.97); color:#14294a; border-radius:16px; padding:12px 14px 14px; border:4px solid var(--gc); box-shadow:0 14px 34px rgba(0,0,0,0.4); }" +
+      ".gx-head{ background:var(--gc); color:#fff; font-weight:900; font-size:20px; letter-spacing:.06em; text-transform:uppercase; border-radius:10px; padding:6px 12px; margin:-2px -2px 10px; text-align:center; }" +
+      ".gx-table{ border-collapse:separate; border-spacing:3px; font-size:16px; }" +
+      ".gx-table th, .gx-table td{ text-align:center; padding:6px 8px; border-radius:7px; white-space:nowrap; }" +
+      ".gx-rowh{ text-align:left !important; font-weight:800; background:rgba(20,41,74,0.06); }" +
+      ".gx-nq .gx-rowh{ opacity:.6; }" +
+      ".gx-cut td, .gx-cut th{ box-shadow:0 3px 0 -1px #d4af37; }" +
+      ".gx-num{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--gc); color:#fff; font-size:13px; font-weight:900; margin-right:8px; }" +
+      ".gx-colh .gx-num{ margin:0; }" +
+      ".gx-diag{ background:repeating-linear-gradient(45deg, var(--gc), var(--gc) 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 8px); opacity:.55; min-width:52px; }" +
+      ".gx-win{ background:#1f9a3f; color:#fff; font-weight:900; min-width:52px; }" +
+      ".gx-loss{ background:#f3c3bd; color:#8a1d12; font-weight:800; min-width:52px; }" +
+      ".gx-draw{ background:#ffd868; color:#1a2233; font-weight:800; }" +
+      ".gx-todo{ background:rgba(20,41,74,0.06); color:rgba(20,41,74,0.45); font-weight:900; min-width:52px; }" +
+      ".gx-live{ background:#5fe37f; color:#0b3d1a; font-weight:900; animation:gxPulse 1.4s ease-in-out infinite; }" +
+      ".gx-none{ color:rgba(20,41,74,0.3); }" +
+      "@keyframes gxPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(95,227,127,0.7);} 50%{ box-shadow:0 0 0 6px rgba(95,227,127,0);} }" +
+      ".gx-sum{ font-size:12px; color:rgba(20,41,74,0.6); text-transform:uppercase; }" +
+      ".gx-pt{ font-weight:900; font-size:18px; background:#ffd868; color:#1a2233; }" +
+      ".gx-s{ font-weight:700; color:rgba(20,41,74,0.75); }" +
+      ".gx-legend{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px 16px; margin-top:16px; font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); }" +
+      ".gx-key{ padding:3px 10px; border-radius:7px; } .gx-legend .gx-todo{ background:rgba(255,255,255,0.9); color:#14294a; }" +
+      ".gx-empty{ font-size:28px; font-weight:800; padding:20vh 4vw; text-align:center; width:80vw; }" +
+      "body.grid-on{ overflow:hidden; }";
+    document.head.appendChild(gcss);
+    var gov = document.createElement("div");
+    gov.id = "gridOverlay";
+    gov.innerHTML = '<div class="gx-top"><div id="gxTitle"></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button>';
+    document.body.appendChild(gov);
+    document.body.classList.add("grid-on");
+    document.getElementById("gxClose").addEventListener("click", function(){ try{ window.close(); }catch(e){} setTimeout(function(){ location.href = location.href.replace(/[?&]grid=1/, ""); }, 200); });
+    function gxClock(){ var d = new Date(), el = document.getElementById("gxClock"); if(el) el.textContent = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+    gxClock();
+    // aggiornamenti: dall'altra finestra (stesso browser) o dalla Live
+    window.addEventListener("storage", function(e){
+      if(e.key !== LS_CURRENT || window.__fbViewer) return;
+      try{ current = e.newValue ? relinkGroupRounds(JSON.parse(e.newValue)) : null; }catch(err){ return; }
+      gridRender();
+    });
+    if(window.__fbViewer){ var _vh = window.__viewerHook; window.__viewerHook = function(){ if(_vh) _vh(); gridRender(); }; }
+    setInterval(function(){ gxClock(); gridRender(); }, 5000);
+    window.addEventListener("resize", gridFit);
+    gridRender();
+  }
+
+  // Opzione Fascia B: ripresa dal torneo in corso
+  function restoreFasciaUI(){
+    var el = document.getElementById("fasciaBMode"); if(el) el.value = (current && current.fasciaBMode) || "yes";
+    var bc = document.getElementById("fasciaBCount"); if(bc) bc.value = (current && current.fasciaBCount) || 2;
+    var ac = document.getElementById("fasciaACount"); if(ac) ac.value = (current && current.fasciaACount) || "";
+    syncFasciaUI();
+  }
+  restoreFasciaUI();
+  (function(){ var _rr5 = renderRounds; renderRounds = function(){ _rr5.apply(this, arguments); restoreFasciaUI(); }; })();
+
   // ---------- QR CODE DELLA DIRETTA (Modalità TV) ----------
   // Se la Live è attiva, in basso a destra compare un QR code: chi è al
   // torneo lo inquadra col telefono e segue risultati e classifiche.

@@ -96,3 +96,9 @@ Se qualcosa non va, il riquadro Live mostra un messaggio:
 - "ultimo invio non riuscito" > il Mac non è connesso a internet.
 
 Il piano gratuito di Firebase è ampiamente sufficiente per i tornei.
+
+COSA VEDONO I GIOCATORI SUL TELEFONO
+   Al primo accesso l'app chiede "Chi sei?": scegliendo il proprio nome si
+   vede la propria posizione e quando tocca a giocare. In basso c'è un menu
+   con In campo, Classifiche, Partite e Tabellone. Il nome scelto resta
+   memorizzato sul telefono (si cambia con "Cambia").

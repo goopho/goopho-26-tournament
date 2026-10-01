@@ -94,3 +94,46 @@ NOVITÀ (versione 11)
    - Iscritti da WhatsApp: copia il messaggio con le liste "Portieri" e
      "Attaccanti", aprilo in "📋 Incolla una lista di nomi" e premi
      "📥 Aggiungi tutto": l'app divide i nomi nei due ruoli da sola.
+
+NOVITÀ (versione 13)
+   - Giallo più giusto: in ogni giornata a ognuno conta UNA sola partita.
+     Se qualcuno gioca due volte (ruoli in numero diverso o coppie dispari),
+     nella partita in più fa da Talpa (o la coppia fa da jolly) e non prende
+     punti. Così tutti chiudono con lo stesso numero di partite in classifica.
+     Inoltre nessuno può più trovarsi in entrambe le squadre della stessa partita.
+   - Avviso prima del sorteggio Giallo se portieri e attaccanti sono molto
+     sbilanciati (es. 19 e 5), con il consiglio su quanti spostare.
+   - Fase finale > "Chi non va in Fascia A": scegli se si gioca la Fascia B
+     oppure no. Se resta fuori una sola coppia, viene ripescata in Fascia A.
+   - Punteggi strani evidenziati in arancione (7-7, nessuno a 7, più di 7):
+     è solo un avviso, puoi lasciarli così se sono giusti.
+   - "🔁 Sostituisci un giocatore" (Giallo): chi se ne va o chi arriva tardi.
+     Cambia solo le partite ancora da giocare.
+
+NOVITÀ (versione 14) - LA LIVE SUL TELEFONO
+   Chi apre il link della diretta (o inquadra il QR in TV) ora ha:
+   - "Chi sei?": sceglie il suo nome e vede la sua scheda (posizione, punti,
+     partite) con l'avviso "🎯 Tocca a te! Vai al Tavolo N", "Preparati"
+     o "Tocca a te tra circa N partite". Su Android il telefono vibra quando
+     tocca a lui (solo con la pagina aperta). Il suo nome è evidenziato ovunque.
+   - Cronaca in diretta: tutti i risultati con l'orario e i momenti speciali
+     (cappotti, 7-6, sorprese, serie di vittorie, nuovo primo, chi passa il
+     turno, chi vince).
+   - Frecce ▲▼ in classifica dopo ogni risultato.
+   - Barra di avanzamento del torneo e "ultimo risultato: N minuti fa".
+   - Menu in basso: In campo · Classifiche · Partite · Tabellone (con il
+     tabellone grafico della fase finale).
+   - Curiosità: miglior attacco e difesa, cappotti, serie più lunga, 7-6.
+   - A fine torneo: festa con coriandoli, podio e "Salva l'immagine del podio".
+
+NOVITÀ (versione 15)
+   - Fase finale, in tutte e tre le modalità:
+     · Giallo: "Coppie in Fascia A" (vuoto = automatico).
+     · Gironi: "Coppie che passano da ogni girone" (come prima).
+     · Fascia B: "Sì, con tutte le altre" / "Sì, scelgo quante" / "No".
+       Con i gironi il numero è per girone (es. 1 = la prima non qualificata
+       di ogni girone). Chi resta fuori da A e B è eliminato.
+   - "🔲 Reticolo gironi" (accanto a Modalità TV, anche nella Live):
+     si apre in un'altra finestra la tabella tutti-contro-tutti di ogni
+     girone, con risultati colorati e partite in campo. Si aggiorna da sola:
+     puoi trascinarla sulla TV.
