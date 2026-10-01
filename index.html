@@ -7818,11 +7818,12 @@ module.exports = QRCode;
     renderAll();
   })();
 
-  // ---------- RETICOLO DEI GIRONI (si apre in un'altra finestra) ----------
-  // Per ogni girone una tabella "tutti contro tutti": in ogni casella il
-  // risultato della coppia della riga contro quella della colonna.
+  // ---------- RETICOLO (gironi: coppia contro coppia · Giallo: giocatori × giornate) ----------
+  // Si vede nella pagina (scheda "Reticolo") e si può aprire in un'altra
+  // finestra a tutto schermo (es. da trascinare sulla TV), che si aggiorna da sola.
   var GRID_MODE = /[?&]grid=1/.test(location.search);
   var GRID_COLORS = ["#1c5fe0","#e02a18","#1f9a3f","#7b3fe0","#f08a1c","#12a6c4","#d8307f","#c9a227"];
+  var LS_GRID_OPEN = "tg_grid_open_v1";
   function gridUrl(){
     var u = location.href.replace(/[?&]grid=1/, "");
     return u + (u.indexOf("?") === -1 ? "?" : "&") + "grid=1";
@@ -7832,22 +7833,204 @@ module.exports = QRCode;
     try{ w = window.open(gridUrl(), "goophoGrid", "width=1280,height=800"); }catch(e){}
     if(!w) location.href = gridUrl();
   }
-  function gridAvailable(){ return !!(current && current.fixedTeams && current.groups && current.groups.length); }
+  function gridGrouped(){ return !!(current && current.fixedTeams && current.groups && current.groups.length); }
+  function gridAvailable(){ return !!(current && current.rounds && current.rounds.length); }
+  function gxScored(m){ return m && m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined; }
+
+  // --- gironi ---
+  function gridCellHtml(rowTeam, colTeam, matches){
+    if(rowTeam.keeper.id === colTeam.keeper.id) return '<td class="gx-diag"></td>';
+    var m = null;
+    for(var i = 0; i < matches.length; i++){
+      var x = matches[i];
+      if((x.teamA.keeper.id === rowTeam.keeper.id && x.teamB.keeper.id === colTeam.keeper.id) || (x.teamB.keeper.id === rowTeam.keeper.id && x.teamA.keeper.id === colTeam.keeper.id)){ m = x; break; }
+    }
+    if(!m) return '<td class="gx-none">–</td>';
+    var mineA = m.teamA.keeper.id === rowTeam.keeper.id;
+    if(!gxScored(m)){
+      var tn = current.onTable && current.onTable[m.id];
+      return tn ? '<td class="gx-live">🎯 T' + tn + '</td>' : '<td class="gx-todo">·</td>';
+    }
+    var own = mineA ? m.scoreA : m.scoreB, opp = mineA ? m.scoreB : m.scoreA;
+    return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '">' + own + '-' + opp + (m.forfeit ? '<sup>*</sup>' : '') + '</td>';
+  }
+  function gridGroupsHtml(cols){
+    var anyForfeit = false;
+    var html = '<div class="gx-grid" style="grid-template-columns:repeat(' + cols + ', auto);">';
+    current.groups.forEach(function(g, gi){
+      var color = GRID_COLORS[gi % GRID_COLORS.length];
+      var rows = computeTeamGroupStandings(g), order = rows.map(function(r){ return r.team; });
+      g.teams.forEach(function(t){ if(!order.some(function(o){ return o.keeper.id === t.keeper.id; })) order.push(t); });
+      var rowById = {}; rows.forEach(function(r){ rowById[r.team.keeper.id] = r; });
+      var matches = []; g.rounds.forEach(function(r){ r.matches.forEach(function(m){ matches.push(m); if(m.forfeit) anyForfeit = true; }); });
+      var q = Math.min(qualifyPerGroup(), order.length);
+      html += '<div class="gx-card" style="--gc:' + color + ';"><div class="gx-head">' + esc(g.label) + '</div><div class="gx-scroll"><table class="gx-table"><thead><tr><th class="gx-corner"></th>' +
+        order.map(function(t, j){ return '<th class="gx-colh"><span class="gx-num">' + (j + 1) + '</span></th>'; }).join("") +
+        '<th class="gx-sum">Pt</th><th class="gx-sum">G</th><th class="gx-sum">DR</th></tr></thead><tbody>' +
+        order.map(function(t, i){
+          var r = rowById[t.keeper.id] || { pt: 0, pg: 0, gf: 0, gs: 0 };
+          var dr = r.gf - r.gs;
+          return '<tr class="' + (i < q ? "gx-q" : "gx-nq") + (i === q - 1 ? " gx-cut" : "") + '"><th class="gx-rowh"><span class="gx-num">' + (i + 1) + '</span><span class="gx-name">' + esc(t.keeper.name) + ' - ' + esc(t.attacker.name) + '</span></th>' +
+            order.map(function(c){ return gridCellHtml(t, c, matches); }).join("") +
+            '<td class="gx-pt">' + r.pt + '</td><td class="gx-s">' + r.pg + '</td><td class="gx-s">' + (dr > 0 ? "+" : "") + dr + '</td></tr>';
+        }).join("") + '</tbody></table></div></div>';
+    });
+    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span>' + (anyForfeit ? '<span>* a tavolino</span>' : '') + '<span>Il risultato si legge dalla parte della coppia della riga · la linea dorata separa chi va in Fascia A</span></div>';
+    return html;
+  }
+
+  // --- Giallo: giocatori × giornate ---
+  function gridGialloHtml(cols){
+    var rounds = current.rounds, all = computeStandings(rounds);
+    var players = {};
+    rounds.forEach(function(r){ r.matches.forEach(function(m){
+      [[m.teamA.keeper,"P"],[m.teamA.attacker,"A"],[m.teamB.keeper,"P"],[m.teamB.attacker,"A"]].forEach(function(x){ if(x[0] && !isTalpa(x[0]) && !players[x[0].id]) players[x[0].id] = { p: x[0], role: x[1] }; });
+    }); });
+    function cell(pid, r){
+      var cnt = 0, main = null, extra = 0;
+      r.matches.forEach(function(m){
+        ["A","B"].forEach(function(sd){
+          var t = m["team" + sd];
+          if(t.keeper.id !== pid && t.attacker.id !== pid) return;
+          var counts = m.jollySide !== sd && !isTalpaIn(m, pid);
+          if(!main && counts) main = { m: m, sd: sd, t: t };
+          else extra++;
+          cnt++;
+        });
+      });
+      if(!cnt) return '<td class="gx-rest" title="riposo">😴</td>';
+      if(!main){ return '<td class="gx-todo" title="solo partita extra (Talpa/jolly)">T</td>'; }
+      var m = main.m, t = main.t, partner = t.keeper.id === pid ? t.attacker : t.keeper;
+      var sub = '<small>' + (isTalpa(partner) ? "Talpa" : esc(partner.name)) + (extra ? " +T" : "") + '</small>';
+      if(!gxScored(m)){
+        var tn = current.onTable && current.onTable[m.id];
+        return tn ? '<td class="gx-live">🎯 T' + tn + sub + '</td>' : '<td class="gx-todo">·' + sub + '</td>';
+      }
+      var own = main.sd === "A" ? m.scoreA : m.scoreB, opp = main.sd === "A" ? m.scoreB : m.scoreA;
+      return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '">' + own + '-' + opp + sub + '</td>';
+    }
+    var html = '<div class="gx-grid" style="grid-template-columns:repeat(' + cols + ', auto);">';
+    [["P","Portieri","#1c5fe0"],["A","Attaccanti","#e02a18"]].forEach(function(role){
+      var rows = all.filter(function(r){ return r.role === role[0]; });
+      var ids = rows.map(function(r){ return r.id; });
+      Object.keys(players).forEach(function(id){ if(players[id].role === role[0] && ids.indexOf(id) === -1){ ids.push(id); rows.push({ id: id, name: players[id].p.name, pt: 0, pg: 0, gf: 0, gs: 0 }); } });
+      html += '<div class="gx-card" style="--gc:' + role[2] + ';"><div class="gx-head">' + role[1] + '</div><div class="gx-scroll"><table class="gx-table gx-giallo"><thead><tr><th class="gx-corner"></th>' +
+        rounds.map(function(r, ri){ return '<th class="gx-colh"><span class="gx-rnd">' + (r.recovery ? "Rec" : "G" + (ri + 1)) + '</span></th>'; }).join("") +
+        '<th class="gx-sum">Pt</th><th class="gx-sum">G</th><th class="gx-sum">DR</th></tr></thead><tbody>' +
+        rows.map(function(r, i){
+          var dr = r.gf - r.gs;
+          return '<tr><th class="gx-rowh"><span class="gx-num">' + (i + 1) + '</span><span class="gx-name">' + esc(r.name) + '</span></th>' +
+            rounds.map(function(rd){ return cell(r.id, rd); }).join("") +
+            '<td class="gx-pt">' + r.pt + '</td><td class="gx-s">' + r.pg + '</td><td class="gx-s">' + (dr > 0 ? "+" : "") + dr + '</td></tr>';
+        }).join("") + '</tbody></table></div></div>';
+    });
+    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span><span>😴 riposo · sotto il risultato il compagno di quella giornata · "+T" = ha giocato anche una partita in più da Talpa (senza punti)</span></div>';
+    return html;
+  }
+  function gridHtml(cols){
+    if(!gridAvailable()) return '<div class="gx-empty">' + (window.__fbViewer ? "In attesa che l'organizzatore avvii il torneo…" : "Sorteggia le partite per vedere il reticolo.") + '</div>';
+    if(gridGrouped()){
+      var G = current.groups.length;
+      return gridGroupsHtml(cols || (G <= 3 ? G : (G === 4 ? 2 : (G <= 6 ? 3 : 4))));
+    }
+    return gridGialloHtml(cols || 2);
+  }
+
+  // --- CSS (sempre: serve anche nella pagina) ---
+  (function(){
+    var gcss = document.createElement("style");
+    gcss.textContent =
+      ".gx-grid{ display:grid; gap:22px; align-items:start; }" +
+      ".gx-card{ background:rgba(255,255,255,0.97); color:#14294a; border-radius:16px; padding:12px 14px 14px; border:4px solid var(--gc); box-shadow:0 14px 34px rgba(0,0,0,0.25); min-width:0; }" +
+      ".gx-scroll{ overflow-x:auto; -webkit-overflow-scrolling:touch; }" +
+      ".gx-head{ background:var(--gc); color:#fff; font-weight:900; font-size:20px; letter-spacing:.06em; text-transform:uppercase; border-radius:10px; padding:6px 12px; margin:-2px -2px 10px; text-align:center; }" +
+      ".gx-table{ border-collapse:separate; border-spacing:3px; font-size:16px; }" +
+      ".gx-table th, .gx-table td{ text-align:center; padding:6px 8px; border-radius:7px; white-space:nowrap; }" +
+      ".gx-table td small{ display:block; font-size:10.5px; font-weight:700; opacity:.85; margin-top:1px; max-width:84px; overflow:hidden; text-overflow:ellipsis; }" +
+      ".gx-rowh{ text-align:left !important; font-weight:800; background:rgba(20,41,74,0.06); }" +
+      ".gx-nq .gx-rowh{ opacity:.6; }" +
+      ".gx-cut td, .gx-cut th{ box-shadow:0 3px 0 -1px #d4af37; }" +
+      ".gx-num{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--gc); color:#fff; font-size:13px; font-weight:900; margin-right:8px; }" +
+      ".gx-colh .gx-num{ margin:0; }" +
+      ".gx-rnd{ display:inline-block; background:var(--gc); color:#fff; font-size:12px; font-weight:900; border-radius:8px; padding:3px 8px; }" +
+      ".gx-diag{ background:repeating-linear-gradient(45deg, var(--gc), var(--gc) 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 8px); opacity:.55; min-width:52px; }" +
+      ".gx-win{ background:#1f9a3f; color:#fff; font-weight:900; min-width:52px; }" +
+      ".gx-loss{ background:#f3c3bd; color:#8a1d12; font-weight:800; min-width:52px; }" +
+      ".gx-draw{ background:#ffd868; color:#1a2233; font-weight:800; }" +
+      ".gx-todo{ background:rgba(20,41,74,0.06); color:rgba(20,41,74,0.5); font-weight:900; min-width:52px; }" +
+      ".gx-rest{ background:rgba(20,41,74,0.03); min-width:52px; }" +
+      ".gx-live{ background:#5fe37f; color:#0b3d1a; font-weight:900; animation:gxPulse 1.4s ease-in-out infinite; }" +
+      ".gx-none{ color:rgba(20,41,74,0.3); }" +
+      "@keyframes gxPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(95,227,127,0.7);} 50%{ box-shadow:0 0 0 6px rgba(95,227,127,0);} }" +
+      ".gx-sum{ font-size:12px; color:rgba(20,41,74,0.6); text-transform:uppercase; }" +
+      ".gx-pt{ font-weight:900; font-size:18px; background:#ffd868; color:#1a2233; }" +
+      ".gx-s{ font-weight:700; color:rgba(20,41,74,0.75); }" +
+      ".gx-legend{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px 16px; margin-top:16px; font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); }" +
+      ".gx-key{ padding:3px 10px; border-radius:7px; } .gx-legend .gx-todo{ background:rgba(255,255,255,0.9); color:#14294a; }" +
+      ".gx-empty{ font-size:20px; font-weight:800; padding:20px; text-align:center; }" +
+      /* nella pagina */
+      "#gridCard summary{ font-weight:900; font-size:17px; color:var(--pitch); cursor:pointer; }" +
+      "#gridInline{ margin-top:12px; }" +
+      "#gridInline .gx-grid{ grid-template-columns:repeat(auto-fit, minmax(min(100%, 420px), 1fr)) !important; gap:14px; }" +
+      "#gridInline .gx-card{ box-shadow:none; padding:10px; }" +
+      "#gridInline .gx-table{ font-size:14px; } #gridInline .gx-head{ font-size:16px; }" +
+      "#gridInline .gx-legend{ color:var(--ink-soft); font-size:12.5px; } #gridInline .gx-legend .gx-todo{ background:rgba(20,41,74,0.08); }" +
+      ".grid-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }" +
+      /* finestra a tutto schermo */
+      "#gridOverlay{ position:fixed; inset:0; z-index:9998; display:flex; flex-direction:column; color:#fff; background:radial-gradient(circle at 15% 0%, #2a6ff0 0%, transparent 45%), linear-gradient(165deg, #0a2f7a, #0d2452 70%); }" +
+      "#gridOverlay .gx-top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:1.4vh 56px 0.6vh 2vw; }" +
+      "#gxTitle{ font-size:clamp(16px, 2.4vw, 46px); font-weight:900; text-shadow:0 3px 14px rgba(0,0,0,0.35); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }" +
+      "#gxClock{ font-size:clamp(14px, 2vw, 40px); font-weight:700; opacity:.9; font-variant-numeric:tabular-nums; }" +
+      "#gxClose{ position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.14); color:#fff; font-size:16px; cursor:pointer; opacity:.4; } #gxClose:hover{ opacity:1; }" +
+      "#gxViewport{ flex:1; position:relative; overflow:hidden; }" +
+      "#gxStage{ position:absolute; left:50%; top:0; transform-origin:top center; }" +
+      "#gxStage .gx-scroll{ overflow:visible; } #gxStage .gx-card{ min-width:max-content; } #gxStage .gx-grid{ width:max-content; }" +
+      "#gxStage .gx-empty{ font-size:28px; padding:20vh 4vw; width:80vw; }" +
+      "body.grid-on{ overflow:hidden; }";
+    document.head.appendChild(gcss);
+  })();
+
+  // --- scheda nella pagina ---
+  (function(){
+    var anchor = document.getElementById("groupStandingsContainer");
+    var card = document.createElement("div");
+    card.className = "card"; card.id = "gridCard"; card.style.display = "none";
+    card.innerHTML = '<details id="gridDetails"><summary id="gridSummary">🔲 Reticolo</summary><div id="gridInline"></div>' +
+      '<div class="grid-actions"><button class="btn btn-primary btn-sm" type="button" id="gridOpenBtn2">↗️ Apri in un\'altra finestra (anche per la TV)</button></div></details>';
+    if(anchor) anchor.parentNode.insertBefore(card, anchor.nextSibling);
+    if(window.__fbViewer) card.setAttribute("data-vx-tab", "classifiche");
+    var det = document.getElementById("gridDetails");
+    try{ det.open = localStorage.getItem(LS_GRID_OPEN) === "1"; }catch(e){}
+    det.addEventListener("toggle", function(){ try{ localStorage.setItem(LS_GRID_OPEN, det.open ? "1" : "0"); }catch(e){} if(det.open) renderGridInline(); });
+    document.getElementById("gridOpenBtn2").addEventListener("click", openGridWindow);
+  })();
+  function renderGridInline(){
+    var card = document.getElementById("gridCard"); if(!card) return;
+    var ok = gridAvailable();
+    card.style.display = ok ? "" : "none";
+    if(!ok) return;
+    var sm = document.getElementById("gridSummary");
+    if(sm) sm.textContent = gridGrouped() ? "🔲 Reticolo dei gironi (tutti contro tutti)" : "🔲 Reticolo giocatori × giornate";
+    var det = document.getElementById("gridDetails");
+    if(det && det.open) document.getElementById("gridInline").innerHTML = gridHtml();
+  }
+
+  // --- pulsanti ---
   function updateGridButtons(){
     var ok = gridAvailable();
     var b = document.getElementById("gridOpenBtn"); if(b) b.style.display = ok ? "" : "none";
     var v = document.getElementById("vxGridBtn"); if(v) v.style.display = ok ? "" : "none";
+    renderGridInline();
   }
   (function(){
-    var bar = document.getElementById("topActionsBar"), tvb = document.getElementById("tvModeBtn");
-    if(bar && tvb){
+    var tvb = document.getElementById("tvModeBtn");
+    if(tvb){
       var b = document.createElement("button");
       b.className = "btn btn-primary"; b.id = "gridOpenBtn"; b.type = "button"; b.style.display = "none";
-      b.textContent = "🔲 Reticolo gironi";
+      b.textContent = "🔲 Reticolo";
       tvb.parentNode.insertBefore(b, tvb.nextSibling);
       b.addEventListener("click", openGridWindow);
     }
-    // anche per chi segue la Live
     var vb = document.querySelector("#spectatorNote .fb-viewer-bar");
     if(vb && window.__fbViewer){
       var g = document.createElement("button");
@@ -7858,65 +8041,25 @@ module.exports = QRCode;
     }
     afterPersistHooks.push(updateGridButtons);
     var _rrG = renderRounds; renderRounds = function(){ _rrG.apply(this, arguments); updateGridButtons(); };
+    var _rsG = renderStandings; renderStandings = function(){ _rsG.apply(this, arguments); renderGridInline(); };
+    if(window.__fbViewer){ var _vh0 = window.__viewerHook; window.__viewerHook = function(){ if(_vh0) _vh0(); updateGridButtons(); }; }
     updateGridButtons();
   })();
 
-  function gridCellHtml(rowTeam, colTeam, matches){
-    if(rowTeam.keeper.id === colTeam.keeper.id) return '<td class="gx-diag"></td>';
-    var m = null;
-    for(var i = 0; i < matches.length; i++){
-      var x = matches[i];
-      if((x.teamA.keeper.id === rowTeam.keeper.id && x.teamB.keeper.id === colTeam.keeper.id) || (x.teamB.keeper.id === rowTeam.keeper.id && x.teamA.keeper.id === colTeam.keeper.id)){ m = x; break; }
-    }
-    if(!m) return '<td class="gx-none">–</td>';
-    var mineA = m.teamA.keeper.id === rowTeam.keeper.id;
-    if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined){
-      var tn = current.onTable && current.onTable[m.id];
-      return tn ? '<td class="gx-live">🎯 T' + tn + '</td>' : '<td class="gx-todo">·</td>';
-    }
-    var own = mineA ? m.scoreA : m.scoreB, opp = mineA ? m.scoreB : m.scoreA;
-    return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '">' + own + '-' + opp + (m.forfeit ? '<sup>*</sup>' : '') + '</td>';
-  }
+  // --- finestra a tutto schermo ---
+  function gridNarrow(){ return window.innerWidth < 700 && window.innerWidth < window.innerHeight; }
   function gridRender(){
     if(!GRID_MODE) return;
-    var ov = document.getElementById("gridOverlay"); if(!ov) return;
-    var title = document.getElementById("gxTitle"); if(title) title.textContent = ((current && current.name) || "GOOPHO 26") + " · Reticolo dei gironi";
-    var stage = document.getElementById("gxStage");
-    if(!gridAvailable()){
-      stage.innerHTML = '<div class="gx-empty">' + (current && current.rounds && current.rounds.length ? "Il reticolo è disponibile per i tornei a gironi (coppie fisse)." : "In attesa che il torneo inizi…") + '</div>';
-      gridFit(); return;
-    }
-    var G = current.groups.length, cols = gridNarrow() ? 1 : (G <= 3 ? G : (G === 4 ? 2 : (G <= 6 ? 3 : 4)));
-    var anyForfeit = false;
-    var html = '<div class="gx-grid" style="grid-template-columns:repeat(' + cols + ', auto);">';
-    current.groups.forEach(function(g, gi){
-      var color = GRID_COLORS[gi % GRID_COLORS.length];
-      var rows = computeTeamGroupStandings(g), order = rows.map(function(r){ return r.team; });
-      g.teams.forEach(function(t){ if(!order.some(function(o){ return o.keeper.id === t.keeper.id; })) order.push(t); });
-      var rowById = {}; rows.forEach(function(r){ rowById[r.team.keeper.id] = r; });
-      var matches = []; g.rounds.forEach(function(r){ r.matches.forEach(function(m){ matches.push(m); if(m.forfeit) anyForfeit = true; }); });
-      var q = Math.min(qualifyPerGroup(), order.length);
-      html += '<div class="gx-card" style="--gc:' + color + ';"><div class="gx-head">' + esc(g.label) + '</div><table class="gx-table"><thead><tr><th class="gx-corner"></th>' +
-        order.map(function(t, j){ return '<th class="gx-colh"><span class="gx-num">' + (j + 1) + '</span></th>'; }).join("") +
-        '<th class="gx-sum">Pt</th><th class="gx-sum">G</th><th class="gx-sum">DR</th></tr></thead><tbody>' +
-        order.map(function(t, i){
-          var r = rowById[t.keeper.id] || { pt: 0, pg: 0, gf: 0, gs: 0 };
-          var dr = r.gf - r.gs;
-          return '<tr class="' + (i < q ? "gx-q" : "gx-nq") + (i === q - 1 ? " gx-cut" : "") + '"><th class="gx-rowh"><span class="gx-num">' + (i + 1) + '</span><span class="gx-name">' + esc(t.keeper.name) + ' - ' + esc(t.attacker.name) + '</span></th>' +
-            order.map(function(c){ return gridCellHtml(t, c, matches); }).join("") +
-            '<td class="gx-pt">' + r.pt + '</td><td class="gx-s">' + r.pg + '</td><td class="gx-s">' + (dr > 0 ? "+" : "") + dr + '</td></tr>';
-        }).join("") + '</tbody></table></div>';
-    });
-    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span>' + (anyForfeit ? '<span>* a tavolino</span>' : '') + '<span>Il risultato si legge dalla parte della coppia della riga · la linea dorata separa chi va in Fascia A</span></div>';
-    stage.innerHTML = html;
+    var title = document.getElementById("gxTitle");
+    if(title) title.textContent = ((current && current.name) || "GOOPHO 26") + " · " + (gridGrouped() ? "Reticolo dei gironi" : "Giocatori × giornate");
+    var stage = document.getElementById("gxStage"); if(!stage) return;
+    stage.innerHTML = gridHtml(gridNarrow() ? 1 : null);
     gridFit();
   }
-  function gridNarrow(){ return window.innerWidth < 700 && window.innerWidth < window.innerHeight; }
   function gridFit(){
     var vp = document.getElementById("gxViewport"), st = document.getElementById("gxStage");
     if(!vp || !st) return;
     if(gridNarrow()){
-      // telefono in verticale: un girone sotto l'altro, si scorre
       vp.style.overflowY = "auto"; st.style.position = "relative"; st.style.left = "0"; st.style.top = "0"; st.style.transform = "none"; st.style.zoom = 1;
       var nat = st.scrollWidth, z = Math.min(1, (vp.clientWidth - 16) / nat);
       st.style.zoom = z; st.style.margin = "0 8px"; return;
@@ -7930,41 +8073,6 @@ module.exports = QRCode;
     st.style.top = Math.max(0, (vp.clientHeight - h * sc) / 2) + "px";
   }
   if(GRID_MODE){
-    var gcss = document.createElement("style");
-    gcss.textContent =
-      "#gridOverlay{ position:fixed; inset:0; z-index:9998; display:flex; flex-direction:column; color:#fff; background:radial-gradient(circle at 15% 0%, #2a6ff0 0%, transparent 45%), linear-gradient(165deg, #0a2f7a, #0d2452 70%); }" +
-      "#gridOverlay .gx-top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:1.4vh 56px 0.6vh 2vw; }" +
-      "#gxTitle{ font-size:clamp(16px, 2.4vw, 46px); font-weight:900; text-shadow:0 3px 14px rgba(0,0,0,0.35); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }" +
-      "#gxClock{ font-size:clamp(14px, 2vw, 40px); font-weight:700; opacity:.9; font-variant-numeric:tabular-nums; }" +
-      "#gxClose{ position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; border:none; background:rgba(255,255,255,0.14); color:#fff; font-size:16px; cursor:pointer; opacity:.4; } #gxClose:hover{ opacity:1; }" +
-      "#gxViewport{ flex:1; position:relative; overflow:hidden; }" +
-      "#gxStage{ position:absolute; left:50%; top:0; transform-origin:top center; }" +
-      ".gx-grid{ display:grid; gap:22px; align-items:start; }" +
-      ".gx-card{ background:rgba(255,255,255,0.97); color:#14294a; border-radius:16px; padding:12px 14px 14px; border:4px solid var(--gc); box-shadow:0 14px 34px rgba(0,0,0,0.4); }" +
-      ".gx-head{ background:var(--gc); color:#fff; font-weight:900; font-size:20px; letter-spacing:.06em; text-transform:uppercase; border-radius:10px; padding:6px 12px; margin:-2px -2px 10px; text-align:center; }" +
-      ".gx-table{ border-collapse:separate; border-spacing:3px; font-size:16px; }" +
-      ".gx-table th, .gx-table td{ text-align:center; padding:6px 8px; border-radius:7px; white-space:nowrap; }" +
-      ".gx-rowh{ text-align:left !important; font-weight:800; background:rgba(20,41,74,0.06); }" +
-      ".gx-nq .gx-rowh{ opacity:.6; }" +
-      ".gx-cut td, .gx-cut th{ box-shadow:0 3px 0 -1px #d4af37; }" +
-      ".gx-num{ display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--gc); color:#fff; font-size:13px; font-weight:900; margin-right:8px; }" +
-      ".gx-colh .gx-num{ margin:0; }" +
-      ".gx-diag{ background:repeating-linear-gradient(45deg, var(--gc), var(--gc) 4px, rgba(255,255,255,0.4) 4px, rgba(255,255,255,0.4) 8px); opacity:.55; min-width:52px; }" +
-      ".gx-win{ background:#1f9a3f; color:#fff; font-weight:900; min-width:52px; }" +
-      ".gx-loss{ background:#f3c3bd; color:#8a1d12; font-weight:800; min-width:52px; }" +
-      ".gx-draw{ background:#ffd868; color:#1a2233; font-weight:800; }" +
-      ".gx-todo{ background:rgba(20,41,74,0.06); color:rgba(20,41,74,0.45); font-weight:900; min-width:52px; }" +
-      ".gx-live{ background:#5fe37f; color:#0b3d1a; font-weight:900; animation:gxPulse 1.4s ease-in-out infinite; }" +
-      ".gx-none{ color:rgba(20,41,74,0.3); }" +
-      "@keyframes gxPulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(95,227,127,0.7);} 50%{ box-shadow:0 0 0 6px rgba(95,227,127,0);} }" +
-      ".gx-sum{ font-size:12px; color:rgba(20,41,74,0.6); text-transform:uppercase; }" +
-      ".gx-pt{ font-weight:900; font-size:18px; background:#ffd868; color:#1a2233; }" +
-      ".gx-s{ font-weight:700; color:rgba(20,41,74,0.75); }" +
-      ".gx-legend{ display:flex; flex-wrap:wrap; justify-content:center; gap:10px 16px; margin-top:16px; font-size:14px; font-weight:700; color:rgba(255,255,255,0.85); }" +
-      ".gx-key{ padding:3px 10px; border-radius:7px; } .gx-legend .gx-todo{ background:rgba(255,255,255,0.9); color:#14294a; }" +
-      ".gx-empty{ font-size:28px; font-weight:800; padding:20vh 4vw; text-align:center; width:80vw; }" +
-      "body.grid-on{ overflow:hidden; }";
-    document.head.appendChild(gcss);
     var gov = document.createElement("div");
     gov.id = "gridOverlay";
     gov.innerHTML = '<div class="gx-top"><div id="gxTitle"></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button>';
@@ -7973,7 +8081,6 @@ module.exports = QRCode;
     document.getElementById("gxClose").addEventListener("click", function(){ try{ window.close(); }catch(e){} setTimeout(function(){ location.href = location.href.replace(/[?&]grid=1/, ""); }, 200); });
     function gxClock(){ var d = new Date(), el = document.getElementById("gxClock"); if(el) el.textContent = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
     gxClock();
-    // aggiornamenti: dall'altra finestra (stesso browser) o dalla Live
     window.addEventListener("storage", function(e){
       if(e.key !== LS_CURRENT || window.__fbViewer) return;
       try{ current = e.newValue ? relinkGroupRounds(JSON.parse(e.newValue)) : null; }catch(err){ return; }
