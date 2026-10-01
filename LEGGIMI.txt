@@ -279,3 +279,22 @@ NOVITÀ (versione 31)
      e quante coppie, chi salta il primo turno) sono ora in "Modalità di
      svolgimento", PRIMA del pulsante Sorteggia partite. Restano modificabili
      fino a "Sorteggia Fase Finale" e vengono ricordate per il torneo dopo.
+
+NOVITÀ (versione 32)
+   - Iscritti a colori: portieri in blu, attaccanti in rosso (come le
+     classifiche e il logo); anche gli "abituali" hanno il colore del ruolo.
+
+NOVITÀ (versione 33)
+   - "Modalità di svolgimento" rifatta: tre schede colorate per scegliere
+     Giallo / Fisso / Coppie scelte, numeri grandi e compatti, e su schermo
+     largo le impostazioni a sinistra e la fase finale a destra.
+
+NOVITÀ (versione 34)
+   - Modalità TV: sotto "Preparatevi" compare "📋 Poi tocca a" con le
+     partite successive, tante quante ne stanno nello spazio libero (senza
+     rimpicciolire le classifiche).
+
+NOVITÀ (versione 35)
+   - Modalità TV: alterna da sola le classifiche (30 secondi) e il reticolo
+     (20 secondi). In basso a destra il conto alla rovescia; il pulsante
+     "🔁 Alterna reticolo" lo accende o lo spegne.

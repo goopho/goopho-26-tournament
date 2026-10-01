@@ -74,6 +74,9 @@
   .fee-btn.paid{ background:#1f9a3f; border-color:#1f9a3f; color:#fff; }
   .player-chip.is-paid{ box-shadow: inset 4px 0 0 #1f9a3f; }
   #tvOverlay .tv-back.tv-voice{ left:200px; }
+  #tvOverlay .tv-back.tv-rot{ left:370px; }
+  #tvStage .gx-scroll{ overflow:visible; } #tvStage .gx-card{ min-width:max-content; } #tvStage .gx-grid{ width:max-content; }
+  #tvStage .tv-gridwrap{ grid-column:1 / -1; }
   #tvOverlay .tv-eta{ display:inline-block; margin-bottom:10px; font-size:20px; font-weight:800; color:#fff; background:rgba(255,216,104,0.18); border:1px solid rgba(255,216,104,0.55); border-radius:999px; padding:4px 14px; margin-left:12px; }
   .tv-brand{ display:flex; align-items:center; gap:clamp(10px, 1.2vw, 22px); min-width:0; }
   .tv-logo{ flex:0 0 auto; width:66px; height:66px; width:clamp(40px, 4.6vw, 92px); height:clamp(40px, 4.6vw, 92px); min-width:40px; min-height:40px; display:inline-block; }
@@ -1382,7 +1385,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 34</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 35</span></div>
 
 </div>
 
@@ -9453,6 +9456,46 @@ module.exports = QRCode;
     var g2 = grp("📺 Mostra e stampa", [["tvModeBtn", "btn-view"], ["tvWinBtn", "btn-view"], ["gridOpenBtn", "btn-view"], ["printsBtn", "btn-view"]]);
     var g3 = grp("⚠️ Correggi o ricomincia", [["undoBtn"], ["resetScoresBtn", "btn-risk"], ["resetTournamentBtn", "btn-risk"]]);
     bar.insertBefore(g1, first); bar.insertBefore(g2, first); bar.insertBefore(g3, first);
+  })();
+
+  // ---------- MODALITÀ TV: ALTERNA CLASSIFICHE E RETICOLO ----------
+  var LS_TV_ROT = "tg_tv_rotate_v1", TV_ROT_STD = 30000, TV_ROT_GRID = 20000, tvRotStart = Date.now();
+  function tvRotOn(){ try{ return localStorage.getItem(LS_TV_ROT) !== "0"; }catch(e){ return true; } }
+  function tvRotPhase(){
+    if(!tvRotOn() || !gridAvailable()) return null;
+    var t = (Date.now() - tvRotStart) % (TV_ROT_STD + TV_ROT_GRID);
+    return t < TV_ROT_STD ? { grid: false, left: Math.ceil((TV_ROT_STD - t) / 1000) } : { grid: true, left: Math.ceil((TV_ROT_STD + TV_ROT_GRID - t) / 1000) };
+  }
+  (function(){
+    var _tvrR = tvRender;
+    tvRender = function(){
+      if(!window.__fbViewer){
+        try{ var raw = localStorage.getItem(LS_CURRENT); if(raw && raw !== tvLastData){ tvLastData = raw; current = relinkGroupRounds(JSON.parse(raw)); } }catch(e){}
+      }
+      var ph = tvRotPhase(), info = { set textContent(v){ var e = document.querySelector("#tvOverlay .tv-foot span:last-child"); if(e) e.textContent = (v ? v + " · " : "") + "Aggiornamento automatico"; } };
+      if(!ph || !ph.grid){
+        var r = _tvrR.apply(this, arguments);
+        if(info) info.textContent = ph ? "🔲 Reticolo tra " + ph.left + " s" : "";
+        return r;
+      }
+      var stage = document.getElementById("tvStage");
+      document.getElementById("tvTitle").textContent = ((current && current.name) || "Torneo") + " · " + (gridGrouped() ? "Reticolo" : "Giocatori × giornate");
+      stage.innerHTML = '<div class="tv-gridwrap">' + gridHtml() + '</div>';
+      stage.style.gridTemplateColumns = "max-content";
+      if(info) info.textContent = "🏆 Classifiche tra " + ph.left + " s";
+      try{ tvUpdateQr(); }catch(e){}
+      tvFit();
+      try{ tvAnnounceCheck(); }catch(e){}
+    };
+    var ov = document.getElementById("tvOverlay");
+    if(ov){
+      var b = document.createElement("button"); b.type = "button"; b.className = "tv-back tv-rot"; b.id = "tvRotBtn";
+      function lbl(){ b.textContent = tvRotOn() ? "🔁 Alterna reticolo: sì" : "🔁 Alterna reticolo: no"; }
+      lbl();
+      b.addEventListener("click", function(){ try{ localStorage.setItem(LS_TV_ROT, tvRotOn() ? "0" : "1"); }catch(e){} tvRotStart = Date.now(); lbl(); tvRender(); });
+      ov.appendChild(b);
+    }
+    document.getElementById("tvModeBtn").addEventListener("click", function(){ tvRotStart = Date.now(); });
   })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
