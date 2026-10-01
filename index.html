@@ -698,6 +698,20 @@
   .player-chip:hover{ background: #c0bcab; }
   .player-chip button{ background:none; border:none; color: var(--danger); cursor:pointer; font-size:16px; line-height:1; padding:2px 4px; border-radius:50%; transition: background .12s ease; }
   .player-chip button:hover{ background: rgba(193,68,59,0.12); }
+  /* iscritti: portieri blu, attaccanti rossi (come le classifiche e il logo) */
+  #listKeepers .player-chip, #listAttackers .player-chip{ color:#fff; font-weight:800; letter-spacing:.02em; border-radius:11px; text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+  #listKeepers .player-chip{ background:linear-gradient(135deg, #3d86ff, #1a4dff); box-shadow:0 3px 10px rgba(26,77,255,0.3); }
+  #listAttackers .player-chip{ background:linear-gradient(135deg, #ff6150, #d81e2c); box-shadow:0 3px 10px rgba(216,30,44,0.3); }
+  #listKeepers .player-chip:hover{ background:linear-gradient(135deg, #5596ff, #2a5cff); }
+  #listAttackers .player-chip:hover{ background:linear-gradient(135deg, #ff7566, #e42a38); }
+  #listKeepers .player-chip button, #listAttackers .player-chip button{ color:#fff; opacity:.85; }
+  #listKeepers .player-chip button:hover, #listAttackers .player-chip button:hover{ background:rgba(255,255,255,0.22); opacity:1; }
+  #listKeepers .player-chip.is-paid, #listAttackers .player-chip.is-paid{ box-shadow:inset 0 0 0 3px #3ee06a, 0 3px 10px rgba(0,0,0,0.2); }
+  .roster-col:nth-child(1) h3, .roster-col:nth-child(2) h3{ display:inline-block; color:#fff; padding:4px 12px; border-radius:999px; font-weight:900; letter-spacing:.1em; }
+  .roster-col:nth-child(1) h3{ background:#1a4dff; } .roster-col:nth-child(2) h3{ background:#d81e2c; }
+  #favKeepers .fav-chip{ border-color:rgba(26,77,255,0.55); color:#1a3fd0; }
+  #favAttackers .fav-chip{ border-color:rgba(216,30,44,0.55); color:#c01826; }
+  #favKeepers .fav-chip:hover{ background:#e6edff; } #favAttackers .fav-chip:hover{ background:#ffe8e6; }
   .add-player-row{ display:flex; gap:6px; margin-top:6px; }
   .add-player-row input{ flex:1; }
   .add-player-row button{ flex-shrink:0; }
@@ -1349,7 +1363,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 31</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 32</span></div>
 
 </div>
 
