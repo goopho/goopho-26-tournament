@@ -45,7 +45,8 @@
   .vx-pf{ margin-top:12px; } .vx-pf summary{ font-weight:800; color:var(--pitch); cursor:pointer; }
   .fb-opts{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
   .fb-opt{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.4; cursor:pointer; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.05); }
-  .fb-opt input{ margin-top:3px; width:18px; height:18px; flex-shrink:0; }
+  #fbLiveCard .fb-opt input, .fb-opt input{ margin:3px 0 0; width:18px !important; height:18px; flex:0 0 18px; padding:0; }
+  .fb-opt > span{ flex:1 1 auto; min-width:0; }
   .signup-box{ margin-top:12px; padding:12px; border-radius:12px; border:2px dashed #2c7be5; background:rgba(44,123,229,0.06); font-size:14px; }
   .su-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 0; border-top:1px solid rgba(20,41,74,0.1); margin-top:6px; }
   .su-row small{ color:var(--ink-soft); }
@@ -1325,7 +1326,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 27</span></div>
 
 </div>
 
