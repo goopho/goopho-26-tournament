@@ -900,6 +900,23 @@
   .podium-row.silver{ background: rgba(154,160,166,0.16); border-color: rgba(154,160,166,0.45); color:#e4e6e8; box-shadow: 0 0 12px rgba(154,160,166,0.25); }
   .podium-row.bronze{ background: rgba(176,114,47,0.18); border-color: rgba(176,114,47,0.45); color:#eec9a1; box-shadow: 0 0 12px rgba(176,114,47,0.3); }
   .top-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+  /* Modalità di svolgimento: più ordinata e colorata */
+  #cardMatchesPerPlayer > h2{ margin:-18px -18px 16px; padding:16px 20px; border-radius:var(--radius) var(--radius) 0 0; color:#fff; background:linear-gradient(135deg, #3d86ff, #1a3fd0); text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+  #cardMatchesPerPlayer input[type=number]{ max-width:160px; text-align:center; font-size:20px; font-weight:800; color:var(--pitch); }
+  #cardMatchesPerPlayer select{ max-width:620px; }
+  #cardMatchesPerPlayer label.field{ font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--pitch); font-weight:900; }
+  @media (min-width:1100px){ .mpp-cols{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:22px; align-items:start; } .mpp-cols > .final-setup{ margin-top:12px; } }
+  .sr-select{ position:absolute !important; width:1px !important; height:1px !important; opacity:0 !important; pointer-events:none; overflow:hidden; }
+  .mode-pick{ display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; margin:6px 0 4px; }
+  .mode-pick button{ border:3px solid transparent; border-radius:16px; padding:14px 12px; cursor:pointer; text-align:left; color:#fff; font-family:inherit; box-shadow:0 6px 16px rgba(0,0,0,0.18); opacity:.55; transition:opacity .15s, transform .15s, border-color .15s; text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+  .mode-pick button b{ display:block; font-size:17px; margin-bottom:3px; } .mode-pick button span{ font-size:12.5px; line-height:1.3; display:block; opacity:.95; }
+  .mode-pick button.on{ opacity:1; border-color:#fff; transform:translateY(-2px); box-shadow:0 0 0 3px #ffd868, 0 10px 22px rgba(0,0,0,0.25); }
+  .mode-pick button:hover{ opacity:.9; } .mode-pick button:disabled{ cursor:not-allowed; }
+  .mode-pick .mp-rotation{ background:linear-gradient(135deg, #ffcf33, #f29a00); color:#3a2500; text-shadow:none; }
+  .mode-pick .mp-fixed{ background:linear-gradient(135deg, #3d86ff, #1a3fd0); }
+  .mode-pick .mp-manual{ background:linear-gradient(135deg, #2fd16b, #138a43); }
+  @media (max-width:640px){ .mode-pick{ grid-template-columns:1fr; } }
+  .bal-toggle{ background:rgba(26,77,255,0.07); border:2px solid rgba(26,77,255,0.25); border-radius:12px; padding:10px 12px; }
   .final-setup{ margin-top:18px; padding:14px 16px 16px; border-radius:14px; background:linear-gradient(135deg, rgba(212,175,55,0.16), rgba(26,77,255,0.08)); border:2px solid rgba(212,175,55,0.55); transition:box-shadow .3s; }
   .final-setup .fs-title{ margin:0 0 6px; font-size:16px; color:var(--pitch); } .final-setup .fs-title span{ font-weight:600; font-size:13px; color:var(--ink-soft); }
   .final-setup.fs-flash{ box-shadow:0 0 0 4px #ffd868, 0 0 30px rgba(255,216,104,0.8); }
@@ -1159,8 +1176,8 @@
       <div id="playoffIntro" class="draw-summary">Fascia A: i primi 8 portieri e i primi 8 attaccanti in classifica formano le squadre in modo meritocratico incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Anche gli accoppiamenti del tabellone (Quarti di finale → Semifinale → Finale) seguono la classifica: il 1° incontra l'ultimo del girone, il 2° il penultimo, e così via, per tenere separati i migliori fino ai turni successivi. Ogni incontro, dagli ottavi/quarti fino alla finale, si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.</div>
       <div id="fasciaAWrap" style="display:none; margin-top:10px;">
         <label class="field" for="fasciaACount">Coppie in Fascia A</label>
-        <input type="number" id="fasciaACount" min="2" max="32" placeholder="Automatico (8, oppure 4 o 2 se siete in pochi)">
-        <div class="draw-summary" style="margin-top:6px;">Le coppie si formano incrociando la classifica (1° portiere con 2° attaccante, 2° portiere con 1° attaccante…). Con un numero diverso da 2, 4, 8, 16 si gioca un primo turno con ripescaggio.</div>
+        <input type="number" id="fasciaACount" min="2" max="32" placeholder="Auto">
+        <div class="draw-summary" style="margin-top:6px;">Vuoto = automatico (8, oppure 4 o 2 se siete in pochi). Le coppie si formano incrociando la classifica (1° portiere con 2° attaccante, 2° portiere con 1° attaccante…). Con un numero diverso da 2, 4, 8, 16 si gioca un primo turno con ripescaggio.</div>
       </div>
       <div id="qualifyWrap" style="display:none; margin-top:10px;">
         <label class="field" for="qualifyPerGroup">Coppie che passano da ogni girone</label>
@@ -1363,7 +1380,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 32</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 33</span></div>
 
 </div>
 
@@ -9135,6 +9152,33 @@ module.exports = QRCode;
       go.innerHTML = '<button class="btn btn-ghost btn-sm" type="button">⚙️ Qualificate e Fascia B: impostazioni in "Modalità di svolgimento"</button>';
       go.querySelector("button").addEventListener("click", function(){ var t = document.getElementById("finalSetup"); if(t){ t.scrollIntoView({ behavior: "smooth", block: "center" }); t.classList.add("fs-flash"); setTimeout(function(){ t.classList.remove("fs-flash"); }, 1600); } });
       pc.parentNode.insertBefore(go, pc.nextSibling);
+    }
+  })();
+  // modalità squadre: tre schede colorate al posto del menu a tendina
+  (function(){
+    var sel = document.getElementById("drawMode"); if(!sel) return;
+    var info = { rotation: ["🔄 Giallo", "Il compagno cambia ogni giornata"], fixed: ["📌 Fisso", "Coppie sorteggiate, uguali per tutto il torneo"], manual: ["🤝 Coppie scelte", "Le coppie le formi tu"] };
+    var box = document.createElement("div"); box.className = "mode-pick"; box.id = "modePick";
+    Array.prototype.forEach.call(sel.options, function(o){
+      var b = document.createElement("button"); b.type = "button"; b.className = "mp-" + o.value; b.dataset.v = o.value;
+      var t = info[o.value] || [o.textContent, ""]; b.innerHTML = "<b>" + t[0] + "</b><span>" + t[1] + "</span>";
+      b.addEventListener("click", function(){ if(sel.disabled || sel.value === o.value) return; sel.value = o.value; sel.dispatchEvent(new Event("change", { bubbles: true })); syncModePick(); });
+      box.appendChild(b);
+    });
+    sel.parentNode.insertBefore(box, sel.nextSibling);
+    sel.classList.add("sr-select"); sel.setAttribute("tabindex", "-1");
+    function syncModePick(){ Array.prototype.forEach.call(box.children, function(b){ b.classList.toggle("on", b.dataset.v === sel.value); b.disabled = !!sel.disabled; }); }
+    window.__syncModePick = syncModePick;
+    sel.addEventListener("change", syncModePick);
+    syncModePick(); setInterval(syncModePick, 800);
+    // su schermo largo: impostazioni a sinistra, fase finale a destra
+    var card = document.getElementById("cardMatchesPerPlayer"), fs = document.getElementById("finalSetup");
+    if(card && fs){
+      var cols = document.createElement("div"); cols.className = "mpp-cols";
+      var left = document.createElement("div"); left.className = "mpp-left";
+      var start = box.nextSibling, n;
+      while(start){ n = start.nextSibling; if(start !== fs) left.appendChild(start); start = n; }
+      cols.appendChild(left); cols.appendChild(fs); card.appendChild(cols);
     }
   })();
   // cosa mostrare prima del sorteggio (in base alla modalità scelta) e dopo (in base al torneo)
