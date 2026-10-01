@@ -37,6 +37,25 @@
   #tvOverlay .tv-exit:hover{ opacity:1; }
   #tvOverlay .tv-empty{ font-size:clamp(16px, 2.4vw, 44px); opacity:.8; text-align:center; padding-top:20vh; width:80vw; }
   body.tv-on{ overflow:hidden; }
+  #tvOverlay .tv-back, #gridOverlay .tv-back{ position:absolute; left:18px; bottom:14px; z-index:5; border:2px solid rgba(255,255,255,0.35); background:rgba(10,24,52,0.75); color:#fff; font-weight:800; font-size:15px; border-radius:999px; padding:8px 16px; cursor:pointer; opacity:.55; transition:opacity .2s, background .2s; }
+  #tvOverlay .tv-back:hover, #gridOverlay .tv-back:hover{ opacity:1; background:#1c5fe0; }
+  #tvOverlay .tv-exit{ opacity:.45 !important; }
+  #tvOverlay .tv-next.side{ grid-column:auto; width:600px; min-width:0; }
+  #tvOverlay .tv-next.side .tv-next-list{ grid-template-columns:1fr; }
+  #tvOverlay .tvb-podium{ margin-top:6px; text-align:center; font-size:17px; font-weight:800; color:#fff; opacity:.92; }
+  .btn-livecam{ background:linear-gradient(135deg,#ff3b30,#c1121f); color:#fff; border:none; border-radius:999px; font-weight:900; letter-spacing:.03em; box-shadow:0 6px 18px rgba(225,29,42,0.45); display:inline-flex; align-items:center; justify-content:center; gap:8px; }
+  .btn-livecam .lc-dot{ width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.45); flex-shrink:0; }
+  .btn-livecam.on .lc-dot{ background:#fff; box-shadow:0 0 0 0 rgba(255,255,255,0.8); animation:lcPulse 1.3s ease-out infinite; }
+  @keyframes lcPulse{ 0%{ box-shadow:0 0 0 0 rgba(255,255,255,0.8);} 100%{ box-shadow:0 0 0 10px rgba(255,255,255,0);} }
+  #liveShare{ position:fixed; inset:0; z-index:9600; background:rgba(8,18,40,0.72); display:flex; align-items:center; justify-content:center; padding:18px; }
+  #liveShare .ls-box{ width:100%; max-width:400px; max-height:100%; overflow-y:auto; background:#fff; border-radius:20px; border:4px solid #e11d2a; padding:20px 18px; text-align:center; color:#14294a; box-shadow:0 20px 50px rgba(0,0,0,0.45); }
+  #liveShare .ls-title{ font-size:22px; font-weight:900; color:#c1121f; }
+  #liveShare .ls-state{ display:inline-block; margin:8px 0 12px; padding:4px 12px; border-radius:999px; font-size:13px; font-weight:800; background:rgba(20,41,74,0.08); }
+  #liveShare .ls-state.on{ background:#e11d2a; color:#fff; }
+  #liveShare canvas{ width:220px; height:220px; image-rendering:pixelated; border:3px solid #14294a; border-radius:12px; }
+  #liveShare .ls-link{ font-size:11.5px; word-break:break-all; color:var(--ink-soft); margin:10px 0; }
+  #liveShare .btn{ width:100%; margin-top:8px; }
+  #liveShare .ls-note{ font-size:13px; line-height:1.45; color:var(--ink-soft); margin:8px 0; }
   .score-input.score-warn{ border-color:#f5a623 !important; background:#fff4d6 !important; box-shadow:0 0 0 2px rgba(245,166,35,0.35); }
   .score-hint{ margin-top:8px; font-size:12.5px; font-weight:700; color:#8a5a00; background:#fff4d6; border:1px solid #f5a623; border-radius:10px; padding:6px 10px; }
   #tvOverlay .tv-qr{ position:absolute; right:2vw; bottom:4.5vh; width:min(30vh, 17vw); background:#fff; color:#0d2452; border-radius:14px; padding:10px 10px 8px; text-align:center; box-shadow:0 10px 30px rgba(0,0,0,0.45); border:3px solid #d4af37; }
@@ -1050,10 +1069,11 @@
       <button class="btn btn-whatsapp" id="shareWhatsAppBtn" type="button">📤 Condividi su WhatsApp</button>
       <button class="btn btn-live" id="liveSyncToggleBtn" type="button" style="display:none">🔴 Live attivo · Disattiva</button>
       <button class="btn btn-primary" id="tvModeBtn" type="button">📺 Modalità TV</button>
-      <button class="btn btn-ghost btn-ghost-onpitch" id="undoBtn" type="button" disabled>↩️ Annulla ultima modifica</button>
+      <button class="btn btn-livecam" id="liveCamBtn" type="button"><span class="lc-dot"></span>🎥 LIVE giocatori</button>
       <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
       <button class="btn btn-electric" id="resetTournamentBtn">Nuovo torneo</button>
+      <button class="btn btn-ghost btn-ghost-onpitch" id="undoBtn" type="button" disabled title="Torna indietro di un passo: risultato sbagliato, sorteggio rifatto per errore, coppia ritirata per sbaglio…">↩️ Annulla</button>
     </div>
     <div class="note" id="tourNote" style="display:none;"></div>
     <div id="tvOverlay" style="display:none;" aria-label="Modalità TV">
@@ -1065,6 +1085,7 @@
       <div class="tv-foot"><span id="tvPageInfo"></span><span>Aggiornamento automatico</span></div>
       <div class="tv-qr" id="tvQr" style="display:none;"><div class="tv-qr-label">📱 Segui la diretta</div><canvas id="tvQrCanvas"></canvas><div class="tv-qr-sub">inquadra con la fotocamera</div></div>
       <button type="button" class="tv-exit" id="tvExitBtn" title="Esci (Esc)">✕</button>
+      <button type="button" class="tv-back" id="tvBackBtn" title="Torna all'app (Esc)">⬅️ Torna all'app</button>
     </div>
 
     <div class="card rules-card" id="lateCard" style="display:none;">
@@ -6623,6 +6644,7 @@ module.exports = QRCode;
       if(window.__fbViewer) return location.href;
       return (cfg.enabled && cfg.refreshToken && cfg.dbUrl) ? viewerLink() : "";
     };
+    window.__liveInfo = function(){ return { connected: !!(cfg.refreshToken && cfg.dbUrl), enabled: !!cfg.enabled, link: (cfg.dbUrl ? viewerLink() : ""), ok: lastPushOk }; };
 
     // ----- viewer (giocatori) -----
     var qs = new URLSearchParams(location.search);
@@ -7056,7 +7078,10 @@ module.exports = QRCode;
         html += '</div>';
       }
       var pod = fasciaPodium(f);
-      if(pod) html += '<div class="tvb-champ">🏆 ' + esc(pairLabel(pod.w)) + '</div>';
+      if(pod){
+        html += '<div class="tvb-champ">🏆 ' + esc(pairLabel(pod.w)) + '</div>';
+        if(pod.l || pod.w3) html += '<div class="tvb-podium">' + (pod.l ? '🥈 ' + esc(pairLabel(pod.l)) : '') + (pod.l && pod.w3 ? ' &nbsp;·&nbsp; ' : '') + (pod.w3 ? '🥉 ' + esc(pairLabel(pod.w3)) : '') + '</div>';
+      }
       card.innerHTML = html;
       cards.push(card);
     });
@@ -7097,13 +7122,20 @@ module.exports = QRCode;
     var nextHtml = tvNextHtml();
     if(nextHtml) stage.insertAdjacentHTML("beforeend", nextHtml);
     var vp = document.getElementById("tvViewport");
-    var best = 1, bestScale = 0;
-    for(var cols = 1; cols <= Math.min(cards.length, 6); cols++){
-      stage.style.gridTemplateColumns = "repeat(" + cols + ", max-content)";
-      stage.style.transform = "translateX(-50%) scale(1)";
-      var sc = Math.min(vp.clientWidth * 0.96 / stage.scrollWidth, vp.clientHeight * 0.98 / stage.scrollHeight);
-      if(sc > bestScale){ bestScale = sc; best = cols; }
-    }
+    var nextEl = stage.querySelector(".tv-next");
+    var best = 1, bestScale = 0, bestSide = false;
+    [false, true].forEach(function(side){
+      if(side && !nextEl) return;
+      if(nextEl) nextEl.classList.toggle("side", side);
+      var n = cards.length + (side ? 1 : 0);
+      for(var cols = 1; cols <= Math.min(n, 6); cols++){
+        stage.style.gridTemplateColumns = "repeat(" + cols + ", max-content)";
+        stage.style.transform = "translateX(-50%) scale(1)";
+        var sc = Math.min(vp.clientWidth * 0.96 / stage.scrollWidth, vp.clientHeight * 0.98 / stage.scrollHeight);
+        if(sc > bestScale * 1.04){ bestScale = sc; best = cols; bestSide = side; }
+      }
+    });
+    if(nextEl) nextEl.classList.toggle("side", bestSide);
     stage.style.gridTemplateColumns = "repeat(" + best + ", max-content)";
     document.getElementById("tvPageInfo").textContent = "";
     tvFit();
@@ -7135,6 +7167,7 @@ module.exports = QRCode;
   }
   document.getElementById("tvModeBtn").addEventListener("click", enterTvMode);
   document.getElementById("tvExitBtn").addEventListener("click", exitTvMode);
+  document.getElementById("tvBackBtn").addEventListener("click", exitTvMode);
   document.addEventListener("keydown", function(e){
     if(e.key === "Escape" && document.getElementById("tvOverlay").style.display !== "none") exitTvMode();
   });
@@ -8075,10 +8108,17 @@ module.exports = QRCode;
   if(GRID_MODE){
     var gov = document.createElement("div");
     gov.id = "gridOverlay";
-    gov.innerHTML = '<div class="gx-top"><div id="gxTitle"></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button>';
+    gov.innerHTML = '<div class="gx-top"><div id="gxTitle"></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button><button type="button" class="tv-back" id="gxBack">⬅️ Torna all\'app</button>';
     document.body.appendChild(gov);
     document.body.classList.add("grid-on");
-    document.getElementById("gxClose").addEventListener("click", function(){ try{ window.close(); }catch(e){} setTimeout(function(){ location.href = location.href.replace(/[?&]grid=1/, ""); }, 200); });
+    function gxLeave(){
+      // finestra aperta dall'app: si chiude e si torna a quella; altrimenti si ricarica l'app normale
+      if(window.opener && !window.opener.closed){ try{ window.opener.focus(); }catch(e){} try{ window.close(); }catch(e){} }
+      setTimeout(function(){ location.href = location.href.replace(/([?&])grid=1&?/, "$1").replace(/[?&]$/, ""); }, 250);
+    }
+    document.getElementById("gxClose").addEventListener("click", gxLeave);
+    document.getElementById("gxBack").addEventListener("click", gxLeave);
+    document.addEventListener("keydown", function(e){ if(e.key === "Escape") gxLeave(); });
     function gxClock(){ var d = new Date(), el = document.getElementById("gxClock"); if(el) el.textContent = ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
     gxClock();
     window.addEventListener("storage", function(e){
@@ -8091,6 +8131,68 @@ module.exports = QRCode;
     window.addEventListener("resize", gridFit);
     gridRender();
   }
+
+  // ---------- PULSANTE "🎥 LIVE giocatori" ----------
+  // Bolla rossa nella barra in alto: mostra se la Live è accesa e apre un
+  // pannello con QR code, link da copiare o mandare su WhatsApp, stampa.
+  (function(){
+    var btn = document.getElementById("liveCamBtn"); if(!btn) return;
+    if(window.__fbViewer){ btn.style.display = "none"; return; }
+    function info(){ try{ return window.__liveInfo ? window.__liveInfo() : null; }catch(e){ return null; } }
+    function refreshBtn(){ var i = info(); btn.classList.toggle("on", !!(i && i.enabled && i.connected)); btn.title = i && i.enabled ? "Live accesa: tocca per QR e link" : "Live spenta: tocca per accenderla o condividere il link"; }
+    function qrCanvas(link, cv, cell){
+      var q = new GQR.QRCode(-1, GQR.L); q.addData(link); q.make();
+      var n = q.getModuleCount(), quiet = 2, size = (n + quiet * 2) * cell;
+      cv.width = size; cv.height = size;
+      var ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, size, size); ctx.fillStyle = "#000";
+      for(var r = 0; r < n; r++) for(var c = 0; c < n; c++) if(q.isDark(r, c)) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+    }
+    function close(){ var o = document.getElementById("liveShare"); if(o) o.remove(); }
+    function open(){
+      close();
+      var i = info() || {};
+      var ov = document.createElement("div"); ov.id = "liveShare";
+      var name = (current && current.name) || "GOOPHO 26";
+      if(!i.connected || !i.link){
+        ov.innerHTML = '<div class="ls-box"><div class="ls-title">🎥 Live per i giocatori</div><div class="ls-note">La Live non è ancora collegata a questo computer. Collegala una volta sola nella sezione <b>"Live per i giocatori"</b> in fondo alla pagina (email e password di Firebase, vedi GUIDA-LIVE).</div>' +
+          '<button class="btn btn-primary" type="button" id="lsGo">⚙️ Vai alle impostazioni della Live</button><button class="btn btn-ghost" type="button" id="lsClose">Chiudi</button></div>';
+        document.body.appendChild(ov);
+        document.getElementById("lsGo").addEventListener("click", function(){ close(); var d = document.getElementById("fbLiveDetails"); if(d){ d.open = true; d.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+      } else {
+        ov.innerHTML = '<div class="ls-box"><div class="ls-title">🎥 Live per i giocatori</div>' +
+          '<div class="ls-state' + (i.enabled ? ' on' : '') + '">' + (i.enabled ? '● IN DIRETTA' : 'Live spenta: i giocatori vedono l\'ultimo aggiornamento') + '</div><br>' +
+          '<canvas id="lsQr"></canvas><div class="ls-link">' + esc(i.link) + '</div>' +
+          '<button class="btn btn-livecam" type="button" id="lsToggle">' + (i.enabled ? '⏹️ Spegni la Live' : '📡 Accendi la Live') + '</button>' +
+          '<button class="btn btn-primary" type="button" id="lsCopy">📋 Copia il link</button>' +
+          '<button class="btn btn-whatsapp" type="button" id="lsWa">💬 Manda su WhatsApp</button>' +
+          '<button class="btn btn-ghost" type="button" id="lsPrint">🖨️ Stampa il QR (da appendere)</button>' +
+          '<button class="btn btn-ghost" type="button" id="lsClose">Chiudi</button>' +
+          '<div class="ls-note">Il link è sempre lo stesso: va bene per tutti i tornei.</div></div>';
+        document.body.appendChild(ov);
+        try{ qrCanvas(i.link, document.getElementById("lsQr"), 8); }catch(e){}
+        document.getElementById("lsToggle").addEventListener("click", function(){ var t = document.getElementById("fbToggleBtn"); if(t) t.click(); setTimeout(function(){ refreshBtn(); open(); }, 400); });
+        document.getElementById("lsCopy").addEventListener("click", function(){
+          var done = function(){ toast("🔗 Link copiato: incollalo dove vuoi."); };
+          try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(i.link).then(done, function(){ window.prompt("Copia il link:", i.link); }); } else window.prompt("Copia il link:", i.link); }catch(e){ window.prompt("Copia il link:", i.link); }
+        });
+        document.getElementById("lsWa").addEventListener("click", function(){
+          var txt = "🎥 Segui " + name + " in diretta: risultati, classifiche e quando tocca a te 👉 " + i.link;
+          window.open("https://wa.me/?text=" + encodeURIComponent(txt), "_blank");
+        });
+        document.getElementById("lsPrint").addEventListener("click", function(){
+          var cv = document.createElement("canvas"); qrCanvas(i.link, cv, 16);
+          var w = window.open("", "_blank");
+          if(!w){ toast("Il browser ha bloccato la finestra di stampa."); return; }
+          w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>QR Live</title><style>body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;text-align:center;padding:30px;color:#14294a}h1{font-size:40px;margin:0 0 6px}h2{font-size:24px;color:#c1121f;margin:0 0 24px}img{width:420px;height:420px;image-rendering:pixelated}p{font-size:20px;font-weight:700}small{font-size:12px;word-break:break-all;color:#555}</style></head><body><h1>' + esc(name) + '</h1><h2>🎥 Segui il torneo in diretta</h2><img src="' + cv.toDataURL("image/png") + '"><p>Inquadra con la fotocamera del telefono:<br>risultati, classifiche e quando tocca a te.</p><small>' + esc(i.link) + '</small><script>setTimeout(function(){window.print();},400);<\/script></body></html>');
+          w.document.close();
+        });
+      }
+      document.getElementById("lsClose").addEventListener("click", close);
+      ov.addEventListener("click", function(e){ if(e.target === ov) close(); });
+    }
+    btn.addEventListener("click", open);
+    refreshBtn(); setInterval(refreshBtn, 2000);
+  })();
 
   // Opzione Fascia B: ripresa dal torneo in corso
   function restoreFasciaUI(){
