@@ -253,3 +253,7 @@ NOVITÀ (versione 26)
      oro = salva, verde = condividi, crema = mostra e stampa (TV, Reticolo,
      Stampe), bordo rosso = cancella o ricomincia (Azzera risultati, Nuovo
      torneo), trasparente = Annulla. Il rosso pieno resta solo per la LIVE.
+
+NOVITÀ (versione 27)
+   - Corretto il riquadro Live: le due opzioni "Risultati anche dal
+     telefono" e "Iscrizioni dal link" si leggono di nuovo bene.
