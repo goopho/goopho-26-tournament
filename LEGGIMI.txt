@@ -298,3 +298,11 @@ NOVITÀ (versione 35)
    - Modalità TV: alterna da sola le classifiche (30 secondi) e il reticolo
      (20 secondi). In basso a destra il conto alla rovescia; il pulsante
      "🔁 Alterna reticolo" lo accende o lo spegne.
+
+NOVITÀ (versione 36)
+   - Giallo: nella stessa giornata non compare più due volte la stessa
+     coppia. Quando serve una partita in più (portieri e attaccanti in numero
+     diverso), gli avversari "jolly" sono una coppia nuova formata da due
+     giocatori che giocano già (in quella partita non fanno punti, come prima).
+     Inoltre chi gioca due volte non viene mai messo in coppia con un altro
+     che gioca due volte.

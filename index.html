@@ -1385,7 +1385,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 35</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 36</span></div>
 
 </div>
 
@@ -3633,7 +3633,34 @@ module.exports = QRCode;
   // Sceglie una squadra già formata in questo turno per farla giocare
   // anche nella partita extra della Talpa, preferendo una che non abbia
   // già affrontato quella coppia.
-  function pickOpponentForExtra(teams, opponentSet, extraTeam){
+  // Avversari della partita extra: invece di far rigiocare una coppia identica
+  // (si vedrebbe la stessa coppia due volte nella giornata), si forma una coppia
+  // NUOVA con un portiere e un attaccante che giocano già, presi da squadre diverse.
+  // In quella partita non fanno punti (jolly), come prima.
+  function pickOpponentForExtra(teams, opponentSet, extraTeam, partnerSet){
+    if(!teams || !teams.length) return null;
+    var ks = [], as = [], teamOfK = {}, teamOfA = {};
+    teams.forEach(function(t, i){
+      if(t.keeper.id !== extraTeam.keeper.id && !teamOfK[t.keeper.id]){ ks.push(t.keeper); teamOfK[t.keeper.id] = i + 1; }
+      if(t.attacker.id !== extraTeam.attacker.id && !teamOfA[t.attacker.id]){ as.push(t.attacker); teamOfA[t.attacker.id] = i + 1; }
+    });
+    var existing = {}; teams.forEach(function(t){ existing[pairKey(t.keeper.id, t.attacker.id)] = 1; });
+    var best = null, bestScore = -1;
+    shuffle(ks).forEach(function(k){
+      shuffle(as).forEach(function(a){
+        if(teamOfK[k.id] === teamOfA[a.id]) return;                  // sarebbe una coppia già in campo
+        var key = pairKey(k.id, a.id);
+        if(existing[key]) return;
+        var cand = { keeper: k, attacker: a }, sc = 0;
+        if(!(partnerSet && partnerSet[key])) sc += 2;
+        if(!teamsHaveFaced(extraTeam, cand, opponentSet)) sc += 1;
+        if(sc > bestScore){ bestScore = sc; best = cand; }
+      });
+    });
+    if(best) return best;
+    return pickOpponentForExtraOld(teams, opponentSet, extraTeam);
+  }
+  function pickOpponentForExtraOld(teams, opponentSet, extraTeam){
     if(!teams || !teams.length) return null;
     var pool = shuffle(teams).filter(function(t){ return t.keeper.id !== extraTeam.keeper.id && t.attacker.id !== extraTeam.attacker.id; });
     if(!pool.length) return null;
@@ -3679,23 +3706,35 @@ module.exports = QRCode;
     var kOrder = shuffle(kExt.map(function(_, idx){ return idx; }));
     var BR = BAL_RATINGS, noise = {};
     function rt(p){ if(!BR) return 0; if(noise[p.id] === undefined) noise[p.id] = (Math.random() - 0.5) * 0.6; return (BR[p.id] || 1.5) + noise[p.id]; }
+    // chi gioca due volte nella stessa giornata (ruoli in numero diverso)
+    var kCount = {}, aCount = {}, roundPairs = {};
+    kExt.forEach(function(p){ kCount[p.id] = (kCount[p.id] || 0) + 1; });
+    aExt.forEach(function(p){ aCount[p.id] = (aCount[p.id] || 0) + 1; });
+    // prima i portieri "doppi", così trovano per primi un compagno che gioca una volta sola
+    kOrder.sort(function(x, y){ return (kCount[kExt[y].id] > 1) - (kCount[kExt[x].id] > 1); });
     kOrder.forEach(function(ki){
       var k = kExt[ki];
       var pick = -1;
       var aIdx = aExt.map(function(_, idx){ return idx; });
-      for(var ii=0;ii<aIdx.length;ii++){
-        var i = aIdx[ii];
-        if(usedAttackerIdx[i]) continue;
-        var key = pairKey(k.id, aExt[i].id);
-        if(!partnerSet[key]){ pick = i; break; }
-      }
-      if(pick === -1){
-        // nessun partner nuovo disponibile -> ripetizione forzata, meglio che riposare
-        for(var j=0;j<aExt.length;j++){ if(!usedAttackerIdx[j]){ pick = j; break; } }
-        violations++;
+      // 1) compagno nuovo, mai la stessa coppia due volte nella giornata, e mai due "doppi" insieme
+      //    (altrimenti la stessa coppia giocherebbe due volte); 2) poi si rinuncia a una condizione per volta
+      var rules = [
+        function(i, key){ return !partnerSet[key] && !roundPairs[key] && !(kCount[k.id] > 1 && aCount[aExt[i].id] > 1); },
+        function(i, key){ return !partnerSet[key] && !roundPairs[key]; },
+        function(i, key){ return !roundPairs[key] && !(kCount[k.id] > 1 && aCount[aExt[i].id] > 1); },
+        function(i, key){ return !roundPairs[key]; },
+        function(){ return true; }
+      ];
+      for(var r = 0; r < rules.length && pick === -1; r++){
+        for(var ii=0;ii<aIdx.length;ii++){
+          var i = aIdx[ii];
+          if(usedAttackerIdx[i]) continue;
+          if(rules[r](i, pairKey(k.id, aExt[i].id))){ pick = i; if(r > 0) violations += (r >= 3 ? 5 : 1); break; }
+        }
       }
       if(pick !== -1){
         usedAttackerIdx[pick] = true;
+        roundPairs[pairKey(k.id, aExt[pick].id)] = 1;
         teams.push({ keeper: k, attacker: aExt[pick] });
       }
     });
@@ -3712,8 +3751,10 @@ module.exports = QRCode;
           var t1 = teams[x], t2 = teams[y];
           if(t1.attacker.id === t2.attacker.id || t1.keeper.id === t2.keeper.id) continue;
           if(partnerSet[pairKey(t1.keeper.id, t2.attacker.id)] || partnerSet[pairKey(t2.keeper.id, t1.attacker.id)]) continue;
+          if((kCount[t1.keeper.id] > 1 && aCount[t2.attacker.id] > 1) || (kCount[t2.keeper.id] > 1 && aCount[t1.attacker.id] > 1)) continue;
+          if(roundPairs[pairKey(t1.keeper.id, t2.attacker.id)] || roundPairs[pairKey(t2.keeper.id, t1.attacker.id)]) continue;
           var before = dev(t1.keeper, t1.attacker) + dev(t2.keeper, t2.attacker), after = dev(t1.keeper, t2.attacker) + dev(t2.keeper, t1.attacker);
-          if(after < before - 1e-9){ var tmp = t1.attacker; t1.attacker = t2.attacker; t2.attacker = tmp; improved = true; }
+          if(after < before - 1e-9){ delete roundPairs[pairKey(t1.keeper.id, t1.attacker.id)]; delete roundPairs[pairKey(t2.keeper.id, t2.attacker.id)]; var tmp = t1.attacker; t1.attacker = t2.attacker; t2.attacker = tmp; roundPairs[pairKey(t1.keeper.id, t1.attacker.id)] = 1; roundPairs[pairKey(t2.keeper.id, t2.attacker.id)] = 1; improved = true; }
         }
         if(!improved) break;
       }
@@ -3773,7 +3814,7 @@ module.exports = QRCode;
       // effetti, quindi giocano una partita extra e fanno ENTRAMBI
       // punteggio normale (nessuna esclusione: non è un caso di Talpa).
       var extraTeamBoth = { keeper: benchedKeeper, attacker: benchedAttacker };
-      var oppBoth = pickOpponentForExtra(teams, opponentSet, extraTeamBoth);
+      var oppBoth = pickOpponentForExtra(teams, opponentSet, extraTeamBoth, partnerSet);
       if(oppBoth){
         teams.push(extraTeamBoth);
         matches.push({ id: uid(), teamA: extraTeamBoth, teamB: oppBoth, scoreA: null, scoreB: null });
@@ -3783,7 +3824,7 @@ module.exports = QRCode;
     } else if(benchedAttacker){
       var talpaKeeper = pickTalpa(teams.map(function(tm){ return tm.keeper; }), talpaCounts);
       var extraTeamK = talpaKeeper ? { keeper: talpaKeeper, attacker: benchedAttacker } : null;
-      var oppK = extraTeamK ? pickOpponentForExtra(teams, opponentSet, extraTeamK) : null;
+      var oppK = extraTeamK ? pickOpponentForExtra(teams, opponentSet, extraTeamK, partnerSet) : null;
       if(extraTeamK && oppK){
         teams.push(extraTeamK);
         matches.push({ id: uid(), teamA: extraTeamK, teamB: oppK, scoreA: null, scoreB: null, talpaPlayerId: talpaKeeper.id });
@@ -3793,7 +3834,7 @@ module.exports = QRCode;
     } else if(benchedKeeper){
       var talpaAttacker = pickTalpa(teams.map(function(tm){ return tm.attacker; }), talpaCounts);
       var extraTeamA = talpaAttacker ? { keeper: benchedKeeper, attacker: talpaAttacker } : null;
-      var oppA = extraTeamA ? pickOpponentForExtra(teams, opponentSet, extraTeamA) : null;
+      var oppA = extraTeamA ? pickOpponentForExtra(teams, opponentSet, extraTeamA, partnerSet) : null;
       if(extraTeamA && oppA){
         teams.push(extraTeamA);
         matches.push({ id: uid(), teamA: extraTeamA, teamB: oppA, scoreA: null, scoreB: null, talpaPlayerId: talpaAttacker.id });
