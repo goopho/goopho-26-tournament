@@ -241,3 +241,15 @@ NOVITÀ (versione 24)
      apre già lì), premi "Schermo intero" o fai doppio clic. Si aggiorna da
      sola mentre lavori nell'altra finestra; "Torna all'app" la chiude.
      Se non si apre, consenti i popup per il sito.
+
+NOVITÀ (versione 25)
+   - App installata con Safari sul Mac: "🖥️ TV sul secondo schermo" non
+     sostituisce più la finestra di lavoro, ma spiega come fare: ⌘N (Archivio
+     › Nuova finestra), trascinare la nuova finestra sul televisore e premere
+     lì "📺 Modalità TV". Con Chrome la finestra separata si apre da sola.
+
+NOVITÀ (versione 26)
+   - Pulsanti in fondo divisi in gruppi, un colore per tipo di azione:
+     oro = salva, verde = condividi, crema = mostra e stampa (TV, Reticolo,
+     Stampe), bordo rosso = cancella o ricomincia (Azzera risultati, Nuovo
+     torneo), trasparente = Annulla. Il rosso pieno resta solo per la LIVE.

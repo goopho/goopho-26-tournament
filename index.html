@@ -883,6 +883,15 @@
   .podium-row.silver{ background: rgba(154,160,166,0.16); border-color: rgba(154,160,166,0.45); color:#e4e6e8; box-shadow: 0 0 12px rgba(154,160,166,0.25); }
   .podium-row.bronze{ background: rgba(176,114,47,0.18); border-color: rgba(176,114,47,0.45); color:#eec9a1; box-shadow: 0 0 12px rgba(176,114,47,0.3); }
   .top-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+  /* pulsanti raggruppati per significato: un colore = un tipo di azione */
+  .ta-group{ flex:1 1 100%; display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; }
+  .ta-label{ flex:1 1 100%; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin:8px 2px -2px; }
+  .top-actions .ta-group .btn{ flex:1 1 0; min-width:160px; }
+  .top-actions .btn-view{ background:#f6f1e3; color:#14294a; border:2px solid #e8a933; box-shadow:0 4px 12px rgba(0,0,0,0.18); }
+  .top-actions .btn-view:hover{ background:#fff; }
+  .top-actions .btn-share{ background:#f6f1e3; color:#14622f; border:2px solid #22c55e; box-shadow:0 4px 12px rgba(0,0,0,0.18); }
+  .top-actions .btn-risk{ background:rgba(193,40,40,0.12); color:#ffd2cc; border:2px solid rgba(255,110,95,0.75); box-shadow:none; }
+  .top-actions .btn-risk:hover{ background:rgba(193,40,40,0.28); color:#fff; }
   .top-actions .btn{ flex:1 1 calc(50% - 8px); min-width:150px; }
   .top-actions .btn-livecam.lc-big{ flex:1 1 100%; font-size:21px; padding:16px 20px; letter-spacing:.06em; border-radius:22px; margin-top:6px; gap:14px; }
   .btn-livecam .lc-cam{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:#fff; font-size:24px; box-shadow:0 0 0 3px rgba(255,255,255,0.35); }
@@ -1151,7 +1160,7 @@
       <button class="btn btn-primary" id="tvWinBtn" type="button" title="Apre la Modalità TV in una finestra a parte da trascinare sul televisore: qui continui a lavorare normalmente">🖥️ TV sul secondo schermo</button>
       <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
-      <button class="btn btn-electric" id="resetTournamentBtn">Nuovo torneo</button>
+      <button class="btn btn-electric" id="resetTournamentBtn">🆕 Nuovo torneo</button>
       <button class="btn btn-ghost btn-ghost-onpitch" id="undoBtn" type="button" disabled title="Torna indietro di un passo: risultato sbagliato, sorteggio rifatto per errore, coppia ritirata per sbaglio…">↩️ Annulla</button>
       <button class="btn btn-livecam lc-big" id="liveCamBtn" type="button"><span class="lc-cam">🎥</span><span class="lc-txt">LIVE PER I GIOCATORI</span><span class="lc-dot"></span></button>
       <div id="liveInline" style="display:none;"></div>
@@ -7583,7 +7592,23 @@ module.exports = QRCode;
   // tu lavori qui, il televisore mostra tutto in tempo reale.
   var TV_WINDOW = (function(){ try{ return new URLSearchParams(location.search).get("tv") === "1"; }catch(e){ return false; } })();
   function tvWinUrl(){ var u = location.href.split("#")[0].replace(/([?&])tv=1&?/, "$1").replace(/[?&]$/, ""); return u + (u.indexOf("?") === -1 ? "?" : "&") + "tv=1"; }
+  // App installata con Safari (Mac/iPad): non può aprire una seconda finestra da sola,
+  // e window.open sostituirebbe la finestra di lavoro. Spieghiamo come fare.
+  function safariStandaloneApp(){
+    var ua = navigator.userAgent || "";
+    var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches);
+    return standalone && !/Chrome|Chromium|CriOS|Edg|Firefox|FxiOS/.test(ua);
+  }
   function openTvWindow(){
+    if(safariStandaloneApp()){
+      var live = window.__liveInfo ? window.__liveInfo() : null;
+      choice3("Nell'app installata sul Mac la seconda finestra va aperta a mano: premi ⌘N (oppure menu Archivio › Nuova finestra), trascina la nuova finestra sul televisore e lì premi 📺 Modalità TV. Si aggiorna da sola mentre lavori in questa." +
+        (live && live.enabled ? " In alternativa apri il link della Live in Safari e premi 📺 Modalità TV." : ""), [
+        ["Ho capito"],
+        ["📺 Usa invece questa finestra", function(){ enterTvMode(); }]
+      ].concat(live && live.enabled && live.link ? [["📋 Copia il link della Live", function(){ try{ navigator.clipboard.writeText(live.link).then(function(){ toast("🔗 Link copiato: incollalo in Safari."); }, function(){ window.prompt("Copia il link:", live.link); }); }catch(e){ window.prompt("Copia il link:", live.link); } }]] : []));
+      return;
+    }
     function plain(){
       var w = null;
       try{ w = window.open(tvWinUrl(), "goophoTV", "popup,width=1280,height=720"); }catch(e){}
@@ -9246,6 +9271,23 @@ module.exports = QRCode;
   (function(){ var _rr = renderRounds; renderRounds = function(){ var r = _rr.apply(this, arguments); layoutGroupCols(); return r; }; })();
   window.addEventListener("resize", layoutGroupCols);
   layoutGroupCols();
+
+  // ---------- PULSANTI IN FONDO: GRUPPI E COLORI CON UN SIGNIFICATO ----------
+  //  oro = salva · verde = condividi · crema = mostra/stampa · rosso bordato = cancella/ricomincia · trasparente = annulla
+  (function(){
+    var bar = document.getElementById("topActionsBar"); if(!bar) return;
+    function grp(label, ids){
+      var g = document.createElement("div"); g.className = "ta-group";
+      g.innerHTML = '<div class="ta-label">' + label + '</div>';
+      ids.forEach(function(x){ var b = document.getElementById(x[0]); if(!b) return; if(x[1]){ b.classList.remove("btn-primary", "btn-electric", "btn-whatsapp"); b.classList.add(x[1]); } g.appendChild(b); });
+      return g;
+    }
+    var first = bar.firstChild;
+    var g1 = grp("💾 Salva e condividi", [["saveTournamentBtn"], ["shareWhatsAppBtn"], ["podiumImgBtn", "btn-share"]]);
+    var g2 = grp("📺 Mostra e stampa", [["tvModeBtn", "btn-view"], ["tvWinBtn", "btn-view"], ["gridOpenBtn", "btn-view"], ["printsBtn", "btn-view"]]);
+    var g3 = grp("⚠️ Correggi o ricomincia", [["undoBtn"], ["resetScoresBtn", "btn-risk"], ["resetTournamentBtn", "btn-risk"]]);
+    bar.insertBefore(g1, first); bar.insertBefore(g2, first); bar.insertBefore(g3, first);
+  })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
   try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}
