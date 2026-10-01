@@ -1,7 +1,7 @@
 // GOOPHO 26 - service worker: rende l'app utilizzabile anche senza internet.
 // Quando pubblichi una nuova versione dell'app, cambia il numero qui sotto
 // (es. v2, v3...) così i dispositivi scaricano l'aggiornamento.
-const VERSION = "goopho26-v28";
+const VERSION = "goopho26-v30";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -47,7 +47,8 @@ self.addEventListener("fetch", (event) => {
   // se non c'è connessione usa la copia salvata.
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req).then((res) => {
+      // cache "no-cache": chiede sempre al sito se c'è una versione nuova (niente copie vecchie di 10 minuti)
+      fetch(req.url, { cache: "no-cache", credentials: "same-origin" }).then((res) => {
         const copy = res.clone();
         caches.open(VERSION).then((c) => c.put("./index.html", copy));
         return res;

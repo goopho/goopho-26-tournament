@@ -890,11 +890,28 @@
   .ta-group{ flex:1 1 100%; display:flex; flex-wrap:wrap; gap:8px; align-items:stretch; }
   .ta-label{ flex:1 1 100%; font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin:8px 2px -2px; }
   .top-actions .ta-group .btn{ flex:1 1 0; min-width:160px; }
-  .top-actions .btn-view{ background:#f6f1e3; color:#14294a; border:2px solid #e8a933; box-shadow:0 4px 12px rgba(0,0,0,0.18); }
-  .top-actions .btn-view:hover{ background:#fff; }
+  .top-actions .btn-view{ background:linear-gradient(180deg, #3fdcff, #1a86ff); color:#fff; border:none; text-shadow:0 1px 2px rgba(0,40,90,0.45); box-shadow:0 6px 16px rgba(26,134,255,0.45); }
+  .top-actions .btn-view:hover{ filter:brightness(1.08); }
+  .top-actions .ta-group #tvModeBtn{ background:linear-gradient(180deg, #ff4b4b, #d0142c); color:#fff; text-shadow:0 1px 2px rgba(90,0,10,0.45); box-shadow:0 6px 16px rgba(208,20,44,0.45); }
+  .top-actions .ta-group #tvWinBtn{ background:linear-gradient(180deg, #ff7a7a, #ff3d3d); color:#0b1f6b; text-shadow:none; box-shadow:0 6px 16px rgba(255,61,61,0.45); }
   .top-actions .btn-share{ background:#f6f1e3; color:#14622f; border:2px solid #22c55e; box-shadow:0 4px 12px rgba(0,0,0,0.18); }
-  .top-actions .btn-risk{ background:rgba(193,40,40,0.12); color:#ffd2cc; border:2px solid rgba(255,110,95,0.75); box-shadow:none; }
-  .top-actions .btn-risk:hover{ background:rgba(193,40,40,0.28); color:#fff; }
+  .top-actions .btn-risk{ background:linear-gradient(180deg, #ffa24a, #f2561d); color:#fff; border:none; text-shadow:0 1px 2px rgba(110,30,0,0.4); box-shadow:0 6px 16px rgba(242,86,29,0.45); }
+  .top-actions .btn-risk:hover{ filter:brightness(1.08); }
+  .top-actions .ta-group #undoBtn{ background:linear-gradient(180deg, #a07bff, #6d3df0); color:#fff; border:none; box-shadow:0 6px 16px rgba(109,61,240,0.45); }
+  .top-actions .ta-group #undoBtn:disabled{ opacity:.45; box-shadow:none; }
+  /* riquadri in fondo: ognuno col suo colore */
+  .card.rules-card{ overflow:hidden; padding:0; border:none; }
+  .rules-card > details > summary{ padding:20px 22px; font-size:16px; }
+  .rules-card > details > .rules-body{ padding:0 22px 20px; }
+  .rules-card > details > summary{ color:#fff; background:linear-gradient(135deg, var(--rc1), var(--rc2)); text-shadow:0 1px 2px rgba(0,0,0,0.3); }
+  .rules-card > details > summary::after{ color:rgba(255,255,255,0.9); }
+  .rules-card > details[open] > summary{ margin-bottom:14px; }
+  #lateCard{ --rc1:#2fd16b; --rc2:#138a43; }
+  #subCard{ --rc1:#1fd1bd; --rc2:#0d7f74; }
+  #retireCard{ --rc1:#ff9a4a; --rc2:#e0461b; }
+  #backupCard{ --rc1:#4d8dff; --rc2:#1a45d8; }
+  #fbLiveCard{ --rc1:#ff5a5a; --rc2:#c01f2e; }
+  #rulesCard{ --rc1:#a07bff; --rc2:#6232e0; }
   .top-actions .btn{ flex:1 1 calc(50% - 8px); min-width:150px; }
   .top-actions .btn-livecam.lc-big{ flex:1 1 100%; font-size:21px; padding:16px 20px; letter-spacing:.06em; border-radius:22px; margin-top:6px; gap:14px; }
   .btn-livecam .lc-cam{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:#fff; font-size:24px; box-shadow:0 0 0 3px rgba(255,255,255,0.35); }
@@ -1328,7 +1345,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 28</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 30</span></div>
 
 </div>
 
@@ -9298,7 +9315,22 @@ module.exports = QRCode;
 </script>
 <script>
 if("serviceWorker" in navigator && location.protocol !== "file:"){
-  window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+  window.addEventListener("load", function(){
+    var hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(function(reg){
+      // controlla se c'è una versione nuova all'avvio e ogni volta che si torna sull'app
+      document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "visible") reg.update().catch(function(){}); });
+      setInterval(function(){ reg.update().catch(function(){}); }, 30 * 60 * 1000);
+    }).catch(function(){});
+    navigator.serviceWorker.addEventListener("controllerchange", function(){
+      if(!hadController || document.getElementById("swUpdateBar")) return;
+      var bar = document.createElement("div"); bar.id = "swUpdateBar";
+      bar.style.cssText = "position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:#ffd868;color:#14294a;font:700 15px -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 18px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.45);display:flex;gap:12px;align-items:center;";
+      bar.innerHTML = '✨ È pronta una nuova versione di GOOPHO 26 <button type="button" style="border:0;border-radius:999px;background:#14294a;color:#fff;font-weight:800;padding:8px 14px;cursor:pointer;">Aggiorna</button>';
+      bar.querySelector("button").addEventListener("click", function(){ location.reload(); });
+      document.body.appendChild(bar);
+    });
+  });
 }
 </script>
 </body></html>
