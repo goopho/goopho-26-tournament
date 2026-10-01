@@ -220,6 +220,8 @@
   #tvOverlay .tv-next-teams{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   #tvOverlay .tv-next-vs{ color:#ffd868; font-weight:800; margin:0 6px; font-size:15px; }
   #tvOverlay .tv-next-note{ margin-left:auto; flex-shrink:0; font-size:14px; font-weight:600; opacity:.8; }
+  #tvOverlay .tv-up{ display:none; }
+  #tvOverlay .tv-up-item{ opacity:.85; background:rgba(255,255,255,0.06); }
   #tvOverlay .tv-next-more{ margin-top:8px; font-size:15px; opacity:.75; }
   #tvOverlay .tv-stage .group-qualify-note{ display:none; }
   #tvOverlay .tv-stage .leaderboard-title{ font-size:22px !important; gap:12px; padding:9px 18px 9px 8px; }
@@ -1380,7 +1382,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 33</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 34</span></div>
 
 </div>
 
@@ -7502,7 +7504,11 @@ module.exports = QRCode;
       html += '<div class="tv-next-sub">⏭️ Preparatevi</div><div class="tv-next-list">' + prep.map(function(id){ return item(info.byId[id], 0); }).join("") + '</div>';
     }
     var rest = info.pending.length - onIds.length - prep.length;
-    if(rest > 0) html += '<div class="tv-next-more">…poi altre ' + rest + ' partite</div>';
+    // elenco "Poi tocca a": compare solo se c'è spazio sullo schermo
+    var used = {}; onIds.concat(prep).forEach(function(id){ used[id] = 1; });
+    var up = info.pending.filter(function(it){ return !used[it.id]; }).slice(0, 14);
+    if(up.length) html += '<div class="tv-up"><div class="tv-next-sub">📋 Poi tocca a</div><div class="tv-next-list">' + up.map(function(it){ return item(it, 0).replace('class="tv-next-item"', 'class="tv-next-item tv-up-item"'); }).join("") + '</div></div>';
+    if(rest > 0) html += '<div class="tv-next-more" data-rest="' + rest + '">…poi altre ' + rest + ' partite</div>';
     return html + '</div>';
   }
   // ---------- TABELLONE GRAFICO (Modalità TV) ----------
@@ -7610,6 +7616,18 @@ module.exports = QRCode;
     });
     if(nextEl) nextEl.classList.toggle("side", bestSide);
     stage.style.gridTemplateColumns = "repeat(" + best + ", max-content)";
+    // riquadro di lato: aggiunge le prossime partite finché c'è spazio (senza rimpicciolire il resto)
+    var upBox = nextEl && nextEl.querySelector(".tv-up");
+    if(upBox){
+      stage.style.transform = "translateX(-50%) scale(1)";
+      var limitH = Math.max(stage.scrollHeight, vp.clientHeight * 0.98 / (bestScale || 1));
+      upBox.style.display = "block";
+      var ups = upBox.querySelectorAll(".tv-next-item"), shown = ups.length;
+      while(shown > 0 && stage.scrollHeight > limitH + 2){ ups[--shown].style.display = "none"; }
+      if(!shown) upBox.style.display = "none";
+      var mo = nextEl.querySelector(".tv-next-more");
+      if(mo){ var r = parseInt(mo.getAttribute("data-rest"), 10) - shown; if(r > 0) mo.textContent = "…poi altre " + r + (r === 1 ? " partita" : " partite"); else mo.style.display = "none"; }
+    }
     document.getElementById("tvPageInfo").textContent = "";
     tvFit();
   }
