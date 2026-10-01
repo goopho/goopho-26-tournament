@@ -137,3 +137,95 @@ NOVITÀ (versione 15)
      si apre in un'altra finestra la tabella tutti-contro-tutti di ogni
      girone, con risultati colorati e partite in campo. Si aggiorna da sola:
      puoi trascinarla sulla TV.
+
+NOVITÀ (versione 16)
+   - Reticolo anche nel Giallo: tabella giocatori × giornate (portieri e
+     attaccanti), con risultato, compagno del turno, riposi e punti.
+   - Il reticolo ora è anche nella pagina principale: sotto le classifiche
+     c'è la scheda "🔲 Reticolo" (si apre e si chiude con un tocco, l'app
+     ricorda la scelta). Da lì o dal pulsante "🔲 Reticolo" accanto a
+     Modalità TV si apre anche in un'altra finestra, a tutto schermo.
+     Nella Live si trova in Classifiche.
+
+NOVITÀ (versione 17)
+   - Nuovo pulsante rosso "🎥 LIVE giocatori" nella barra in alto (il pallino
+     lampeggia quando la Live è accesa). Apre un pannello con: QR code,
+     accendi/spegni la Live, copia il link, manda su WhatsApp, stampa il QR
+     da appendere vicino ai biliardini.
+   - "↩️ Annulla" (torna indietro di un passo dopo un errore) è stato
+     spostato in fondo alla barra, più piccolo.
+
+NOVITÀ (versione 18)
+   - Modalità TV e Reticolo: pulsante "⬅️ Torna all'app" in basso a sinistra
+     (funziona anche il tasto Esc). Il reticolo aperto in un'altra finestra
+     si chiude e ti riporta all'app.
+   - Modalità TV nel Giallo: le classifiche e "In campo ora" stanno affiancate,
+     così i caratteri sono più grandi.
+   - Fase finale in TV: a fine torneo oltre al vincitore compaiono anche
+     secondo e terzo posto.
+
+NOVITÀ (versione 19) - CONTROLLO GENERALE
+   - Pulsante rosso grande "🎥 LIVE PER I GIOCATORI" in fondo ai pulsanti;
+     sotto, quando la Live è collegata, il QR code sempre visibile con
+     "Copia link" e "WhatsApp".
+   - Logo con la stellina accanto al nome in Modalità TV e nel Reticolo.
+   - Su schermi larghi l'app usa tutta la larghezza (iscritti su più colonne,
+     calendario su due colonne).
+   - "🗑️ Cancella iscritti" nella scheda Giocatori.
+   - Correzioni:
+     · se correggi un risultato della fase finale, i turni successivi giocati
+       da altre coppie si azzerano (prima il risultato passava alla coppia
+       sbagliata);
+     · "Sorteggia partite" con un torneo in corso chiede conferma;
+     · "Annulla" funziona anche dopo "Azzera risultati" e "Nuovo torneo";
+     · con un numero dispari di coppie in una fascia riposa solo la prima,
+       le altre giocano il primo turno (con ripescaggio se serve);
+     · ritiro in fase finale: le gare già giocate restano;
+     · sostituzione: impedita se il sostituto è già in quella partita;
+     · incollando da WhatsApp, "Riserve"/"Panchina" non diventano giocatori;
+     · sul telefono le classifiche mostrano sempre i punti e la cronaca
+       della Live va a capo.
+
+NOVITÀ (versione 20)
+   - Calendario inserito a mano: se cambi i giocatori di una partita che ha
+     già un risultato, l'app chiede se tenerlo (era solo un nome sbagliato)
+     o cancellarlo (è un'altra partita).
+   - Ripescaggio: la coppia ripescata non ritrova subito, al turno dopo,
+     la coppia che l'ha appena battuta.
+
+NOVITÀ (versione 21) - NOVE IDEE NUOVE
+   1. Modalità TV: annuncio a voce quando una partita va su un tavolo
+      ("Tavolo 2: Rossi e Bianchi contro…"), con un piccolo suono prima.
+      Si spegne col pulsante "🔊 Voce" in alto in TV.
+   2. Orario di fine previsto ("Fine gironi verso le 22:40 · Finale verso
+      le 23:30"), calcolato dai tempi reali: in TV e nella Live.
+   3. Quote di iscrizione: nella scheda Giocatori spunta "💶 Segna chi ha
+      pagato la quota" e scrivi la cifra, poi tocca "€" accanto a chi ha
+      pagato (diventa verde). Accanto vedi quanti hanno pagato e il totale.
+   4. "🖨️ Stampe": classifica finale, locandina con il QR della Live,
+      tabellone della fase finale.
+   5. Schede dei giocatori: tocca un nome nella Stagione (Storico). Tornei,
+      vittorie, podi, coppia d'oro e bestia nera. Nella Live ognuno vede la
+      sua ("📇 La tua scheda").
+   6. Giallo: "⚖️ Sorteggio bilanciato" (casella, spenta di partenza): usa
+      i tornei salvati per non mettere insieme due fortissimi.
+   7. Backup online automatico su Firebase quando la Live è collegata, e
+      "☁️ Recupera dal backup online" in "💾 Backup dei dati".
+   8. Risultati inseriti dal telefono (SPENTO di partenza, vedi GUIDA-LIVE).
+   9. Iscrizioni dal link con approvazione (SPENTO di partenza; serve una
+      regola in più su Firebase, vedi GUIDA-LIVE).
+
+   Controllo della versione 21 (correzioni):
+     · backup online in un indirizzo legato a email + password (dopo
+       l'aggiornamento: Scollega e ricollega la Live una volta);
+     · risultati dal telefono: li riceve una sola finestra (non la TV),
+       quelli mandati a Live spenta vengono scartati, chi sta scrivendo
+       un punteggio sul Mac non perde il cursore, il telefono avvisa se il
+       risultato non arriva;
+     · sorteggio bilanciato: ora cambia compagno a ogni giornata come il
+       sorteggio normale, e poi equilibra le coppie;
+     · quote: pulsante "↺ Azzera pagamenti" per il torneo successivo;
+     · stampa classifica: "provvisoria" finché non c'è il podio, avviso se
+       non ci sono ancora risultati;
+     · iscrizioni dal link: segnala chi è già iscritto (anche nell'altro
+       ruolo); la scheda del giocatore sul telefono resta aperta.

@@ -37,6 +37,72 @@
   #tvOverlay .tv-exit:hover{ opacity:1; }
   #tvOverlay .tv-empty{ font-size:clamp(16px, 2.4vw, 44px); opacity:.8; text-align:center; padding-top:20vh; width:80vw; }
   body.tv-on{ overflow:hidden; }
+  .pf-box{ max-width:380px; } .pf-name{ font-size:20px; font-weight:900; color:var(--pitch); margin-bottom:10px; }
+  .pf-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; margin-bottom:10px; }
+  .pf-grid div{ background:rgba(20,41,74,0.07); border-radius:10px; padding:6px 4px; text-align:center; } .pf-grid b{ display:block; font-size:18px; color:var(--pitch); } .pf-grid span{ font-size:10.5px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; }
+  .pf-line{ font-size:13.5px; margin-top:6px; line-height:1.4; }
+  table.season tbody tr{ cursor:pointer; } table.season tbody tr:hover{ background:rgba(255,216,104,0.18); }
+  .vx-pf{ margin-top:12px; } .vx-pf summary{ font-weight:800; color:var(--pitch); cursor:pointer; }
+  .fb-opts{ margin-top:14px; display:flex; flex-direction:column; gap:10px; }
+  .fb-opt{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; line-height:1.4; cursor:pointer; padding:10px 12px; border-radius:10px; background:rgba(20,41,74,0.05); }
+  .fb-opt input{ margin-top:3px; width:18px; height:18px; flex-shrink:0; }
+  .signup-box{ margin-top:12px; padding:12px; border-radius:12px; border:2px dashed #2c7be5; background:rgba(44,123,229,0.06); font-size:14px; }
+  .su-row{ display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 0; border-top:1px solid rgba(20,41,74,0.1); margin-top:6px; }
+  .su-row small{ color:var(--ink-soft); }
+  .su-count{ display:inline-block; min-width:22px; padding:1px 7px; border-radius:11px; background:#e11d2a; color:#fff; font-size:12px; font-weight:800; text-align:center; }
+  .su-warn{ color:#b45309; font-weight:700; }
+  .su-note{ font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.4; }
+  .su-card .su-form{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .su-card .su-form input{ flex:1 1 160px; min-width:0; } .su-card .su-form select{ flex:0 0 auto; } .su-card .su-form .btn{ flex:0 0 auto; }
+  .ref-bar{ display:inline-flex; align-items:center; gap:8px; }
+  .ref-on{ font-weight:800; color:#1a7f43; font-size:13px; }
+  .btn-ref{ background:#ffd868; color:#14294a; border:0; font-weight:800; }
+  .score-input.ref-tap{ cursor:pointer; border-color:#f5a623 !important; background:#fffbe9 !important; }
+  .score-input.ref-pending{ background:#e4f6ea !important; border-color:#22a050 !important; }
+  .ref-modal .modal-box{ max-width:380px; }
+  .ref-score{ display:flex; align-items:flex-end; gap:10px; justify-content:center; margin:12px 0; }
+  .ref-score > div{ flex:1; text-align:center; } .ref-team{ font-size:13px; font-weight:700; margin-bottom:6px; min-height:34px; }
+  .ref-score input{ width:100%; font-size:30px; text-align:center; padding:8px 4px; border:2px solid var(--line); border-radius:12px; }
+  .ref-btns{ display:flex; gap:8px; margin-top:12px; } .ref-btns .btn{ flex:1; }
+  .bal-toggle{ display:flex; gap:10px; align-items:flex-start; margin-top:12px; font-size:13.5px; cursor:pointer; line-height:1.4; } .bal-toggle input{ margin-top:3px; width:18px; height:18px; flex-shrink:0; }
+  .fee-bar{ margin-top:12px; padding:10px 12px; border-radius:12px; background:rgba(20,41,74,0.05); display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:14px; }
+  .fee-toggle{ font-weight:800; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .fee-amount input{ width:70px; padding:4px 6px; }
+  .fee-sum{ flex:1 1 100%; font-size:13px; color:var(--ink-soft); line-height:1.45; }
+  .fee-btn{ border:1.5px solid #d4af37; background:#fff; color:#8a6d00; font-weight:900; font-size:12px; border-radius:999px; padding:2px 8px; margin-right:6px; cursor:pointer; }
+  .fee-btn.paid{ background:#1f9a3f; border-color:#1f9a3f; color:#fff; }
+  .player-chip.is-paid{ box-shadow: inset 4px 0 0 #1f9a3f; }
+  #tvOverlay .tv-back.tv-voice{ left:200px; }
+  #tvOverlay .tv-eta{ display:inline-block; margin-bottom:10px; font-size:20px; font-weight:800; color:#fff; background:rgba(255,216,104,0.18); border:1px solid rgba(255,216,104,0.55); border-radius:999px; padding:4px 14px; margin-left:12px; }
+  .tv-brand{ display:flex; align-items:center; gap:clamp(10px, 1.2vw, 22px); min-width:0; }
+  .tv-logo{ flex-shrink:0; width:clamp(40px, 4.6vw, 92px); height:clamp(40px, 4.6vw, 92px); display:inline-block; }
+  .tv-logo svg{ width:100%; height:100%; display:block; filter:drop-shadow(0 3px 10px rgba(0,0,0,0.4)); }
+  @media (min-width:1280px){
+    body .wrap{ max-width:min(1680px, 95vw); }
+    body #cardTournamentName{ min-height:min(31vw, 600px); background-position:center 35%; }
+    #listKeepers, #listAttackers{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:0 8px; }
+    #roundsContainer{ display:grid; grid-template-columns:repeat(auto-fill, minmax(560px, 1fr)); gap:0 18px; align-items:start; }
+    #roundsContainer > .empty-note{ grid-column:1 / -1; }
+  }
+  .vx-feed-item > div{ min-width:0; overflow-wrap:anywhere; }
+  .vx-feed-item .vx-score{ white-space:normal !important; }
+  @media (max-width:560px){
+    #standingsCard table.standings th:nth-child(4), #standingsCard table.standings td:nth-child(4),
+    #standingsCard table.standings th:nth-child(5), #standingsCard table.standings td:nth-child(5),
+    #standingsCard table.standings th:nth-child(6), #standingsCard table.standings td:nth-child(6),
+    #standingsCard table.standings th:nth-child(7), #standingsCard table.standings td:nth-child(7),
+    #standingsCardAtt table.standings th:nth-child(4), #standingsCardAtt table.standings td:nth-child(4),
+    #standingsCardAtt table.standings th:nth-child(5), #standingsCardAtt table.standings td:nth-child(5),
+    #standingsCardAtt table.standings th:nth-child(6), #standingsCardAtt table.standings td:nth-child(6),
+    #standingsCardAtt table.standings th:nth-child(7), #standingsCardAtt table.standings td:nth-child(7),
+    #groupStandingsContainer table.standings th:nth-child(4), #groupStandingsContainer table.standings td:nth-child(4),
+    #groupStandingsContainer table.standings th:nth-child(5), #groupStandingsContainer table.standings td:nth-child(5),
+    #groupStandingsContainer table.standings th:nth-child(6), #groupStandingsContainer table.standings td:nth-child(6),
+    #groupStandingsContainer table.standings th:nth-child(7), #groupStandingsContainer table.standings td:nth-child(7){ display:none; }
+    #standingsCard table.standings, #standingsCardAtt table.standings, #groupStandingsContainer table.standings{ width:100%; }
+    #standingsCard .player-name, #standingsCardAtt .player-name, #groupStandingsContainer .player-name{ max-width:calc(100vw - 225px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:inline-block; vertical-align:middle; font-size:13px !important; padding:4px 10px !important; }
+    #standingsCard table.standings td, #standingsCardAtt table.standings td, #groupStandingsContainer table.standings td, #standingsCard table.standings th, #standingsCardAtt table.standings th, #groupStandingsContainer table.standings th{ padding-left:4px !important; padding-right:4px !important; }
+  }
   #tvOverlay .tv-back, #gridOverlay .tv-back{ position:absolute; left:18px; bottom:14px; z-index:5; border:2px solid rgba(255,255,255,0.35); background:rgba(10,24,52,0.75); color:#fff; font-weight:800; font-size:15px; border-radius:999px; padding:8px 16px; cursor:pointer; opacity:.55; transition:opacity .2s, background .2s; }
   #tvOverlay .tv-back:hover, #gridOverlay .tv-back:hover{ opacity:1; background:#1c5fe0; }
   #tvOverlay .tv-exit{ opacity:.45 !important; }
@@ -815,6 +881,16 @@
   .podium-row.bronze{ background: rgba(176,114,47,0.18); border-color: rgba(176,114,47,0.45); color:#eec9a1; box-shadow: 0 0 12px rgba(176,114,47,0.3); }
   .top-actions{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
   .top-actions .btn{ flex:1 1 calc(50% - 8px); min-width:150px; }
+  .top-actions .btn-livecam.lc-big{ flex:1 1 100%; font-size:21px; padding:16px 20px; letter-spacing:.06em; border-radius:22px; margin-top:6px; gap:14px; }
+  .btn-livecam .lc-cam{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:#fff; font-size:24px; box-shadow:0 0 0 3px rgba(255,255,255,0.35); }
+  .btn-livecam.lc-big .lc-dot{ width:12px; height:12px; }
+  #liveInline{ flex:1 1 100%; display:flex; gap:16px; align-items:center; background:rgba(255,255,255,0.96); border:3px solid #e11d2a; border-radius:18px; padding:12px 14px; color:#14294a; }
+  #liveInline canvas{ width:132px; height:132px; flex-shrink:0; image-rendering:pixelated; border-radius:8px; }
+  #liveInline .li-txt{ flex:1; min-width:0; }
+  #liveInline .li-title{ font-weight:900; font-size:16px; color:#c1121f; }
+  #liveInline .li-sub{ font-size:13px; color:var(--ink-soft); margin:4px 0 8px; line-height:1.4; }
+  #liveInline .li-link{ font-size:11px; color:var(--ink-soft); word-break:break-all; margin-bottom:8px; }
+  #liveInline .li-btns{ display:flex; gap:8px; flex-wrap:wrap; } #liveInline .li-btns .btn{ flex:1 1 140px; min-width:0; padding:8px 10px; font-size:13px; }
   .top-actions .btn-ghost{
     background: rgba(255,255,255,0.10); color: var(--chalk); border:1.5px solid rgba(230,226,211,0.55);
     box-shadow: 0 4px 12px rgba(0,0,0,0.18);
@@ -909,7 +985,7 @@
     </div>
 
     <div class="card" id="cardPlayers">
-      <h2 class="card-title-row">👥 Giocatori <span style="display:flex; gap:6px; flex-wrap:wrap;"><button class="btn btn-ghost btn-sm" id="printRosterBtn" type="button">🖨️ Stampa iscritti</button></span></h2>
+      <h2 class="card-title-row">👥 Giocatori <span style="display:flex; gap:6px; flex-wrap:wrap;"><button class="btn btn-ghost btn-sm" id="printRosterBtn" type="button">🖨️ Stampa iscritti</button><button class="btn btn-ghost btn-sm" id="clearRosterBtn" type="button">🗑️ Cancella iscritti</button></span></h2>
       <div class="roster-lists">
         <div class="roster-col">
           <h3>Portieri</h3>
@@ -993,10 +1069,10 @@
     </div>
 
     <button class="btn btn-primary btn-block" id="drawBtn" style="font-size:15px; padding:14px;">🎲 Sorteggia partite</button>
-    <div class="draw-summary" id="drawSummary">5 giornate generate · 20 partite totali.</div>
+    <div class="draw-summary" id="drawSummary"></div>
     <button class="btn btn-ghost btn-ghost-onpitch btn-block" id="printRoundsBtn" type="button" style="margin-top: 8px;">🖨️ Stampa turni di gioco</button>
 
-    <div id="roundsContainer"><div class="round-block"><div class="round-title">Giornata 1</div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="y3l89z1iy90" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="y3l89z1iy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="trd5xj3iy90" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="trd5xj3iy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="rbp7n4ciy90" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="rbp7n4ciy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="zhzfr81iy90" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="zhzfr81iy90" data-side="B" value="5"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div></div></div></div><div class="round-block"><div class="round-title">Giornata 2</div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="ly214ldiy90" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="ly214ldiy90" data-side="B" value="5"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="65875nsiy90" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="65875nsiy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="5urxt2aiy90" data-side="A" value="6"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="5urxt2aiy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="58je432iy90" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="58je432iy90" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div></div></div></div><div class="round-block"><div class="round-title">Giornata 3</div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="pxabkjqiy91" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="pxabkjqiy91" data-side="B" value="5"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="5vxbzbqiy91" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="5vxbzbqiy91" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="8vppde8iy91" data-side="A" value="6"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="8vppde8iy91" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="2fp63efiy91" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="2fp63efiy91" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div></div></div><div class="round-block"><div class="round-title">Giornata 4</div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="kvrs5oliy94" data-side="A" value="6"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="kvrs5oliy94" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="4xpi8p4iy94" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="4xpi8p4iy94" data-side="B" value="6"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="z85jouniy94" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="z85jouniy94" data-side="B" value="6"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="hpp7ggyiy94" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="hpp7ggyiy94" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div></div></div></div></div><div class="round-block"><div class="round-title">Giornata 5</div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="ttp1d0liy95" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="ttp1d0liy95" data-side="B" value="5"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="pq4jkxbiy95" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="pq4jkxbiy95" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="b9bonsoiy95" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="b9bonsoiy95" data-side="B" value="5"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div></div></div><div class="match-card"><div class="match-teams"><div class="team"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div><div class="score-row"><input type="number" min="0" class="score-input" data-match="siuiwleiy95" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-match="siuiwleiy95" data-side="B" value="7"></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div></div></div></div></div>
+    <div id="roundsContainer"></div>
 
     <div class="card leaderboard-card" id="standingsCard" style="">
       <h2 class="leaderboard-title lt-blue"><span class="lb-emoji"><img src="data:image/png;base64,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" alt="Portiere"></span><span class="lb-text">Leaderboard Portieri</span></h2>
@@ -1006,7 +1082,7 @@
             <th>Player</th><th class="num pt-cell">Pt</th><th class="num">PG</th><th class="num">V</th><th class="num">P</th>
             <th class="num">GF</th><th class="num">GS</th><th class="num">DR</th>
           </tr></thead>
-          <tbody id="standingsBodyKeepers"><tr class="rank-1"><td><span class="rank-badge r1">🥇</span><span class="player-name fascia-a">alfonso</span></td><td class="num pt-cell"><span class="pt-badge">10</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">32</td><td class="num">29</td><td class="num">3</td></tr><tr class="rank-2"><td><span class="rank-badge r2">🥈</span><span class="player-name fascia-a">alex</span></td><td class="num pt-cell"><span class="pt-badge">10</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">32</td><td class="num">29</td><td class="num">3</td></tr><tr class="rank-3"><td><span class="rank-badge r3">🥉</span><span class="player-name fascia-a">ghera</span></td><td class="num pt-cell"><span class="pt-badge">9</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">32</td><td class="num">30</td><td class="num">2</td></tr><tr class=""><td><span class="rank-badge">4</span><span class="player-name fascia-a">gufo</span></td><td class="num pt-cell"><span class="pt-badge">9</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">31</td><td class="num">29</td><td class="num">2</td></tr><tr class=""><td><span class="rank-badge">5</span><span class="player-name fascia-a">cai</span></td><td class="num pt-cell"><span class="pt-badge">8</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">31</td><td class="num">30</td><td class="num">1</td></tr><tr class=""><td><span class="rank-badge">6</span><span class="player-name fascia-a">bianco</span></td><td class="num pt-cell"><span class="pt-badge">6</span></td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">30</td><td class="num">32</td><td class="num">-2</td></tr><tr class=""><td><span class="rank-badge">7</span><span class="player-name fascia-a">gardo</span></td><td class="num pt-cell"><span class="pt-badge">5</span></td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">29</td><td class="num">32</td><td class="num">-3</td></tr><tr class=""><td><span class="rank-badge">8</span><span class="player-name fascia-a">vito</span></td><td class="num pt-cell"><span class="pt-badge">3</span></td><td class="num">5</td><td class="num">1</td><td class="num">4</td><td class="num">28</td><td class="num">34</td><td class="num">-6</td></tr></tbody>
+          <tbody id="standingsBodyKeepers"></tbody>
         </table>
       </div>
       <div id="tieBreakPanelKeepers"></div>
@@ -1020,7 +1096,7 @@
             <th>Player</th><th class="num pt-cell">Pt</th><th class="num">PG</th><th class="num">V</th><th class="num">P</th>
             <th class="num">GF</th><th class="num">GS</th><th class="num">DR</th>
           </tr></thead>
-          <tbody id="standingsBodyAttackers"><tr class="rank-1"><td><span class="rank-badge r1">🥇</span><span class="player-name fascia-a">rosso</span></td><td class="num pt-cell"><span class="pt-badge">11</span></td><td class="num">5</td><td class="num">4</td><td class="num">1</td><td class="num">33</td><td class="num">28</td><td class="num">5</td></tr><tr class="rank-2"><td><span class="rank-badge r2">🥈</span><span class="player-name fascia-a">nello</span></td><td class="num pt-cell"><span class="pt-badge">9</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">31</td><td class="num">29</td><td class="num">2</td></tr><tr class="rank-3"><td><span class="rank-badge r3">🥉</span><span class="player-name fascia-a">jelena</span></td><td class="num pt-cell"><span class="pt-badge">8</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">31</td><td class="num">30</td><td class="num">1</td></tr><tr class=""><td><span class="rank-badge">4</span><span class="player-name fascia-a">bera</span></td><td class="num pt-cell"><span class="pt-badge">7</span></td><td class="num">5</td><td class="num">3</td><td class="num">2</td><td class="num">31</td><td class="num">31</td><td class="num">0</td></tr><tr class=""><td><span class="rank-badge">5</span><span class="player-name fascia-a">andrea b</span></td><td class="num pt-cell"><span class="pt-badge">7</span></td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">30</td><td class="num">31</td><td class="num">-1</td></tr><tr class=""><td><span class="rank-badge">6</span><span class="player-name fascia-a">lello</span></td><td class="num pt-cell"><span class="pt-badge">7</span></td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">30</td><td class="num">31</td><td class="num">-1</td></tr><tr class=""><td><span class="rank-badge">7</span><span class="player-name fascia-a">emilio</span></td><td class="num pt-cell"><span class="pt-badge">6</span></td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">30</td><td class="num">32</td><td class="num">-2</td></tr><tr class=""><td><span class="rank-badge">8</span><span class="player-name fascia-a">stefano</span></td><td class="num pt-cell"><span class="pt-badge">5</span></td><td class="num">5</td><td class="num">1</td><td class="num">4</td><td class="num">29</td><td class="num">33</td><td class="num">-4</td></tr></tbody>
+          <tbody id="standingsBodyAttackers"></tbody>
         </table>
       </div>
       <div id="tieBreakPanelAttackers"></div>
@@ -1061,7 +1137,7 @@
         <div class="draw-summary" style="margin-top:6px;" id="fasciaBHint">Chi non entra né in Fascia A né in Fascia B è eliminato. Se per la Fascia B resta una sola coppia, viene ripescata in Fascia A.</div>
       </div>
       <button class="btn btn-primary btn-block" id="genPlayoffBtn" style="margin-top:8px;">🎲 Sorteggia Fase Finale</button>
-      <div id="playoffBracket"><div><div class="stage-subtitle">Quarti di finale</div><div class="match-card"><span class="match-label">1ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m0" data-leg="1" data-side="B" value="5"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">vito</b> <span class="role">P</span><br><b class="name-a">emilio</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">alfonso - nello</span></div></div><div class="match-card"><span class="match-label">2ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="0" data-side="B" value="4"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m1" data-leg="1" data-side="B" value="4"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">cai</b> <span class="role">P</span><br><b class="name-a">lello</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - jelena</span></div></div><div class="match-card"><span class="match-label">3ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">alex</b> <span class="role">P</span><br><b class="name-a">rosso</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="1" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m2" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gardo - stefano</span></div></div><div class="match-card"><span class="match-label">4ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">ghera</b> <span class="role">P</span><br><b class="name-a">bera</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="1" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r0_m3" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">bianco - andrea b</span></div></div><div class="stage-subtitle">Semifinale</div><div class="match-card"><span class="match-label">1ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="0" data-side="A" value="5"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="0" data-side="B" value="7"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="1" data-side="A" value="4"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m0" data-leg="1" data-side="B" value="7"></div></div><div class="team winner" style="text-align:right;"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - nello</span></div></div><div class="match-card"><span class="match-label">2ª partita</span><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="0" data-side="B" value="3"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r1_m1" data-leg="1" data-side="B" value="0"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">bianco - stefano</span></div></div><div class="stage-subtitle">Finale</div><div class="match-card"><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">gufo</b> <span class="role">P</span><br><b class="name-a">nello</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_r2_m0" data-leg="1" data-side="B" value="5"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">bianco</b> <span class="role">P</span><br><b class="name-a">stefano</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">gufo - nello</span></div></div><div class="stage-subtitle">Finale 3°/4° posto</div><div class="match-card"><div class="match-teams" style="align-items:flex-start;"><div class="team winner"><div class="players"><b class="name-p">alfonso</b> <span class="role">P</span><br><b class="name-a">jelena</b> <span class="role">A</span></div><div class="winner-check">✓ Qualificata</div></div><div style="flex-shrink:0; display:flex; flex-direction:column;"><div class="score-row" style="margin-top:0;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Andata</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="0" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="0" data-side="B" value="5"></div><div class="score-row" style="margin-top:6px;"><span style="font-size:10.5px; font-weight:700; color:var(--ink-soft); width:52px; flex-shrink:0;">Ritorno</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="1" data-side="A" value="7"><span class="vs">VS</span><input type="number" min="0" class="score-input" data-po="A_third" data-leg="1" data-side="B" value="3"></div></div><div class="team" style="text-align:right;"><div class="players"><b class="name-p">gardo</b> <span class="role">P</span><br><b class="name-a">andrea b</b> <span class="role">A</span></div></div></div><div class="match-result-badge decided">✅ Coppia qualificata: <span class="quali-name">alfonso - jelena</span></div></div><div class="podium-box"><div class="podium-title">🏆 VINCITORI</div><div class="podium-row gold"><span class="podium-medal">🥇</span><span class="podium-names">gufo - nello</span></div><div class="podium-row silver"><span class="podium-medal">🥈</span><span class="podium-names">bianco - stefano</span></div><div class="podium-row bronze"><span class="podium-medal">🥉</span><span class="podium-names">alfonso - jelena</span></div></div></div></div>
+      <div id="playoffBracket"></div>
     </div>
 
     <div class="top-actions" id="topActionsBar">
@@ -1069,16 +1145,17 @@
       <button class="btn btn-whatsapp" id="shareWhatsAppBtn" type="button">📤 Condividi su WhatsApp</button>
       <button class="btn btn-live" id="liveSyncToggleBtn" type="button" style="display:none">🔴 Live attivo · Disattiva</button>
       <button class="btn btn-primary" id="tvModeBtn" type="button">📺 Modalità TV</button>
-      <button class="btn btn-livecam" id="liveCamBtn" type="button"><span class="lc-dot"></span>🎥 LIVE giocatori</button>
       <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
       <button class="btn btn-electric" id="resetTournamentBtn">Nuovo torneo</button>
       <button class="btn btn-ghost btn-ghost-onpitch" id="undoBtn" type="button" disabled title="Torna indietro di un passo: risultato sbagliato, sorteggio rifatto per errore, coppia ritirata per sbaglio…">↩️ Annulla</button>
+      <button class="btn btn-livecam lc-big" id="liveCamBtn" type="button"><span class="lc-cam">🎥</span><span class="lc-txt">LIVE PER I GIOCATORI</span><span class="lc-dot"></span></button>
+      <div id="liveInline" style="display:none;"></div>
     </div>
     <div class="note" id="tourNote" style="display:none;"></div>
     <div id="tvOverlay" style="display:none;" aria-label="Modalità TV">
       <div class="tv-head">
-        <div class="tv-title" id="tvTitle">Classifiche</div>
+        <div class="tv-brand"><span class="tv-logo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div class="tv-title" id="tvTitle">Classifiche</div></div>
         <div class="tv-clock" id="tvClock"></div>
       </div>
       <div class="tv-viewport" id="tvViewport"><div class="tv-stage" id="tvStage"></div></div>
@@ -3527,10 +3604,14 @@ module.exports = QRCode;
     var teams = [];
     var usedAttackerIdx = {};
     var kOrder = shuffle(kExt.map(function(_, idx){ return idx; }));
+    var BR = BAL_RATINGS, noise = {};
+    function rt(p){ if(!BR) return 0; if(noise[p.id] === undefined) noise[p.id] = (Math.random() - 0.5) * 0.6; return (BR[p.id] || 1.5) + noise[p.id]; }
     kOrder.forEach(function(ki){
       var k = kExt[ki];
       var pick = -1;
-      for(var i=0;i<aExt.length;i++){
+      var aIdx = aExt.map(function(_, idx){ return idx; });
+      for(var ii=0;ii<aIdx.length;ii++){
+        var i = aIdx[ii];
         if(usedAttackerIdx[i]) continue;
         var key = pairKey(k.id, aExt[i].id);
         if(!partnerSet[key]){ pick = i; break; }
@@ -3546,8 +3627,27 @@ module.exports = QRCode;
       }
     });
 
+    // Sorteggio bilanciato: scambia gli attaccanti tra coppie solo verso compagni NUOVI,
+    // finché le coppie hanno una forza il più possibile simile.
+    if(BR && teams.length > 1){
+      var tsum = 0; teams.forEach(function(t){ tsum += rt(t.keeper) + rt(t.attacker); });
+      var mean = tsum / teams.length;
+      function dev(k, a){ var d = rt(k) + rt(a) - mean; return d * d; }
+      for(var pass = 0; pass < 6; pass++){
+        var improved = false;
+        for(var x = 0; x < teams.length; x++) for(var y = x + 1; y < teams.length; y++){
+          var t1 = teams[x], t2 = teams[y];
+          if(t1.attacker.id === t2.attacker.id || t1.keeper.id === t2.keeper.id) continue;
+          if(partnerSet[pairKey(t1.keeper.id, t2.attacker.id)] || partnerSet[pairKey(t2.keeper.id, t1.attacker.id)]) continue;
+          var before = dev(t1.keeper, t1.attacker) + dev(t2.keeper, t2.attacker), after = dev(t1.keeper, t2.attacker) + dev(t2.keeper, t1.attacker);
+          if(after < before - 1e-9){ var tmp = t1.attacker; t1.attacker = t2.attacker; t2.attacker = tmp; improved = true; }
+        }
+        if(!improved) break;
+      }
+    }
     // Pair teams into matches avoiding repeat opponents when possible
     var teamPool = shuffle(teams);
+    if(BR) teamPool.sort(function(a, b){ return (rt(b.keeper) + rt(b.attacker)) - (rt(a.keeper) + rt(a.attacker)); });   // squadre di forza simile si affrontano
     var matches = [];
     var used = {};
     // Uno stesso giocatore (raddoppiato) non può trovarsi in entrambe le squadre della stessa partita.
@@ -3815,16 +3915,45 @@ module.exports = QRCode;
     var b = mrBuildRounds();
     if(b.error){ toast("⚠️ " + b.error); mrScrollToFirstError(); return; }
     var lostCount = mrLostCount(b.rounds);
+    // partite già giocate a cui hai cambiato i giocatori
+    var oldMap = mrPosMap(), changedPos = [];
+    b.rounds.forEach(function(r){ r.matches.forEach(function(m){
+      var o = oldMap[m.mrPos]; if(!o || !mrIsScored(o)) return;
+      var a = [o.teamA.keeper.id, o.teamA.attacker.id, o.teamB.keeper.id, o.teamB.attacker.id].join("|");
+      var n = [m.teamA.keeper.id, m.teamA.attacker.id, m.teamB.keeper.id, m.teamB.attacker.id].join("|");
+      if(a !== n) changedPos.push(m.mrPos);
+    }); });
+    var clearChanged = false;
     function go(){
       mrCarryOver(b.rounds);
+      if(clearChanged) b.rounds.forEach(function(r){ r.matches.forEach(function(m){ if(changedPos.indexOf(m.mrPos) !== -1){ m.scoreA = null; m.scoreB = null; delete m.playedAt; } }); });
       current.rounds = b.rounds; current.onTable = {}; current.manualRounds = true;
       persistCurrent(); renderRounds(); renderStandings();
       if(current.playoffs) renderPlayoffBracket();
       mrRefreshUI();
       toast("🔄 Calendario aggiornato: i risultati già inseriti sono rimasti.");
     }
-    if(lostCount) showConfirm("Hai tolto " + lostCount + (lostCount === 1 ? " partita che aveva già un risultato: quel risultato verrà cancellato." : " partite che avevano già un risultato: quei risultati verranno cancellati.") + " Continuare?", go);
-    else go();
+    function step2(){
+      if(lostCount) showConfirm("Hai tolto " + lostCount + (lostCount === 1 ? " partita che aveva già un risultato: quel risultato verrà cancellato." : " partite che avevano già un risultato: quei risultati verranno cancellati.") + " Continuare?", go);
+      else go();
+    }
+    if(changedPos.length){
+      choice3("Hai cambiato i giocatori di " + changedPos.length + (changedPos.length === 1 ? " partita che ha già un risultato." : " partite che hanno già un risultato.") + " Se hai solo corretto un nome sbagliato, tieni il risultato; se è davvero un'altra partita, cancellalo.",
+        [["✅ Tieni il risultato", function(){ clearChanged = false; step2(); }], ["🧹 Cancella quel risultato", function(){ clearChanged = true; step2(); }], ["Annulla", null]]);
+    } else step2();
+  }
+  function choice3(msg, opts){
+    var ov = document.createElement("div"); ov.className = "modal-overlay"; ov.style.display = "flex"; ov.style.zIndex = "9700";
+    ov.innerHTML = '<div class="modal-box"><p style="margin:0 0 14px; line-height:1.45;">' + esc(msg) + '</p></div>';
+    var box = ov.querySelector(".modal-box");
+    opts.forEach(function(o, i){
+      var b = document.createElement("button"); b.type = "button";
+      b.className = "btn btn-block " + (i === 0 ? "btn-primary" : (o[1] ? "btn-electric" : "btn-ghost")); b.style.marginTop = "8px";
+      b.textContent = o[0];
+      b.addEventListener("click", function(){ ov.remove(); if(o[1]) o[1](); });
+      box.appendChild(b);
+    });
+    document.body.appendChild(ov);
   }
   function mrScrollToFirstError(){
     var el = document.querySelector("#manualRoundsList .mr-note.err");
@@ -3900,7 +4029,8 @@ module.exports = QRCode;
   updateDrawModeUI();
 
   // ---------- DRAW BUTTON ----------
-  var drawImbalanceOk = false;
+  var drawImbalanceOk = false, drawRedoOk = false;
+  var BAL_RATINGS = null;
   document.getElementById("drawBtn").addEventListener("click", function(){
     if(players.keepers.length < 2 || players.attackers.length < 2){
       toast("Aggiungi almeno 2 portieri e 2 attaccanti prima di sorteggiare.");
@@ -3930,6 +4060,16 @@ module.exports = QRCode;
       }
     }
     if(manualRounds && mrLinked()){ mrApplyToCurrent(); return; }
+    if(!drawRedoOk && current && current.rounds && current.rounds.length){
+      var nRes = 0; current.rounds.forEach(function(r){ r.matches.forEach(function(m){ if(m.scoreA !== null && m.scoreA !== undefined) nRes++; }); });
+      if(nRes || current.playoffs){
+        showConfirm("C'è un torneo in corso" + (nRes ? " con " + nRes + (nRes === 1 ? " risultato" : " risultati") : "") + (current.playoffs ? " e la fase finale" : "") + ". Rifare il sorteggio cancella calendario e risultati. Vuoi davvero ricominciare?", function(){
+          drawRedoOk = true;
+          try{ document.getElementById("drawBtn").click(); } finally { drawRedoOk = false; }
+        });
+        return;
+      }
+    }
     if(isFixed){
       var built = isManual ? buildManualTeams() : buildFixedTeams(players.keepers, players.attackers);
       if(built.teams.length < 2){
@@ -3974,7 +4114,8 @@ module.exports = QRCode;
       if(mb.error){ toast("⚠️ " + mb.error); mrScrollToFirstError(); return; }
       rounds = mb.rounds;
     } else {
-      rounds = generateDraw(players.keepers, players.attackers, matchesPerPlayer);
+      BAL_RATINGS = balancedOn() ? balancedRatings() : null;
+      try{ rounds = generateDraw(players.keepers, players.attackers, matchesPerPlayer); } finally { BAL_RATINGS = null; }
     }
     current = {
       id: uid(),
@@ -4043,6 +4184,15 @@ module.exports = QRCode;
     toast(toastMsg);
   }
 
+  document.getElementById("clearRosterBtn").addEventListener("click", function(){
+    if(!players.keepers.length && !players.attackers.length){ toast("L'elenco degli iscritti è già vuoto."); return; }
+    var running = !!(current && current.rounds && current.rounds.length);
+    showConfirm(running ? "Cancellare tutti gli iscritti? C'è un torneo in corso: verrà azzerato anche quello (calendario, risultati e fase finale). Prima salva i risultati, se ti servono." : "Cancellare tutti i " + (players.keepers.length + players.attackers.length) + " iscritti (portieri e attaccanti)?", function(){
+      if(running){ fullTournamentReset("Iscritti e torneo cancellati."); return; }
+      players = { keepers: [], attackers: [] }; persistPlayers(); renderRoster();
+      toast("🗑️ Iscritti cancellati.");
+    });
+  });
   document.getElementById("resetTournamentBtn").addEventListener("click", function(){
     showConfirm("Vuoi iniziare un nuovo torneo? Il sorteggio attuale non salvato andrà perso e l'elenco di portieri e attaccanti verrà svuotato.", function(){
       fullTournamentReset("Nuovo torneo pronto: elenco giocatori ed etichette svuotati.");
@@ -4697,7 +4847,7 @@ module.exports = QRCode;
       el.textContent = msg;
       return;
     }
-    if(isGrouped && current.groups.length === 2 && qualifyPerGroup() === 4){
+    if(isGrouped && current.groups.length === 2 && qualifyPerGroup() === 4 && n === 8){
       msg = "Dai due gironi passano alla fase finale le prime 4 squadre di ciascuno (8 in tutto): la 1ª classificata di un girone incontra la 4ª dell'altro, la 2ª incontra la 3ª dell'altro (Quarti di finale → Semifinale → Finale), mantenendo sempre la stessa coppia portiere+attaccante fino alla fine.";
     } else if(isGrouped){
       msg = "Dai " + current.groups.length + (current.groups.length===1 ? " girone" : " gironi") + " passano in Fascia A le prime " + qualifyPerGroup() + " squadre di ciascuno (" + n + " in tutto), con tabellone per merito: ordinate per piazzamento nel girone e poi per punti e differenza reti, la 1ª incontra l'ultima, la 2ª la penultima e così via" + ([2,4,8,16,32].indexOf(Math.min(n,32)) === -1 ? " (non essendo 2, 4, 8, 16 o 32, nessuno riposa: tutte giocano il primo turno e passano le vincenti più le migliori perdenti, col ripescaggio" + (n % 2 === 1 ? "; con un numero dispari di coppie la meglio classificata passa il primo turno" : "") + ")" : "") + (avoidRematchOn() ? "; al primo turno si evitano, quando possibile, le rivincite del girone scambiando solo avversari con lo stesso piazzamento" : "") + ". Le coppie restano sempre le stesse fino alla fine.";
@@ -4846,20 +4996,25 @@ module.exports = QRCode;
     var N = teams.length;
     if(N < 2) return null;
     if(N === 3) return buildTriangleFascia(teams, prefix);
-    if(isPow2(N) || N % 2 === 1) return buildSeededByeFascia(teams, prefix);
+    if(isPow2(N)) return buildSeededByeFascia(teams, prefix);
     var seeded = teams.map(function(t, i){ return withSeed(t, i+1); });
+    // numero dispari: solo la meglio classificata salta il primo turno
+    var byeTeam = null, pool = seeded;
+    if(N % 2 === 1){ byeTeam = seeded[0]; pool = seeded.slice(1); }
+    var M = pool.length;
     var list = [];
-    for(var i=0; i<N/2; i++){ list.push(seeded[i]); list.push(seeded[N-1-i]); }
+    for(var i=0; i<M/2; i++){ list.push(pool[i]); list.push(pool[M-1-i]); }
     list = avoidSameGroupFirstRound(list);
     var round0 = [];
+    if(byeTeam){ var bm = emptyPlayoffMatch(prefix+"_r0_bye", byeTeam, null); bm.bye = true; round0.push(bm); }
     for(var k=0; k<list.length; k+=2) round0.push(emptyPlayoffMatch(prefix+"_r0_m"+(k/2), list[k], list[k+1]));
-    var W = N/2, T = 2; while(T < W) T *= 2;
+    var W = M/2 + (byeTeam ? 1 : 0), T = 2; while(T < W) T *= 2;
     var rest = [];
     for(var j=0; j<T/2; j++) rest.push(emptyPlayoffMatch(prefix+"_r1_m"+j, null, null));
     var sub = buildFasciaFromRound0(rest, prefix + "_x");
     sub.rounds.forEach(function(r, ri){ r.matches.forEach(function(m, mi){ m.id = prefix+"_r"+(ri+1)+"_m"+mi; }); });
     if(sub.third) sub.third.id = prefix+"_third";
-    var rounds = [{ stage: "Primo turno (con ripescaggio)", matches: round0 }].concat(sub.rounds);
+    var rounds = [{ stage: T - W > 0 ? "Primo turno (con ripescaggio)" : "Primo turno", matches: round0 }].concat(sub.rounds);
     return { size: N, teams: seeded, rounds: rounds, third: sub.third, repechage: T - W, bracketSize: T };
   }
   // Classifica delle perdenti del primo turno per il ripescaggio: vittorie
@@ -4868,6 +5023,7 @@ module.exports = QRCode;
   function repechageRanking(matches){
     var losers = [];
     matches.forEach(function(m){
+      if(m.bye) return;
       var w = playoffWinner(m);
       if(!w) return;
       var isA = w !== m.teamA;
@@ -4899,6 +5055,20 @@ module.exports = QRCode;
     var list = winners.concat(rp).sort(function(a,b){ return (a.seed||99) - (b.seed||99); });
     var order = seedOrder(f.bracketSize);
     next.forEach(function(m, k){ m.teamA = list[order[2*k]-1] || null; m.teamB = list[order[2*k+1]-1] || null; });
+    // il ripescato non deve ritrovare subito la coppia che l'ha appena battuto
+    var met = {};
+    r0.forEach(function(m){ if(m.bye || !m.teamA || !m.teamB) return; met[m.teamA.keeper.id + "|" + m.teamB.keeper.id] = met[m.teamB.keeper.id + "|" + m.teamA.keeper.id] = 1; });
+    function clash(m){ return !!(m.teamA && m.teamB && met[m.teamA.keeper.id + "|" + m.teamB.keeper.id]); }
+    next.forEach(function(m, k){
+      if(!clash(m)) return;
+      var best = null;
+      next.forEach(function(o, j){
+        if(j === k || best) return;
+        // scambio i "secondi" delle due partite (le teste di serie restano dove sono)
+        var t = m.teamB; m.teamB = o.teamB; o.teamB = t;
+        if(!clash(m) && !clash(o)) best = j; else { t = m.teamB; m.teamB = o.teamB; o.teamB = t; }
+      });
+    });
   }
   // Triangolare a 3 coppie: tre partite secche (chi arriva prima a 7), con
   // gli stessi punti del girone (3-0 con 2+ gol di scarto, 2-1 con 1 gol).
@@ -5100,6 +5270,7 @@ module.exports = QRCode;
   function syncFasciaUI(){
     var grouped = !!(current && current.fixedTeams && current.groups);
     var aw = document.getElementById("fasciaAWrap"); if(aw) aw.style.display = (current && !current.fixedTeams && !READ_ONLY_VIEW) ? "" : "none";
+    var bw = document.getElementById("fasciaBWrap"); if(bw) bw.style.display = READ_ONLY_VIEW ? "none" : "";
     var cw = document.getElementById("fasciaBCountWrap"); if(cw) cw.style.display = fasciaBModeVal() === "count" ? "" : "none";
     var lb = document.getElementById("fasciaBCountLabel"); if(lb) lb.textContent = grouped ? "Coppie per girone in Fascia B (dopo le qualificate)" : "Coppie in Fascia B";
     var o = document.querySelector('#fasciaBMode option[value="yes"]'); if(o) o.textContent = grouped ? "🅱️ Sì, con tutte le non qualificate" : "🅱️ Sì, con tutte le altre coppie possibili";
@@ -5344,6 +5515,25 @@ module.exports = QRCode;
     }
   }
   function cascadePlayoffs(){
+    if(!current || !current.playoffs) return;
+    var _sig = {};
+    function _ids(m){ return (m.teamA ? m.teamA.keeper.id : "-") + "|" + (m.teamB ? m.teamB.keeper.id : "-"); }
+    for(var _pass = 0; _pass < 8; _pass++){
+      _sig = {}; forEachFasciaMatch(current, function(m){ _sig[m.id] = _ids(m); });
+      cascadePlayoffsCore();
+      var cleared = false;
+      forEachFasciaMatch(current, function(m){
+        if(m.bye || m.voidSlot || !m.legs) return;
+        if(_sig[m.id] !== undefined && _sig[m.id] !== _ids(m) && m.legs.some(legDone)){
+          // le coppie di questo incontro sono cambiate: i risultati erano di altri
+          m.legs = m.legs.map(function(){ return { scoreA: null, scoreB: null }; });
+          delete m.forfeit; m._legsDone = 0; m.lastAt = null; cleared = true;
+        }
+      });
+      if(!cleared) break;
+    }
+  }
+  function cascadePlayoffsCore(){
     if(!current || !current.playoffs) return;
     // Nel sorteggio a coppie fisse le squadre non vengono mai rimescolate,
     // nemmeno dopo i quarti: restano le stesse dall'inizio alla fine.
@@ -6149,7 +6339,11 @@ module.exports = QRCode;
           m.legs[0] = { scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }; m.forfeit = (ra ? m.teamA : m.teamB).keeper.id; any = true; return;
         }
         if(playoffWinner(m)) return;
-        m.legs = [{ scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }, { scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 }, { scoreA: null, scoreB: null }];
+        if(!m._preForfeit) m._preForfeit = JSON.stringify(m.legs || []);
+        var fl = { scoreA: ra ? 0 : 7, scoreB: ra ? 7 : 0 };
+        m.legs = (m.legs || [{},{},{}]).map(function(l){ return l ? { scoreA: l.scoreA === undefined ? null : l.scoreA, scoreB: l.scoreB === undefined ? null : l.scoreB } : { scoreA: null, scoreB: null }; });
+        while(m.legs.length < 3) m.legs.push({ scoreA: null, scoreB: null });
+        for(var li = 0; li < 3 && !playoffWinner(m); li++){ if(!legDone(m.legs[li])) m.legs[li] = { scoreA: fl.scoreA, scoreB: fl.scoreB }; }
         m.forfeit = (ra ? m.teamA : m.teamB).keeper.id; any = true;
       });
       if(!any) break;
@@ -6185,7 +6379,7 @@ module.exports = QRCode;
         showConfirm("Annullare il ritiro? Le partite date a tavolino tornano da giocare.", function(){
           current.retired = (current.retired || []).filter(function(x){ return x !== id; });
           current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){ if(m.forfeit === id){ m.scoreA = null; m.scoreB = null; delete m.forfeit; } }); });
-          forEachFasciaMatch(current, function(m){ if(m.forfeit === id){ m.legs = [{scoreA:null,scoreB:null},{scoreA:null,scoreB:null},{scoreA:null,scoreB:null}]; delete m.forfeit; } });
+          forEachFasciaMatch(current, function(m){ if(m.forfeit === id){ var back = null; try{ back = m._preForfeit ? JSON.parse(m._preForfeit) : null; }catch(e){} m.legs = (back && back.length) ? back : [{scoreA:null,scoreB:null},{scoreA:null,scoreB:null},{scoreA:null,scoreB:null}]; while(m.legs.length < 3) m.legs.push({scoreA:null,scoreB:null}); delete m.forfeit; delete m._preForfeit; } });
           cascadePlayoffs();
           persistCurrent(); renderRounds(); renderStandings(); if(current.playoffs) renderPlayoffBracket(); renderRetireCard();
           toast("Ritiro annullato.");
@@ -6234,7 +6428,24 @@ module.exports = QRCode;
     renderRetireCard(); updateStaleWarn();
     if(document.body.classList.contains("tv-on")) tvRender();
   }
+  var lastSavedPlayers = null;
+  afterPersistHooks.push(function(){ try{ lastSavedPlayers = JSON.stringify(players); }catch(e){} });
+  try{ lastSavedPlayers = JSON.stringify(players); }catch(e){}
+  function undoAfterReset(){
+    // torneo azzerato senza passare dal salvataggio: si torna all'ultimo stato salvato
+    var nowStr = current ? JSON.stringify(current) : null;
+    return !!(lastSaved && nowStr !== lastSaved && (!current || !current.rounds || !current.rounds.length));
+  }
+  setInterval(function(){ var b = document.getElementById("undoBtn"); if(b && !undoStack.length) b.disabled = !undoAfterReset(); }, 1500);
   document.getElementById("undoBtn").addEventListener("click", function(){
+    if(undoAfterReset()){
+      try{ current = relinkGroupRounds(JSON.parse(lastSaved)); }catch(e){ return; }
+      try{ var pl = JSON.parse(lastSavedPlayers || "null"); if(pl && !players.keepers.length && !players.attackers.length){ players = pl; persistPlayers(); renderRoster(); } }catch(e){}
+      safeSet(LS_CURRENT, current); scheduleLiveSync();
+      rerenderAll(); updateUndoBtn();
+      toast("↩️ Torneo ripristinato com'era prima dell'azzeramento.");
+      return;
+    }
     if(!undoStack.length) return;
     var prev = undoStack.pop();
     try{ current = relinkGroupRounds(JSON.parse(prev)); }catch(e){ return; }
@@ -6347,6 +6558,9 @@ module.exports = QRCode;
       var out = { keeper: [], attacker: [] }, role = null, found = false;
       String(text).split(/\r?\n/).forEach(function(raw){
         var l = cleanWaLine(raw); if(!l) return;
+        var rawT = String(raw).replace(/^\s*\[[^\]]*\]\s*[^:]{1,40}:\s*/, "").trim();
+        var isOtherHeader = (/^\*[^*]+\*:?$/.test(rawT) || /^[A-Za-zÀ-ÿ ]{3,25}:$/.test(l) || /^(riserv|panchin|assent|forse|in dubbio|note|lista d.attesa)/i.test(l)) && isHeader(l, RE_KEEP) === null && isHeader(l, RE_ATT) === null;
+        if(isOtherHeader){ role = null; return; }
         var hk = isHeader(l, RE_KEEP), ha = hk === null ? isHeader(l, RE_ATT) : null;
         if(hk !== null){ role = "keeper"; found = true; l = hk; }
         else if(ha !== null){ role = "attacker"; found = true; l = ha; }
@@ -6543,7 +6757,7 @@ module.exports = QRCode;
       '<p class="draw-summary" style="margin-top:8px;">Conta solo i tornei salvati con "💾 Salva risultati torneo" (' + sel.length + ' ' + (sel.length === 1 ? 'torneo' : 'tornei') + '). Punti: 1° posto 10, 2° 7, 3° 5, vincitori Fascia B 3, +1 per ogni torneo giocato.</p></div>' +
       '<div class="card"><h2>👑 Albo d\'oro</h2>' + (albo.length ? albo.join("") : '<div class="empty-note">Nessun torneo salvato.</div>') + '</div>' +
       '<div class="card"><h2>📊 Classifica giocatori</h2>' + (rows.length ?
-        '<div style="overflow-x:auto;"><table class="season"><thead><tr><th>#</th><th>Giocatore</th><th>Punti</th><th>Tornei</th><th>Vittorie</th><th>Podi</th><th>Partite vinte</th></tr></thead><tbody>' +
+        '<div style="overflow-x:auto;"><table class="season"><thead><tr><th>#</th><th>Giocatore <small style="font-weight:600;">(tocca per la scheda)</small></th><th>Punti</th><th>Tornei</th><th>Vittorie</th><th>Podi</th><th>Partite vinte</th></tr></thead><tbody>' +
         rows.map(function(r, i){ return '<tr><td>' + (RANK_MEDALS[i] || (i + 1)) + '</td><td><b>' + esc(r.name) + '</b></td><td class="pts">' + r.pts + '</td><td>' + r.t + '</td><td>' + r.win + '</td><td>' + r.pod + '</td><td>' + r.v + '</td></tr>'; }).join("") +
         '</tbody></table></div>' : '<div class="empty-note">Nessun dato ancora.</div>') + '</div>';
     document.getElementById("seasonYearSel").addEventListener("change", function(){ seasonYear = this.value; renderSeason(); });
@@ -6683,6 +6897,9 @@ module.exports = QRCode;
     function push(){
       if(!cfg.enabled || !cfg.refreshToken) return;
       var payload = { updatedAt: Date.now(), data: current ? JSON.stringify(current) : "" };
+      try{ var pf = window.__profilesForCurrent ? window.__profilesForCurrent() : null; if(pf) payload.prof = JSON.stringify(pf); }catch(e){}
+      if(cfg.allowRemote) payload.k = cfg.apiKey;
+      if(cfg.signupOpen) payload.su = true;
       getToken().then(function(tok){
         return fetch(cfg.dbUrl + "/live/" + encodeURIComponent(cfg.liveId) + ".json?auth=" + encodeURIComponent(tok), {
           method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
@@ -6718,6 +6935,7 @@ module.exports = QRCode;
           cfg.dbUrl = db; cfg.apiKey = key; cfg.publicUrl = pub; cfg.email = email;
           cfg.refreshToken = j.refreshToken; idToken = j.idToken; idTokenExp = Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000;
           save(); $("fbPassword").value = "";
+          makeBkKey(email, pw).then(function(k){ cfg.bkKey = k; save(); try{ cloudStatus(); }catch(e){} });
           refreshUi(); toast("Collegata a Firebase ✅");
         })
         .catch(function(e){
@@ -6749,6 +6967,187 @@ module.exports = QRCode;
     refreshUi();
     if(cfg.enabled) push();
 
+
+    // ===== 7. BACKUP AUTOMATICO ONLINE (quando la Live è collegata) =====
+    var LS_CLOUD = "tg_cloud_last_v1";
+    function fnv(str){ var h = 0x811c9dc5; for(var i = 0; i < str.length; i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(36); }
+    function cloudPath(){ return cfg.dbUrl + "/live/bk_" + cfg.bkKey + ".json"; }
+    // indirizzo del backup ricavato da email + password: senza la password non si trova
+    function makeBkKey(email, pw){
+      var src = String(email || "").trim().toLowerCase() + "|" + pw + "|goopho26";
+      try{
+        if(window.crypto && crypto.subtle && window.TextEncoder){
+          return crypto.subtle.digest("SHA-256", new TextEncoder().encode(src)).then(function(buf){
+            return Array.prototype.map.call(new Uint8Array(buf), function(x){ return ("0" + x.toString(16)).slice(-2); }).join("").slice(0, 40);
+          }).catch(function(){ return fallbackKey(src); });
+        }
+      }catch(e){}
+      return Promise.resolve(fallbackKey(src));
+    }
+    function fallbackKey(src){ var o = ""; for(var i = 0; i < 5; i++) o += fnv(i + "#" + src + "#" + o); return o; }
+    function collectAll(){
+      var data = {};
+      for(var i = 0; i < localStorage.length; i++){
+        var k = localStorage.key(i);
+        if(k && k.indexOf("tg_") === 0 && k !== LS_CLOUD && !/^tg_(ref|viewer_me|signup_done|inbox_lock)_/.test(k)){ try{ data[k] = JSON.parse(localStorage.getItem(k)); }catch(e){ data[k] = localStorage.getItem(k); } }
+      }
+      if(data[LS_FB] && typeof data[LS_FB] === "object"){ data[LS_FB] = JSON.parse(JSON.stringify(data[LS_FB])); delete data[LS_FB].refreshToken; data[LS_FB].enabled = false; }
+      return data;
+    }
+    var lastCloudSig = null;
+    function cloudStatus(){
+      var el = $("cloudStatus"); if(!el) return;
+      var last = null; try{ last = localStorage.getItem(LS_CLOUD); }catch(e){}
+      if(!cfg.refreshToken){ el.innerHTML = "☁️ Backup online: si attiva da solo quando colleghi la Live (sezione in fondo)."; el.className = "fb-status"; return; }
+      if(!cfg.bkKey){ el.innerHTML = "☁️ Backup online: per attivarlo, nel riquadro Live premi <b>Scollega</b> e ricollegati una volta (serve la password)."; el.className = "fb-status"; return; }
+      el.innerHTML = "☁️ Backup online automatico <b>attivo</b>" + (last ? " · ultimo: " + new Date(+last).toLocaleString("it-IT") : " · ancora nessuno") + ". Si aggiorna quando salvi un torneo e ogni 10 minuti se qualcosa è cambiato.";
+      el.className = "fb-status on";
+    }
+    function cloudBackup(manual){
+      if(!cfg.refreshToken || !cfg.dbUrl || !cfg.email) { if(manual) toast("Collega prima la Live (email e password di Firebase)."); return Promise.resolve(false); }
+      if(!cfg.bkKey){ if(manual) toast("Per il backup online: Scollega la Live e ricollegati una volta con la password."); return Promise.resolve(false); }
+      var data = collectAll(), sig = JSON.stringify(data);
+      if(!manual && sig === lastCloudSig) return Promise.resolve(true);
+      var payload = { app: "GOOPHO 26", version: 1, exportedAt: new Date().toISOString(), data: data };
+      return getToken().then(function(tok){
+        return fetch(cloudPath() + "?auth=" + encodeURIComponent(tok), { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      }).then(function(r){
+        if(!r.ok) throw new Error("http " + r.status);
+        lastCloudSig = sig; try{ localStorage.setItem(LS_CLOUD, String(Date.now())); }catch(e){}
+        cloudStatus(); if(manual) toast("☁️ Backup online salvato.");
+        return true;
+      }).catch(function(){ if(manual) toast("⚠️ Backup online non riuscito: controlla internet."); return false; });
+    }
+    function cloudRestore(){
+      if(!cfg.dbUrl || !cfg.email || !cfg.bkKey){ toast("Collega prima la Live con la tua email e password: il backup online è legato a quell'account."); return; }
+      fetch(cloudPath(), { cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(p){
+        if(!p || !p.data){ toast("Nessun backup online trovato per " + cfg.email + "."); return; }
+        var d = p.data, nP = d.tg_players_v1 ? ((d.tg_players_v1.keepers || []).length + (d.tg_players_v1.attackers || []).length) : 0, nH = (d.tg_history_v1 || []).length;
+        showConfirm("Recuperare il backup online del " + new Date(p.exportedAt).toLocaleString("it-IT") + " (" + nP + " iscritti, " + nH + " tornei nello storico)? I dati di questo browser verranno sostituiti.", function(){
+          var keep = JSON.parse(localStorage.getItem(LS_FB) || "null");
+          var rm = []; for(var i = 0; i < localStorage.length; i++){ var k = localStorage.key(i); if(k && k.indexOf("tg_") === 0) rm.push(k); }
+          rm.forEach(function(k){ localStorage.removeItem(k); });
+          Object.keys(d).forEach(function(k){
+            if(k.indexOf("tg_") !== 0) return;
+            var v = d[k];
+            if(k === LS_FB && v && typeof v === "object" && keep){ v.refreshToken = keep.refreshToken; v.enabled = !!keep.enabled; v.apiKey = keep.apiKey || v.apiKey; v.email = keep.email || v.email; v.bkKey = keep.bkKey || v.bkKey; }
+            localStorage.setItem(k, typeof v === "string" ? v : JSON.stringify(v));
+          });
+          toast("☁️ Backup online recuperato ✅"); setTimeout(function(){ location.reload(); }, 700);
+        });
+      }).catch(function(){ toast("⚠️ Non riesco a leggere il backup online: controlla internet."); });
+    }
+    (function(){
+      var card = $("backupCard"); if(!card) return;
+      var body = card.querySelector(".rules-body"); if(!body) return;
+      var row = document.createElement("div"); row.className = "fb-row";
+      row.innerHTML = '<button class="btn btn-primary" id="cloudSaveBtn" type="button">☁️ Salva online adesso</button><button class="btn btn-ghost" id="cloudRestoreBtn" type="button">☁️ Recupera dal backup online</button>';
+      body.appendChild(row);
+      var st = document.createElement("div"); st.className = "fb-status"; st.id = "cloudStatus"; body.appendChild(st);
+      $("cloudSaveBtn").addEventListener("click", function(){ cloudBackup(true); });
+      $("cloudRestoreBtn").addEventListener("click", cloudRestore);
+      var sb = $("saveTournamentBtn"); if(sb) sb.addEventListener("click", function(){ setTimeout(function(){ cloudBackup(false); }, 800); });
+      setInterval(function(){ cloudBackup(false); }, 10 * 60 * 1000);
+      cloudStatus();
+    })();
+
+    // ===== 8. RISULTATI INSERITI DAL TELEFONO (spento di partenza) =====
+    // ===== 9. ISCRIZIONI DAL LINK (spento di partenza) =====
+    (function(){
+      var box = $("fbConnected"); if(!box) return;
+      var opt = document.createElement("div"); opt.className = "fb-opts";
+      opt.innerHTML = '<label class="fb-opt"><input type="checkbox" id="optRemote"> <span><b>📱 Risultati anche dal telefono</b> — dalla pagina della Live puoi entrare con la tua email e password Firebase e inserire i punteggi stando ai biliardini: arrivano qui da soli. Serve la Live accesa.</span></label>' +
+        '<label class="fb-opt"><input type="checkbox" id="optSignup"> <span><b>📝 Iscrizioni dal link</b> — i giocatori si iscrivono dalla pagina della Live e tu approvi nella scheda Giocatori. Serve la Live accesa e una regola in più su Firebase (vedi GUIDA-LIVE, punto "Iscrizioni dal link").</span></label>';
+      box.appendChild(opt);
+      $("optRemote").checked = !!cfg.allowRemote; $("optSignup").checked = !!cfg.signupOpen;
+      $("optRemote").addEventListener("change", function(){ cfg.allowRemote = this.checked; save(); if(this.checked) clearInbox(); if(cfg.enabled) push(); toast(this.checked ? "📱 Inserimento dal telefono attivo." : "Inserimento dal telefono spento."); });
+      $("optSignup").addEventListener("change", function(){ cfg.signupOpen = this.checked; save(); if(cfg.enabled) push(); renderSignups([]); if(this.checked) pollSignups(); toast(this.checked ? "📝 Iscrizioni dal link aperte." : "Iscrizioni dal link chiuse."); });
+    })();
+    // --- 8: posta in arrivo dal telefono ---
+    var inboxBusy = false;
+    function inboxUrl(){ return cfg.dbUrl + "/live/" + encodeURIComponent(cfg.liveId) + "_in.json"; }
+    function applyRemote(e){
+      if(!current || !e || !e.id) return null;
+      function val(x){ return (x === "" || x === null || x === undefined || isNaN(+x)) ? null : Math.max(0, parseInt(x, 10)); }
+      if(e.t === "g"){
+        var m = findMatchById(e.id); if(!m) return null;
+        m.scoreA = val(e.a); m.scoreB = val(e.b);
+        return pairLabel(m.teamA) + " " + (m.scoreA === null ? "–" : m.scoreA) + "-" + (m.scoreB === null ? "–" : m.scoreB) + " " + pairLabel(m.teamB);
+      }
+      if(e.t === "p"){
+        var found = null; forEachFasciaMatch(current, function(m){ if(m.id === e.id) found = m; });
+        if(!found || !found.teamA || !found.teamB) return null;
+        var li = Math.max(0, Math.min(2, parseInt(e.leg, 10) || 0));
+        while(found.legs.length < 3) found.legs.push({ scoreA: null, scoreB: null });
+        found.legs[li] = { scoreA: val(e.a), scoreB: val(e.b) };
+        return pairLabel(found.teamA) + " " + (found.legs[li].scoreA === null ? "–" : found.legs[li].scoreA) + "-" + (found.legs[li].scoreB === null ? "–" : found.legs[li].scoreB) + " " + pairLabel(found.teamB);
+      }
+      return null;
+    }
+    var TAB_ID = Math.random().toString(36).slice(2), LS_LOCK = "tg_inbox_lock_v1";
+    function inboxLeader(){
+      if(document.body.classList.contains("tv-on")) return false;            // la scheda in Modalità TV solo mostra
+      try{
+        var l = JSON.parse(localStorage.getItem(LS_LOCK) || "null");
+        if(l && l.tab !== TAB_ID && Date.now() - l.at < 9000) return false;  // un'altra scheda dell'app sta già ricevendo
+        localStorage.setItem(LS_LOCK, JSON.stringify({ tab: TAB_ID, at: Date.now() }));
+      }catch(e){}
+      return true;
+    }
+    window.addEventListener("pagehide", function(){ try{ var l = JSON.parse(localStorage.getItem(LS_LOCK) || "null"); if(l && l.tab === TAB_ID) localStorage.removeItem(LS_LOCK); }catch(e){} });
+    // risultati mandati mentre la Live era spenta: si scartano quando la riaccendi
+    function clearInbox(){
+      if(!cfg.refreshToken || !cfg.dbUrl) return;
+      getToken().then(function(tok){ return fetch(inboxUrl() + "?auth=" + encodeURIComponent(tok), { method: "DELETE" }); }).catch(function(){});
+    }
+    $("fbToggleBtn").addEventListener("click", function(){ if(cfg.enabled && cfg.allowRemote) clearInbox(); });
+    function pollInbox(){
+      if(inboxBusy || !cfg.enabled || !cfg.allowRemote || !cfg.refreshToken || !current) return;
+      if(!inboxLeader()) return;
+      inboxBusy = true;
+      fetch(inboxUrl(), { cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(obj){
+        if(!obj || typeof obj !== "object"){ inboxBusy = false; return; }
+        var keys = Object.keys(obj).sort(function(a, b){ return (obj[a].at || 0) - (obj[b].at || 0); });
+        var done = {}, last = null;
+        keys.forEach(function(k){ var t = applyRemote(obj[k]); if(t) last = t; done[k] = null; });
+        if(last){ try{ cascadePlayoffs(); }catch(e){} persistCurrent(); try{ runPreservingFocus(rerenderAll); }catch(e){} toast("📱 Dal telefono: " + last); }
+        return getToken().then(function(tok){ return fetch(inboxUrl() + "?auth=" + encodeURIComponent(tok), { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(done) }); });
+      }).catch(function(){}).then(function(){ inboxBusy = false; });
+    }
+    setInterval(pollInbox, 3000);
+    // --- 9: richieste di iscrizione ---
+    function signupUrl(){ return cfg.dbUrl + "/signup/" + encodeURIComponent(cfg.liveId); }
+    function renderSignups(list, err){
+      var card = document.getElementById("cardPlayers"); if(!card) return;
+      var bx = document.getElementById("signupBox");
+      if(!cfg.signupOpen){ if(bx) bx.remove(); return; }
+      if(!bx){ bx = document.createElement("div"); bx.id = "signupBox"; bx.className = "signup-box"; var fb = document.getElementById("feeBar"); var anchor = fb || card.querySelector(".roster-lists"); anchor.parentNode.insertBefore(bx, anchor.nextSibling); }
+      if(err){ bx.innerHTML = '<b>📥 Iscrizioni dal link</b><div class="su-note">⚠️ ' + esc(err) + '</div>'; return; }
+      bx.innerHTML = '<b>📥 Iscrizioni dal link</b> ' + (list.length ? '<span class="su-count">' + list.length + '</span>' : '') +
+        (list.length ? list.map(function(it){ var same = inRoster(it.role === "P" ? "keeper" : "attacker", it.name), other = inRoster(it.role === "P" ? "attacker" : "keeper", it.name);
+            return '<div class="su-row"><span>' + esc(it.name) + ' <small>' + (it.role === "P" ? "portiere" : "attaccante") + '</small>' + (same ? ' <small class="su-warn">· già iscritto</small>' : other ? ' <small class="su-warn">· già iscritto come ' + (it.role === "P" ? "attaccante" : "portiere") + '</small>' : '') + '</span><span><button class="btn btn-primary btn-sm" data-ok="' + esc(it.k) + '">✓ Aggiungi</button> <button class="btn btn-ghost btn-sm" data-no="' + esc(it.k) + '">✕</button></span></div>'; }).join("")
+          : '<div class="su-note">Nessuna richiesta per ora. I giocatori si iscrivono dalla pagina della Live (con la Live accesa).</div>');
+      bx.querySelectorAll("[data-ok],[data-no]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var k = b.dataset.ok || b.dataset.no, it = list.filter(function(x){ return x.k === k; })[0];
+          if(b.dataset.ok && it){ var r = addNames(it.role === "P" ? "keeper" : "attacker", [it.name]); toast(r.added ? "✅ " + it.name + " aggiunto agli iscritti" + (current && current.rounds && current.rounds.length ? " (il calendario di stasera non cambia)" : "") : it.name + " era già iscritto"); if(typeof renderFavs === "function") try{ renderFavs(); }catch(e){} }
+          getToken().then(function(tok){ return fetch(signupUrl() + "/" + encodeURIComponent(k) + ".json?auth=" + encodeURIComponent(tok), { method: "DELETE" }); }).then(pollSignups);
+        });
+      });
+    }
+    function pollSignups(){
+      if(!cfg.signupOpen || !cfg.refreshToken) return;
+      getToken().then(function(tok){ return fetch(signupUrl() + ".json?auth=" + encodeURIComponent(tok), { cache: "no-store" }); })
+        .then(function(r){ if(r.status === 401 || r.status === 403) throw new Error("rules"); return r.ok ? r.json() : null; })
+        .then(function(obj){
+          var list = obj ? Object.keys(obj).map(function(k){ var v = obj[k] || {}; return { k: k, name: String(v.name || "").slice(0, 40), role: v.role === "P" ? "P" : "A", at: v.at || 0 }; }).filter(function(x){ return x.name; }).sort(function(a, b){ return a.at - b.at; }) : [];
+          renderSignups(list);
+        }).catch(function(e){ renderSignups([], e && e.message === "rules" ? "Firebase non permette ancora le iscrizioni: aggiungi la regola \"signup\" (vedi GUIDA-LIVE)." : "Non riesco a leggere le iscrizioni (internet?)."); });
+    }
+    setInterval(pollSignups, 8000);
+    pollSignups();
+
+
     // ----- modalità spettatore da link -----
     function startViewer(liveId, db){
       window.__fbViewer = true;
@@ -6773,6 +7172,7 @@ module.exports = QRCode;
           if(obj.updatedAt && obj.updatedAt === lastStamp) return;
           lastStamp = obj.updatedAt || null;
           try{ current = obj.data ? relinkGroupRounds(JSON.parse(obj.data)) : null; }catch(e){ return; }
+          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; }catch(e){}
         }
         render();
       }
@@ -7272,6 +7672,13 @@ module.exports = QRCode;
       incoming = players[roleKey].filter(function(pl){ return pl.id === inVal; })[0];
     }
     if(!incoming){ toast("Scegli chi entra."); return; }
+    var clash = null;
+    current.rounds.forEach(function(r, ri){ r.matches.forEach(function(m){
+      if(clash || (m.scoreA !== null && m.scoreA !== undefined)) return;
+      var ids = [m.teamA.keeper.id, m.teamA.attacker.id, m.teamB.keeper.id, m.teamB.attacker.id];
+      if(ids.indexOf(outId) !== -1 && ids.indexOf(incoming.id) !== -1) clash = r.recovery ? "nel recupero" : "nella giornata " + (ri + 1);
+    }); });
+    if(clash){ toast("⚠️ " + incoming.name + " gioca già nella stessa partita di " + x.p.name + " (" + clash + "): scegli un altro sostituto."); return; }
     showConfirm("Nelle " + x.left + (x.left === 1 ? " partita ancora da giocare" : " partite ancora da giocare") + ", " + x.p.name + " viene sostituito da " + incoming.name + ". Le partite già giocate non cambiano. Confermi?", function(){
       var changed = 0;
       current.rounds.forEach(function(r){
@@ -7290,7 +7697,7 @@ module.exports = QRCode;
         if(touched && r.byes){
           var inRound = {};
           r.matches.forEach(function(m){ [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(pl){ inRound[pl.id] = 1; }); });
-          r.byes = players.keepers.concat(players.attackers).filter(function(pl){ return !inRound[pl.id]; });
+          r.byes = players.keepers.concat(players.attackers).filter(function(pl){ return !inRound[pl.id] && pl.id !== outId; });
         }
       });
       if(current.manualRounds && typeof mrLoadFromCurrent === "function") mrLoadFromCurrent();
@@ -7574,6 +7981,9 @@ module.exports = QRCode;
           '<div class="vx-pill"><b>' + st.row.pg + '</b><span>giocate</span></div><div class="vx-pill"><b>' + st.row.v + '</b><span>vinte</span></div><div class="vx-pill"><b>' + (st.row.gf - st.row.gs > 0 ? "+" : "") + (st.row.gf - st.row.gs) + '</b><span>diff. reti</span></div></div>';
       }
       if(stt) html += '<div class="vx-status ' + stt.kind + '">' + stt.html + '</div>';
+      var lp = window.__liveProfiles && window.__liveProfiles[norm(myName.name)];
+      if(lp && window.__profileHtml) html += '<details class="vx-pf"><summary>📇 La tua scheda (tornei passati)</summary>' + window.__profileHtml(lp) + '</details>';
+      var pfWas = meCard.querySelector(".vx-pf"); if(pfWas && pfWas.open) html = html.replace('<details class="vx-pf">', '<details class="vx-pf" open>');
       meCard.innerHTML = html;
       if(stt && stt.kind === "now" && lastStatusKind && lastStatusKind !== "now"){ try{ if(navigator.vibrate) navigator.vibrate([300, 150, 300]); }catch(e){} }
       lastStatusKind = stt ? stt.kind : null;
@@ -7616,7 +8026,8 @@ module.exports = QRCode;
       var lt = lastEventTime();
       prog.innerHTML = '<div class="vx-prog-top"><span>' + esc(label) + '</span><span>' + Math.round(total ? done * 100 / total : 0) + '%</span></div>' +
         '<div class="vx-bar"><div style="width:' + (total ? done * 100 / total : 0) + '%"></div></div>' +
-        '<div class="vx-prog-sub">' + esc(sub) + (lt ? ' · Ultimo risultato: <span id="vxAgo" data-t="' + lt + '">' + ago(lt) + '</span>' : '') + '</div>';
+        '<div class="vx-prog-sub">' + esc(sub) + (lt ? ' · Ultimo risultato: <span id="vxAgo" data-t="' + lt + '">' + ago(lt) + '</span>' : '') + '</div>' +
+        (typeof etaText === "function" && etaText(current) ? '<div class="vx-prog-sub" style="font-weight:800; color:var(--pitch);">' + esc(etaText(current)) + '</div>' : '');
     }
 
     // ----- in campo adesso -----
@@ -8108,7 +8519,7 @@ module.exports = QRCode;
   if(GRID_MODE){
     var gov = document.createElement("div");
     gov.id = "gridOverlay";
-    gov.innerHTML = '<div class="gx-top"><div id="gxTitle"></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button><button type="button" class="tv-back" id="gxBack">⬅️ Torna all\'app</button>';
+    gov.innerHTML = '<div class="gx-top"><div class="tv-brand"><span class="tv-logo"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg></span><div id="gxTitle"></div></div><div id="gxClock"></div></div><div id="gxViewport"><div id="gxStage"></div></div><button type="button" id="gxClose" title="Chiudi">✕</button><button type="button" class="tv-back" id="gxBack">⬅️ Torna all\'app</button>';
     document.body.appendChild(gov);
     document.body.classList.add("grid-on");
     function gxLeave(){
@@ -8191,8 +8602,375 @@ module.exports = QRCode;
       ov.addEventListener("click", function(e){ if(e.target === ov) close(); });
     }
     btn.addEventListener("click", open);
-    refreshBtn(); setInterval(refreshBtn, 2000);
+    // QR sempre visibile nella pagina quando la Live è collegata
+    var inlineLink = null;
+    function refreshInline(){
+      var box = document.getElementById("liveInline"); if(!box) return;
+      var i = info();
+      if(!i || !i.connected || !i.link){ box.style.display = "none"; inlineLink = null; return; }
+      box.style.display = "";
+      var key = i.link + "|" + i.enabled;
+      if(key === inlineLink) return;
+      inlineLink = key;
+      box.innerHTML = '<canvas id="liQr"></canvas><div class="li-txt"><div class="li-title">' + (i.enabled ? '● In diretta' : 'Live spenta') + ' · inquadra il QR</div>' +
+        '<div class="li-sub">' + (i.enabled ? 'I giocatori vedono risultati, classifiche e quando tocca a loro.' : 'Accendila col pulsante rosso: il QR e il link restano sempre gli stessi.') + '</div>' +
+        '<div class="li-link">' + esc(i.link) + '</div><div class="li-btns"><button class="btn btn-primary" type="button" id="liCopy">📋 Copia link</button><button class="btn btn-whatsapp" type="button" id="liWa">💬 WhatsApp</button></div></div>';
+      try{ qrCanvas(i.link, document.getElementById("liQr"), 6); }catch(e){}
+      document.getElementById("liCopy").addEventListener("click", function(){
+        try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(i.link).then(function(){ toast("🔗 Link copiato."); }, function(){ window.prompt("Copia il link:", i.link); }); } else window.prompt("Copia il link:", i.link); }catch(e){ window.prompt("Copia il link:", i.link); }
+      });
+      document.getElementById("liWa").addEventListener("click", function(){ window.open("https://wa.me/?text=" + encodeURIComponent("🎥 Segui " + ((current && current.name) || "il torneo") + " in diretta 👉 " + i.link), "_blank"); });
+    }
+    refreshBtn(); refreshInline(); setInterval(function(){ refreshBtn(); refreshInline(); }, 2000);
   })();
+
+  // ---------- ORARIO DI FINE PREVISTO ----------
+  // Stima dai tempi reali: intervallo medio tra un risultato e il successivo.
+  function etaRound5(t){ var d = new Date(t); d.setSeconds(0, 0); var m = d.getMinutes(); d.setMinutes(Math.round(m / 5) * 5); return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+  function estimateTimes(c){
+    if(!c || !c.rounds || !c.rounds.length) return null;
+    var T = Math.max(1, tablesCount());
+    var done = [], remaining = 0;
+    c.rounds.forEach(function(r){ r.matches.forEach(function(m){ if(isScored(m)){ if(m.playedAt && !m.forfeit) done.push(m.playedAt); } else if(!m.forfeit) remaining++; }); });
+    var legTimes = [];
+    forEachFasciaMatch(c, function(m){ if(m.lastAt) legTimes.push(m.lastAt); });
+    var all = done.concat(legTimes).sort(function(a, b){ return a - b; });
+    if(all.length < 3) return null;
+    var gaps = [];
+    for(var i = Math.max(1, all.length - 14); i < all.length; i++){ var g = all[i] - all[i-1]; if(g > 15000 && g < 30 * 60000) gaps.push(g); }
+    if(gaps.length < 2) return null;
+    gaps.sort(function(a, b){ return a - b; });
+    var gap = gaps[Math.floor(gaps.length / 2)];      // un risultato ogni "gap" ms con tutti i tavoli in uso
+    var perMatch = gap * T;                           // durata di una partita su un tavolo
+    var now = Date.now();
+    var endGroups = remaining ? now + remaining * gap : null;
+    // fase finale: turni in sequenza, ~2,3 gare a incontro
+    var poTime = 0;
+    function fasciaTime(f){
+      if(!f) return 0;
+      if(f.type === "triangle"){ var left = f.rounds[0].matches.filter(function(m){ return !legDone(m.legs[0]); }).length; return Math.ceil(left / T) * perMatch; }
+      var t = 0;
+      f.rounds.forEach(function(r){
+        var open = r.matches.filter(function(m){ return !m.bye && !m.voidSlot && !playoffWinner(m); });
+        if(!open.length) return;
+        var legs = open.reduce(function(s, m){ return s + Math.max(0.5, 2.3 - (m.legs || []).filter(legDone).length); }, 0);
+        t += Math.max(Math.ceil(open.length / T), 1) * perMatch * (legs / open.length);
+      });
+      return t;
+    }
+    if(c.playoffs){
+      poTime = Math.max(fasciaTime(c.playoffs.fasciaA), fasciaTime(c.playoffs.fasciaB) * 0.6);
+    } else {
+      var n = (c.fixedTeams && c.groups) ? Math.max(2, computeQualifiers().length) : 8;
+      var rounds = Math.ceil(Math.log(n) / Math.log(2));
+      poTime = rounds * 2.3 * perMatch + (n > 2 ? perMatch : 0);
+    }
+    var endFinal = (endGroups || now) + poTime;
+    var finished = c.playoffs && c.playoffs.fasciaA && fasciaPodium(c.playoffs.fasciaA);
+    if(finished) return null;
+    return { groupsLabel: (c.fixedTeams && c.groups) ? "Fine gironi" : "Fine giornate", endGroups: endGroups, endFinal: endFinal, perMatchMin: Math.round(perMatch / 60000) };
+  }
+  function etaText(c){
+    var e = estimateTimes(c); if(!e) return "";
+    var parts = [];
+    if(e.endGroups) parts.push(e.groupsLabel + " verso le " + etaRound5(e.endGroups));
+    parts.push("Finale verso le " + etaRound5(e.endFinal));
+    return "⏱️ " + parts.join(" · ");
+  }
+  (function(){
+    var _tvn = tvNextHtml;
+    tvNextHtml = function(){
+      var h = _tvn.apply(this, arguments);
+      var eta = etaText(current);
+      if(!eta) return h;
+      if(!h) return '<div class="tv-next"><div class="tv-eta">' + esc(eta) + '</div></div>';
+      return h.replace('<div class="tv-next">', '<div class="tv-next"><div class="tv-eta">' + esc(eta) + '</div>');
+    };
+  })();
+
+  // ---------- ANNUNCIO VOCALE IN MODALITÀ TV ----------
+  var LS_VOICE = "tg_tv_voice_v1";
+  var tvAnnounced = null;
+  function voiceOn(){ try{ return localStorage.getItem(LS_VOICE) !== "0"; }catch(e){ return true; } }
+  function chime(){
+    try{
+      var AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+      var ac = chime._ac || (chime._ac = new AC());
+      [660, 880].forEach(function(f, i){
+        var o = ac.createOscillator(), g = ac.createGain();
+        o.frequency.value = f; o.type = "sine";
+        g.gain.setValueAtTime(0.0001, ac.currentTime + i * 0.18);
+        g.gain.exponentialRampToValueAtTime(0.25, ac.currentTime + i * 0.18 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime + i * 0.18 + 0.3);
+        o.connect(g); g.connect(ac.destination); o.start(ac.currentTime + i * 0.18); o.stop(ac.currentTime + i * 0.18 + 0.32);
+      });
+    }catch(e){}
+  }
+  function speak(text){
+    try{
+      if(!window.speechSynthesis) return;
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "it-IT"; u.rate = 0.95;
+      var vs = speechSynthesis.getVoices().filter(function(v){ return /^it/i.test(v.lang); });
+      if(vs.length) u.voice = vs[0];
+      speechSynthesis.speak(u);
+    }catch(e){}
+  }
+  function spokenTag(tag){
+    return String(tag || "").replace(/^Gir\.\s*/i, "girone ").replace(/^G(\d+)$/, "giornata $1").replace("1° turno", "primo turno").replace("Semi", "semifinale").replace("Triang.", "triangolare").replace(/^A · /, "fascia A, ").replace(/^B · /, "fascia B, ");
+  }
+  function tvAnnounceCheck(){
+    if(!document.body.classList.contains("tv-on") || !current || !current.rounds) return;
+    var info = computeTables(current), on = current.onTable || {};
+    var ids = Object.keys(on).filter(function(id){ return info.byId[id]; });
+    if(tvAnnounced === null){ tvAnnounced = {}; ids.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; }); return; }
+    var fresh = ids.filter(function(id){ return !tvAnnounced[id + "@" + on[id]]; }).sort(function(a, b){ return on[a] - on[b]; });
+    fresh.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; });
+    if(!fresh.length || !voiceOn()) return;
+    chime();
+    setTimeout(function(){
+      fresh.forEach(function(id){
+        var it = info.byId[id];
+        function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; }
+        speak("Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + (it.tag ? ". " + spokenTag(it.tag) : "") + ".");
+      });
+    }, 700);
+  }
+  (function(){
+    var ov = document.getElementById("tvOverlay");
+    if(ov){
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "tv-back tv-voice"; b.id = "tvVoiceBtn";
+      function lbl(){ b.textContent = voiceOn() ? "🔊 Voce: sì" : "🔇 Voce: no"; }
+      lbl();
+      b.addEventListener("click", function(){ try{ localStorage.setItem(LS_VOICE, voiceOn() ? "0" : "1"); }catch(e){} lbl(); if(voiceOn()){ chime(); speak("Annunci vocali attivi."); } });
+      ov.appendChild(b);
+    }
+    var _tvr2 = tvRender; tvRender = function(){ var r = _tvr2.apply(this, arguments); tvAnnounceCheck(); return r; };
+    document.addEventListener("click", function(e){ if(e.target && e.target.closest && e.target.closest("#tvModeBtn, #fbViewerTvBtn, #pinTvBtn")){ tvAnnounced = null; try{ if(window.speechSynthesis) speechSynthesis.getVoices(); }catch(err){} } }, true);
+  })();
+
+  // ---------- QUOTE D'ISCRIZIONE ----------
+  var LS_FEE = "tg_fee_v1";
+  function feeCfg(){ return safeGet(LS_FEE, { on: false, amount: 5 }); }
+  function renderFees(){
+    var card = document.getElementById("cardPlayers"); if(!card || READ_ONLY_VIEW) return;
+    var cfg = feeCfg();
+    var bar = document.getElementById("feeBar");
+    if(!bar){
+      bar = document.createElement("div"); bar.id = "feeBar"; bar.className = "fee-bar";
+      var lists = card.querySelector(".roster-lists") || document.getElementById("listKeepers").closest(".roster-col").parentNode;
+      lists.parentNode.insertBefore(bar, lists.nextSibling);
+    }
+    var all = players.keepers.concat(players.attackers);
+    var paid = all.filter(function(p){ return p.paid; });
+    var missing = all.filter(function(p){ return !p.paid; });
+    bar.innerHTML = '<label class="fee-toggle"><input type="checkbox" id="feeOn"' + (cfg.on ? " checked" : "") + '> 💶 Segna chi ha pagato la quota</label>' +
+      (cfg.on ? '<span class="fee-amount">Quota <input type="number" id="feeAmount" min="0" step="0.5" value="' + (cfg.amount || 0) + '"> €</span>' +
+        '<div class="fee-sum">✅ Pagato: <b>' + paid.length + '/' + all.length + '</b> · In cassa: <b>' + (paid.length * (cfg.amount || 0)).toLocaleString("it-IT") + ' €</b>' +
+        (missing.length ? ' · ⏳ Mancano: ' + esc(missing.map(function(p){ return p.name; }).join(", ")) : ' · 🎉 Tutti in regola') +
+        (paid.length ? ' <button class="btn btn-ghost btn-sm" type="button" id="feeReset">↺ Azzera pagamenti</button>' : '') + '</div>' : '');
+    document.getElementById("feeOn").addEventListener("change", function(){ var c = feeCfg(); c.on = this.checked; safeSet(LS_FEE, c); renderRoster(); });
+    var fr = document.getElementById("feeReset");
+    if(fr) fr.addEventListener("click", function(){ showConfirm("Togliere il segno di pagato a tutti (per il prossimo torneo)?", function(){ players.keepers.concat(players.attackers).forEach(function(p){ delete p.paid; }); persistPlayers(); renderRoster(); toast("Pagamenti azzerati."); }); });
+    var am = document.getElementById("feeAmount");
+    if(am) am.addEventListener("change", function(){ var c = feeCfg(); c.amount = Math.max(0, parseFloat(this.value) || 0); safeSet(LS_FEE, c); renderFees(); });
+    // pulsante € su ogni iscritto
+    document.querySelectorAll("#listKeepers .player-chip, #listAttackers .player-chip").forEach(function(chip){
+      var rm = chip.querySelector("button[data-id]"); if(!rm) return;
+      var old = chip.querySelector(".fee-btn"); if(old) old.remove();
+      chip.classList.remove("is-paid");
+      if(!cfg.on) return;
+      var id = rm.dataset.id, kind = rm.dataset.kind;
+      var p = (kind === "keeper" ? players.keepers : players.attackers).filter(function(x){ return x.id === id; })[0]; if(!p) return;
+      var b = document.createElement("button"); b.type = "button"; b.className = "fee-btn" + (p.paid ? " paid" : ""); b.textContent = p.paid ? "€ ✓" : "€";
+      b.title = p.paid ? "Ha pagato (tocca per annullare)" : "Segna come pagato";
+      if(p.paid) chip.classList.add("is-paid");
+      b.addEventListener("click", function(){ p.paid = !p.paid; persistPlayers(); renderRoster(); });
+      chip.insertBefore(b, rm);
+    });
+  }
+  (function(){ var _rrF = renderRoster; renderRoster = function(){ _rrF.apply(this, arguments); renderFees(); }; renderFees(); })();
+
+  // ---------- STAMPE PRONTE ----------
+  function printWindow(title, body, landscape){
+    var w = window.open("", "_blank");
+    if(!w){ toast("Il browser ha bloccato la finestra di stampa: consenti i popup."); return; }
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>' + esc(title) + '</title><style>' +
+      '@page{ size:A4 ' + (landscape ? 'landscape' : 'portrait') + '; margin:12mm; }' +
+      'body{ font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#14294a; margin:0; }' +
+      'h1{ font-size:30px; margin:0 0 2px; } h2{ font-size:18px; margin:18px 0 6px; color:#0a2f7a; border-bottom:2px solid #d4af37; padding-bottom:3px; }' +
+      '.sub{ color:#555; font-size:13px; margin-bottom:12px; } table{ border-collapse:collapse; width:100%; font-size:12.5px; margin-bottom:8px; }' +
+      'th,td{ border:1px solid #c9cfdb; padding:4px 6px; text-align:center; } th{ background:#eef2fa; } td.l, th.l{ text-align:left; }' +
+      '.pod{ display:flex; gap:12px; flex-wrap:wrap; } .pod div{ flex:1 1 200px; border:2px solid #d4af37; border-radius:10px; padding:8px 12px; font-size:15px; } .pod b{ display:block; color:#0a2f7a; margin-bottom:4px; }' +
+      '.cols{ columns:2; column-gap:18px; } .blk{ break-inside:avoid; }' +
+      '.br{ display:flex; gap:14px; align-items:stretch; } .br-col{ flex:1; display:flex; flex-direction:column; } .br-st{ font-weight:800; font-size:12px; text-transform:uppercase; color:#8a6d00; text-align:center; margin-bottom:6px; }' +
+      '.br-ms{ flex:1; display:flex; flex-direction:column; justify-content:space-around; gap:6px; } .br-m{ border:1px solid #9aa6bd; border-radius:6px; font-size:12px; } .br-m div{ display:flex; justify-content:space-between; padding:3px 6px; } .br-m div + div{ border-top:1px solid #dde2ec; } .br-m .w{ font-weight:800; background:#fff6d6; } .br-m .s{ color:#555; font-size:11px; }' +
+      '.center{ text-align:center; } .logo{ width:110px; height:110px; }' +
+      '</style></head><body>' + body + '<script>setTimeout(function(){ window.print(); }, 500);<\/script></body></html>');
+    w.document.close();
+  }
+  var PRINT_LOGO = '<svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="47" fill="#d81e2c" stroke="#ffffff" stroke-width="5"></circle><circle cx="50" cy="50" r="29" fill="#0057ff"></circle><path d="M50 32 L55.9 45.5 L70.5 47 L59.5 56.7 L62.9 71 L50 63.2 L37.1 71 L40.5 56.7 L29.5 47 L44.1 45.5 Z" fill="#ffffff"></path></svg>';
+  function tournDate(){ var d = current && current.createdAt ? new Date(current.createdAt) : new Date(); return d.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long", year: "numeric" }); }
+  function printStandings(){
+    if(!current || !current.rounds || !current.rounds.length){ toast("Non c'è ancora nessun torneo da stampare."); return; }
+    var anyScore = current.rounds.some(function(r){ return r.matches.some(isScored); });
+    if(!anyScore){ toast("Non c'è ancora nessun risultato: la classifica sarebbe vuota."); return; }
+    var pd = podiumData();
+    var name = current.name || "GOOPHO 26", body = '<h1>' + esc(name) + ' · Classifica' + (pd ? ' finale' : ' (provvisoria)') + '</h1><div class="sub">' + esc(tournDate()) + '</div>';
+    if(pd) body += '<h2>🏆 Podio</h2><div class="pod">' + pd.map(function(sec){ return '<div><b>' + esc(sec.label || "Fase finale") + '</b>🥇 ' + esc(pairLabel(sec.pod.w)) + (sec.pod.l ? '<br>🥈 ' + esc(pairLabel(sec.pod.l)) : '') + (sec.pod.w3 ? '<br>🥉 ' + esc(pairLabel(sec.pod.w3)) : '') + '</div>'; }).join("") + '</div>';
+    function rowsTable(rows, label){
+      return '<table><tr><th>#</th><th class="l">' + label + '</th><th>Pt</th><th>G</th><th>V</th><th>P</th><th>GF</th><th>GS</th><th>DR</th></tr>' +
+        rows.map(function(r, i){ return '<tr><td>' + (i + 1) + '</td><td class="l">' + esc(r.label) + '</td><td><b>' + r.pt + '</b></td><td>' + r.pg + '</td><td>' + r.v + '</td><td>' + r.p + '</td><td>' + r.gf + '</td><td>' + r.gs + '</td><td>' + (r.gf - r.gs) + '</td></tr>'; }).join("") + '</table>';
+    }
+    if(current.fixedTeams && current.groups){
+      body += '<div class="cols">' + current.groups.map(function(g){ return '<div class="blk"><h2>' + esc(g.label) + '</h2>' + rowsTable(computeTeamGroupStandings(g).map(function(r){ return { label: pairLabel(r.team), pt: r.pt, pg: r.pg, v: r.v, p: r.p, gf: r.gf, gs: r.gs }; }), "Coppia") + '</div>'; }).join("") + '</div>';
+    } else {
+      var all = computeStandings(current.rounds);
+      [["P","Portieri"],["A","Attaccanti"]].forEach(function(x){ body += '<h2>' + x[1] + '</h2>' + rowsTable(all.filter(function(r){ return r.role === x[0]; }).map(function(r){ return { label: r.name, pt: r.pt, pg: r.pg, v: r.v, p: r.p, gf: r.gf, gs: r.gs }; }), "Giocatore"); });
+    }
+    printWindow(name + " - classifica", body, false);
+  }
+  function printPoster(){
+    var name = (current && current.name) || (document.getElementById("tournamentName") || {}).value || "GOOPHO 26";
+    var info = window.__liveInfo ? window.__liveInfo() : null, qr = "";
+    if(info && info.link){
+      try{ var q = new GQR.QRCode(-1, GQR.L); q.addData(info.link); q.make(); var n = q.getModuleCount(), cell = 14, size = (n + 4) * cell, cv = document.createElement("canvas"); cv.width = size; cv.height = size; var ctx = cv.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, size, size); ctx.fillStyle = "#000"; for(var r = 0; r < n; r++) for(var c = 0; c < n; c++) if(q.isDark(r, c)) ctx.fillRect((c + 2) * cell, (r + 2) * cell, cell, cell); qr = cv.toDataURL("image/png"); }catch(e){}
+    }
+    var body = '<div class="center" style="padding-top:10mm;">' + PRINT_LOGO + '<h1 style="font-size:52px; margin-top:10px;">' + esc(name) + '</h1>' +
+      '<div style="font-size:26px; letter-spacing:.3em; font-weight:800; color:#b8860b; margin:6px 0 4px;">PARTNER IN CRIME · TOURNAMENT</div>' +
+      '<div class="sub" style="font-size:18px;">' + esc(tournDate()) + '</div>' +
+      (qr ? '<h2 style="border:none; font-size:30px; color:#c1121f; margin-top:30px;">🎥 Segui il torneo in diretta</h2><img src="' + qr + '" style="width:110mm; height:110mm; image-rendering:pixelated;"><p style="font-size:20px; font-weight:700;">Inquadra con la fotocamera del telefono:<br>risultati, classifiche e quando tocca a te.</p>'
+          : '<p style="font-size:18px; margin-top:40px; color:#555;">(Collega la Live per avere qui il QR code della diretta.)</p>') +
+      '</div>';
+    printWindow(name + " - locandina", body, false);
+  }
+  function printBracket(){
+    var po = current && current.playoffs; if(!po){ toast("Il tabellone non c'è ancora: prima sorteggia la fase finale."); return; }
+    var name = current.name || "GOOPHO 26", body = '<h1>' + esc(name) + ' · Fase finale</h1><div class="sub">' + esc(tournDate()) + '</div>';
+    function box(m){
+      if(!m || m.voidSlot) return '';
+      if(m.bye){ var t = m.teamA || m.teamB; return '<div class="br-m"><div><span>' + (t ? esc(pairLabel(t)) : '<i>in attesa</i>') + '</span><span class="s">' + (t ? 'passa il turno' : '') + '</span></div></div>'; }
+      var w = playoffWinner(m), legs = (m.legs || []).filter(legDone).map(function(l){ return l.scoreA + "-" + l.scoreB; }).join(" · ");
+      function row(t){ return '<div class="' + (w && t && w === t ? 'w' : '') + '"><span>' + (t ? esc(pairLabel(t)) : '<i>in attesa</i>') + '</span></div>'; }
+      return '<div class="br-m">' + row(m.teamA) + row(m.teamB) + (legs ? '<div class="s"><span>' + legs + '</span></div>' : '') + '</div>';
+    }
+    [["A", po.fasciaA], ["B", po.fasciaB]].forEach(function(fx){
+      var f = fx[1]; if(!f) return;
+      body += '<h2>' + (po.fasciaB ? "Fascia " + fx[0] : "Tabellone") + '</h2>';
+      if(f.type === "triangle"){
+        var ts = triangleStandings(f);
+        body += '<table><tr><th class="l">Triangolare</th><th>Pt</th><th>G</th><th>DR</th></tr>' + ts.rows.map(function(r, i){ return '<tr><td class="l">' + (i + 1) + '. ' + esc(pairLabel(r.team)) + '</td><td>' + r.pt + '</td><td>' + r.pg + '</td><td>' + (r.gf - r.gs) + '</td></tr>'; }).join("") + '</table>';
+      } else {
+        body += '<div class="br">' + f.rounds.map(function(r, ri){
+          return '<div class="br-col"><div class="br-st">' + esc(String(r.stage).replace(" di finale", "")) + '</div><div class="br-ms">' + r.matches.map(box).join("") +
+            (ri === f.rounds.length - 1 && f.third ? '<div class="br-st" style="margin-top:10px;">3°/4° posto</div>' + box(f.third) : '') + '</div></div>';
+        }).join("") + '</div>';
+      }
+      var pod = fasciaPodium(f);
+      if(pod) body += '<p><b>🥇 ' + esc(pairLabel(pod.w)) + '</b>' + (pod.l ? ' · 🥈 ' + esc(pairLabel(pod.l)) : '') + (pod.w3 ? ' · 🥉 ' + esc(pairLabel(pod.w3)) : '') + '</p>';
+    });
+    printWindow(name + " - tabellone", body, true);
+  }
+  (function(){
+    var tvb = document.getElementById("podiumImgBtn");
+    if(!tvb) return;
+    var b = document.createElement("button"); b.type = "button"; b.className = "btn btn-primary"; b.id = "printsBtn"; b.textContent = "🖨️ Stampe";
+    tvb.parentNode.insertBefore(b, tvb);
+    b.addEventListener("click", function(){
+      choice3("Cosa vuoi stampare?", [["🏆 Classifica finale (A4)", printStandings], ["📣 Locandina con il QR della Live", printPoster], ["📊 Tabellone della fase finale", printBracket], ["Chiudi", null]]);
+    });
+  })();
+
+  // ---------- SCHEDE DEI GIOCATORI (dai tornei salvati) ----------
+  function buildProfiles(){
+    var P = {};
+    function pf(name){ var k = norm(name); if(!P[k]) P[k] = { name: name, t: 0, win: 0, pod: 0, g: 0, v: 0, gf: 0, gs: 0, pt: 0, partners: {}, beatenBy: {}, last: null }; return P[k]; }
+    (history || []).forEach(function(h){
+      var seen = {};
+      (h.rounds || []).forEach(function(r){ (r.matches || []).forEach(function(m){
+        if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined || m.forfeit) return;
+        var tal = (m.talpaIds || []).concat(m.talpaPlayerId ? [m.talpaPlayerId] : []);
+        [["A", m.teamA, m.teamB, m.scoreA, m.scoreB], ["B", m.teamB, m.teamA, m.scoreB, m.scoreA]].forEach(function(x){
+          if(m.jollySide === x[0] || !x[1]) return;
+          var won = x[3] > x[4], d = Math.abs(x[3] - x[4]);
+          [x[1].keeper, x[1].attacker].forEach(function(pl, i){
+            if(!pl || isTalpa(pl) || tal.indexOf(pl.id) !== -1) return;
+            var p = pf(pl.name), mate = i === 0 ? x[1].attacker : x[1].keeper;
+            seen[norm(pl.name)] = 1;
+            p.g++; p.gf += x[3]; p.gs += x[4]; if(won){ p.v++; p.pt += d === 1 ? 2 : 3; } else if(x[3] < x[4]) p.pt += d === 1 ? 1 : 0;
+            if(mate && !isTalpa(mate)){ var mk = norm(mate.name); var ps = p.partners[mk] || (p.partners[mk] = { name: mate.name, g: 0, v: 0 }); ps.g++; if(won) ps.v++; }
+            if(!won && x[3] < x[4]) [x[2].keeper, x[2].attacker].forEach(function(o){ if(o && !isTalpa(o)){ var ok = norm(o.name); var bs = p.beatenBy[ok] || (p.beatenBy[ok] = { name: o.name, n: 0 }); bs.n++; } });
+            p.last = h.date || h.savedAt;
+          });
+        });
+      }); });
+      Object.keys(seen).forEach(function(k){ P[k].t++; });
+      var po = h.playoffs;
+      [po && po.fasciaA, po && po.fasciaB].forEach(function(f, fi){
+        var pod = f ? fasciaPodium(f) : null; if(!pod) return;
+        [pod.w, pod.l, pod.w3].forEach(function(t, pi){ if(!t) return; [t.keeper, t.attacker].forEach(function(pl){ var p = pf(pl.name); if(fi === 0){ p.pod++; if(pi === 0) p.win++; } }); });
+      });
+    });
+    Object.keys(P).forEach(function(k){
+      var p = P[k];
+      var best = null; Object.keys(p.partners).forEach(function(q){ var s = p.partners[q]; if(s.g >= 2 && (!best || s.v > best.v || (s.v === best.v && s.v / s.g > best.v / best.g))) best = s; });
+      var nem = null; Object.keys(p.beatenBy).forEach(function(q){ var s = p.beatenBy[q]; if(s.n >= 2 && (!nem || s.n > nem.n)) nem = s; });
+      p.gold = best && best.v ? { name: best.name, v: best.v, g: best.g } : null;
+      p.nemesis = nem ? { name: nem.name, n: nem.n } : null;
+      p.rating = Math.round(((p.pt + 1.5 * 3) / (p.g + 3)) * 100) / 100;   // punti a partita, prudente con chi ha giocato poco
+      delete p.partners; delete p.beatenBy;
+    });
+    return P;
+  }
+  function profileHtml(p){
+    if(!p) return '<div class="empty-note">Nessun torneo salvato per questo giocatore.</div>';
+    var pct = p.g ? Math.round(p.v * 100 / p.g) : 0;
+    return '<div class="pf-grid"><div><b>' + p.t + '</b><span>tornei</span></div><div><b>' + p.win + '</b><span>vittorie</span></div><div><b>' + p.pod + '</b><span>podi</span></div><div><b>' + pct + '%</b><span>partite vinte</span></div></div>' +
+      '<div class="pf-line">⚽ ' + p.v + ' vinte su ' + p.g + ' · gol ' + p.gf + '-' + p.gs + '</div>' +
+      '<div class="pf-line">💛 Coppia d\'oro: ' + (p.gold ? '<b>' + esc(p.gold.name) + '</b> (' + p.gold.v + ' vittorie in ' + p.gold.g + ' partite insieme)' : '<i>ancora nessuna</i>') + '</div>' +
+      '<div class="pf-line">😈 Bestia nera: ' + (p.nemesis ? '<b>' + esc(p.nemesis.name) + '</b> (ti ha battuto ' + p.nemesis.n + ' volte)' : '<i>nessuna, per ora</i>') + '</div>';
+  }
+  function showProfile(name){
+    var P = buildProfiles(), p = P[norm(name)];
+    var ov = document.createElement("div"); ov.className = "modal-overlay"; ov.style.display = "flex"; ov.style.zIndex = "9700";
+    ov.innerHTML = '<div class="modal-box pf-box"><div class="pf-name">📇 ' + esc(name) + '</div>' + profileHtml(p) + '<button class="btn btn-primary btn-block" type="button" style="margin-top:12px;">Chiudi</button></div>';
+    ov.querySelector("button").addEventListener("click", function(){ ov.remove(); });
+    ov.addEventListener("click", function(e){ if(e.target === ov) ov.remove(); });
+    document.body.appendChild(ov);
+  }
+  // nella Stagione: tocca un nome per aprire la scheda
+  document.addEventListener("click", function(e){
+    var td = e.target.closest && e.target.closest("table.season tbody tr");
+    if(!td) return;
+    var nm = td.querySelector("td:nth-child(2) b"); if(nm) showProfile(nm.textContent);
+  });
+  // per la Live: le schede di chi gioca stasera
+  window.__profilesForCurrent = function(){
+    try{
+      if(!current || !current.rounds || !history || !history.length) return null;
+      var P = buildProfiles(), out = {};
+      current.rounds.forEach(function(r){ r.matches.forEach(function(m){ [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(pl){ var k = norm(pl.name); if(P[k]) out[k] = P[k]; }); }); });
+      return out;
+    }catch(e){ return null; }
+  };
+  window.__profileHtml = profileHtml;
+
+  // ---------- SORTEGGIO GIALLO BILANCIATO (opzione) ----------
+  var LS_BAL = "tg_balanced_v1";
+  function balancedOn(){ try{ return localStorage.getItem(LS_BAL) === "1"; }catch(e){ return false; } }
+  (function(){
+    var wrap = document.getElementById("autoRoundsWrap"); if(!wrap) return;
+    var lab = document.createElement("label"); lab.className = "bal-toggle";
+    lab.innerHTML = '<input type="checkbox" id="balancedToggle"' + (balancedOn() ? " checked" : "") + '> <span><b>⚖️ Sorteggio bilanciato</b> — usa i risultati dei tornei salvati per non mettere insieme due fortissimi o due alle prime armi, e far giocare partite equilibrate. Chi non ha tornei salvati vale "nella media".</span>';
+    wrap.appendChild(lab);
+    document.getElementById("balancedToggle").addEventListener("change", function(){ try{ localStorage.setItem(LS_BAL, this.checked ? "1" : "0"); }catch(e){} toast(this.checked ? "⚖️ Sorteggio bilanciato attivo." : "Sorteggio normale (casuale)."); });
+  })();
+  function balancedRatings(){
+    var P = buildProfiles(), map = {};
+    players.keepers.concat(players.attackers).forEach(function(pl){ var p = P[norm(pl.name)]; map[pl.id] = p ? p.rating : 1.5; });
+    return map;
+  }
 
   // Opzione Fascia B: ripresa dal torneo in corso
   function restoreFasciaUI(){
@@ -8226,6 +9004,174 @@ module.exports = QRCode;
     }catch(e){ box.style.display = "none"; ov.classList.remove("has-qr"); }
   }
   (function(){ var _tvr = tvRender; tvRender = function(){ tvUpdateQr(); return _tvr.apply(this, arguments); }; })();
+
+  // ---------- LIVE (telefono): RISULTATI DAL TELEFONO e ISCRIZIONI DAL LINK ----------
+  // Compaiono solo se l'organizzatore li ha accesi; altrimenti la Live resta identica.
+  (function(){
+    if(!window.__fbViewer) return;
+    var qs = new URLSearchParams(location.search);
+    var liveId = qs.get("live"), db = (qs.get("db") || "").trim().replace(/\/+$/, "");
+    if(!liveId || !db) return;
+    var LS_REF = "tg_ref_v1", LS_SU = "tg_signup_done_v1";
+    function lsGet(k){ try{ return JSON.parse(localStorage.getItem(k) || "null"); }catch(e){ return null; } }
+    function lsSet(k, v){ try{ if(v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+    function ref(){ var r = lsGet(LS_REF); return (r && r.db === db && r.refreshToken) ? r : null; }
+    var refTok = null, refTokExp = 0;
+    function refToken(){
+      var r = ref(), key = window.__liveApiKey;
+      if(!key) return Promise.reject(new Error("off"));
+      if(!r) return Promise.reject(new Error("login"));
+      if(refTok && Date.now() < refTokExp - 60000) return Promise.resolve(refTok);
+      return fetch("https://securetoken.googleapis.com/v1/token?key=" + encodeURIComponent(key), {
+        method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "grant_type=refresh_token&refresh_token=" + encodeURIComponent(r.refreshToken)
+      }).then(function(x){ return x.json().then(function(j){ if(!x.ok) throw new Error("login"); return j; }); })
+        .then(function(j){ refTok = j.id_token; refTokExp = Date.now() + (parseInt(j.expires_in, 10) || 3600) * 1000; if(j.refresh_token){ r.refreshToken = j.refresh_token; lsSet(LS_REF, r); } return refTok; });
+    }
+    function modal(html){
+      var ov = document.createElement("div"); ov.className = "modal-overlay ref-modal"; ov.style.display = "flex"; ov.style.zIndex = "9800";
+      ov.innerHTML = '<div class="modal-box">' + html + '</div>';
+      ov.addEventListener("click", function(e){ if(e.target === ov) ov.remove(); });
+      document.body.appendChild(ov);
+      return ov;
+    }
+
+    // ===== 8. arbitro dal telefono =====
+    function openLogin(){
+      var ov = modal('<div class="pf-name">✍️ Inserisci risultati</div>' +
+        '<div class="su-note" style="margin-bottom:10px;">Entra con la <b>stessa email e password</b> che l\'organizzatore usa per la Live (Firebase). Senza queste credenziali non si possono inserire risultati.</div>' +
+        '<input type="email" id="refEmail" placeholder="Email" autocomplete="username" style="width:100%;margin-bottom:8px;">' +
+        '<input type="password" id="refPw" placeholder="Password" autocomplete="current-password" style="width:100%;">' +
+        '<div class="su-note" id="refErr" style="color:#c1121f;min-height:18px;margin-top:6px;"></div>' +
+        '<div class="ref-btns"><button class="btn btn-ghost" type="button" data-x>Annulla</button><button class="btn btn-primary" type="button" data-go>Entra</button></div>');
+      ov.querySelector("[data-x]").addEventListener("click", function(){ ov.remove(); });
+      ov.querySelector("[data-go]").addEventListener("click", function(){
+        var em = ov.querySelector("#refEmail").value.trim(), pw = ov.querySelector("#refPw").value, er = ov.querySelector("#refErr");
+        if(!em || !pw){ er.textContent = "Inserisci email e password."; return; }
+        er.textContent = "Accesso in corso…";
+        fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + encodeURIComponent(window.__liveApiKey || ""), {
+          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: em, password: pw, returnSecureToken: true })
+        }).then(function(x){ return x.json().then(function(j){ if(!x.ok) throw new Error((j.error && j.error.message) || "login"); return j; }); })
+          .then(function(j){
+            lsSet(LS_REF, { db: db, email: em, refreshToken: j.refreshToken });
+            refTok = j.idToken; refTokExp = Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000;
+            ov.remove(); toast("✍️ Ora tocca un punteggio per inserirlo."); refresh(); enableInputs();
+          }).catch(function(e){ er.textContent = /INVALID|EMAIL_NOT_FOUND|PASSWORD/.test(String(e && e.message)) ? "Email o password non corrette." : "Accesso non riuscito: controlla internet."; });
+      });
+    }
+    function logout(){ lsSet(LS_REF, null); refTok = null; toast("Uscito dall'inserimento risultati."); refresh(); disableInputs(); }
+    function disableInputs(){ document.querySelectorAll(".score-input.ref-tap").forEach(function(inp){ inp.classList.remove("ref-tap"); inp.readOnly = false; inp.disabled = true; }); }
+    function sendResult(entry, inps){
+      return refToken().then(function(tok){
+        return fetch(db + "/live/" + encodeURIComponent(liveId) + "_in.json?auth=" + encodeURIComponent(tok), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(entry) });
+      }).then(function(x){
+        if(x.status === 401 || x.status === 403){ lsSet(LS_REF, null); refresh(); disableInputs(); throw new Error("perm"); }
+        if(!x.ok) throw new Error("net");
+        inps.forEach(function(p){ if(p.el){ p.el.value = p.v === null ? "" : p.v; p.el.classList.add("ref-pending"); } });
+        toast("📤 Inviato! Compare tra pochi secondi.");
+        var want = entry;
+        setTimeout(function(){
+          var m = want.t === "p" ? findPlayoffMatchById(want.id) : findMatchById(want.id); if(!m) return;
+          var got = want.t === "p" ? (m.legs[want.leg] || {}) : m;
+          var a = got.scoreA === undefined ? null : got.scoreA, b = got.scoreB === undefined ? null : got.scoreB;
+          if(a !== want.a || b !== want.b) toast("⚠️ Il risultato non è ancora arrivato all'organizzatore (computer spento o Live spenta?). Avvisalo a voce.");
+        }, 25000);
+      }).catch(function(e){
+        var m = String(e && e.message);
+        toast(m === "perm" ? "⚠️ Questo account non può inserire risultati." : m === "off" ? "L'organizzatore ha chiuso l'inserimento dal telefono: risultato non inviato." : m === "login" ? "Accedi di nuovo per inserire risultati." : "⚠️ Invio non riuscito: controlla internet e riprova.");
+        if(m === "login"){ lsSet(LS_REF, null); refresh(); disableInputs(); }
+      });
+    }
+    function openScore(inp){
+      var ds = inp.dataset, isPo = !!ds.po, m = isPo ? findPlayoffMatchById(ds.po) : findMatchById(ds.match);
+      if(!m || !m.teamA || !m.teamB) return;
+      var leg = isPo ? (parseInt(ds.leg, 10) || 0) : 0, tri = false;
+      if(isPo) forEachFasciaMatch(current, function(mm, f){ if(mm.id === ds.po && f.type === "triangle") tri = true; });
+      var sA = isPo ? ((m.legs[leg] || {}).scoreA) : m.scoreA, sB = isPo ? ((m.legs[leg] || {}).scoreB) : m.scoreB;
+      function v(x){ return x === null || x === undefined ? "" : x; }
+      var ov = modal('<div class="pf-name">✍️ Risultato' + (isPo && !tri ? ' · ' + LEG_LABELS[leg] : '') + '</div>' +
+        '<div class="ref-score"><div><div class="ref-team">' + esc(pairLabel(m.teamA)) + '</div><input type="number" min="0" inputmode="numeric" id="refA" value="' + v(sA) + '"></div>' +
+        '<span class="vs">VS</span><div><div class="ref-team">' + esc(pairLabel(m.teamB)) + '</div><input type="number" min="0" inputmode="numeric" id="refB" value="' + v(sB) + '"></div></div>' +
+        '<div class="ref-btns"><button class="btn btn-ghost" type="button" data-x>Annulla</button><button class="btn btn-ghost" type="button" data-clr>Svuota</button><button class="btn btn-primary" type="button" data-go>📤 Invia</button></div>');
+      var iA = ov.querySelector("#refA"), iB = ov.querySelector("#refB");
+      setTimeout(function(){ try{ iA.focus(); iA.select(); }catch(e){} }, 50);
+      function num(x){ return x === "" || isNaN(+x) ? null : Math.max(0, parseInt(x, 10)); }
+      function partner(side){ return isPo ? document.querySelector('.score-input[data-po="' + ds.po + '"][data-leg="' + ds.leg + '"][data-side="' + side + '"]') : document.querySelector('.score-input[data-match="' + ds.match + '"][data-side="' + side + '"]'); }
+      function go(a, b){
+        ov.remove();
+        sendResult({ t: isPo ? "p" : "g", id: isPo ? ds.po : ds.match, leg: leg, a: a, b: b, at: Date.now() }, [{ el: partner("A"), v: a }, { el: partner("B"), v: b }]);
+      }
+      ov.querySelector("[data-x]").addEventListener("click", function(){ ov.remove(); });
+      ov.querySelector("[data-clr]").addEventListener("click", function(){ go(null, null); });
+      ov.querySelector("[data-go]").addEventListener("click", function(){
+        var a = num(iA.value), b = num(iB.value);
+        if(a === null || b === null){ toast("Scrivi entrambi i punteggi (oppure usa Svuota)."); return; }
+        if(a === b){ toast("Il pareggio non è possibile: controlla i punteggi."); return; }
+        go(a, b);
+      });
+      iB.addEventListener("keydown", function(e){ if(e.key === "Enter") ov.querySelector("[data-go]").click(); });
+      iA.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); iB.focus(); } });
+    }
+    document.addEventListener("click", function(e){
+      var t = e.target && e.target.closest && e.target.closest(".score-input.ref-tap");
+      if(!t) return;
+      e.preventDefault(); t.blur(); openScore(t);
+    }, true);
+    function enableInputs(){
+      if(!(window.__liveApiKey && ref())) return;
+      document.querySelectorAll("#roundsContainer .score-input, #playoffBracket .score-input").forEach(function(inp){
+        if(inp.dataset.po){ var m = findPlayoffMatchById(inp.dataset.po); if(!m || !m.teamA || !m.teamB || m.bye) return; }
+        else if(!inp.dataset.match) return;
+        inp.disabled = false; inp.readOnly = true; inp.classList.add("ref-tap"); inp.setAttribute("inputmode", "none");
+      });
+    }
+    var refBar = null;
+    function refresh(){
+      var bar = document.querySelector("#spectatorNote .fb-viewer-bar"); if(!bar) return;
+      if(!window.__liveApiKey){ if(refBar){ refBar.remove(); refBar = null; } document.body.classList.remove("ref-mode"); disableInputs(); return; }
+      if(!refBar || !bar.contains(refBar)){ refBar = document.createElement("span"); refBar.className = "ref-bar"; bar.appendChild(refBar); }
+      var r = ref();
+      var want = r ? "in" : "out";
+      if(refBar.dataset.state === want) return;
+      refBar.dataset.state = want;
+      refBar.innerHTML = r ? '<span class="ref-on">✍️ Inserimento attivo</span> <button class="btn btn-ghost btn-sm" type="button">Esci</button>' : '<button class="btn btn-sm btn-ref" type="button">✍️ Inserisci risultati</button>';
+      refBar.querySelector("button").addEventListener("click", r ? logout : openLogin);
+      document.body.classList.toggle("ref-mode", !!r);
+    }
+
+    // ===== 9. iscrizione dal link =====
+    var suCard = null;
+    function renderSignup(){
+      var open = !!window.__liveSignup;
+      if(!open){ if(suCard){ suCard.remove(); suCard = null; } return; }
+      if(suCard && document.body.contains(suCard)) return;
+      var anchor = document.getElementById("spectatorNote"); if(!anchor) return;
+      suCard = document.createElement("div"); suCard.className = "card su-card"; suCard.id = "suCard"; suCard.setAttribute("data-vx-tab", "incampo");
+      anchor.parentNode.insertBefore(suCard, anchor.nextSibling);
+      drawSignup();
+    }
+    function drawSignup(){
+      if(!suCard) return;
+      var done = lsGet(LS_SU);
+      if(done && done.live === liveId && Date.now() - done.at < 7 * 864e5){
+        suCard.innerHTML = '<b>📝 Iscrizione</b><div class="su-note">✅ Richiesta inviata per <b>' + esc(done.name) + '</b> (' + (done.role === "P" ? "portiere" : "attaccante") + '). L\'organizzatore la approva prima del torneo.</div><button class="btn btn-ghost btn-sm" type="button" data-more>Iscrivi un\'altra persona</button>';
+        suCard.querySelector("[data-more]").addEventListener("click", function(){ lsSet(LS_SU, null); drawSignup(); });
+        return;
+      }
+      suCard.innerHTML = '<b>📝 Iscriviti al prossimo torneo</b><div class="su-form"><input type="text" id="suName" maxlength="38" placeholder="Nome e cognome"><select id="suRole"><option value="P">🧤 Portiere</option><option value="A">⚡ Attaccante</option></select><button class="btn btn-primary" type="button" id="suGo">Invia</button></div><div class="su-note">L\'organizzatore vede la richiesta e la conferma.</div>';
+      suCard.querySelector("#suGo").addEventListener("click", function(){
+        var name = suCard.querySelector("#suName").value.replace(/\s+/g, " ").trim().slice(0, 38), role = suCard.querySelector("#suRole").value;
+        if(name.length < 2){ toast("Scrivi il tuo nome."); return; }
+        var btn = this; btn.disabled = true;
+        fetch(db + "/signup/" + encodeURIComponent(liveId) + ".json", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: name, role: role, at: Date.now() }) })
+          .then(function(x){ if(!x.ok) throw new Error(String(x.status)); lsSet(LS_SU, { live: liveId, name: name, role: role, at: Date.now() }); toast("✅ Richiesta inviata!"); drawSignup(); })
+          .catch(function(){ btn.disabled = false; toast("⚠️ Iscrizione non riuscita: riprova più tardi o scrivi all'organizzatore."); });
+      });
+    }
+
+    var _vh = window.__viewerHook;
+    window.__viewerHook = function(){ if(_vh) _vh(); try{ refresh(); enableInputs(); renderSignup(); }catch(e){} };
+  })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
   try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}

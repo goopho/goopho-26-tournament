@@ -102,3 +102,78 @@ COSA VEDONO I GIOCATORI SUL TELEFONO
    vede la propria posizione e quando tocca a giocare. In basso c'è un menu
    con In campo, Classifiche, Partite e Tabellone. Il nome scelto resta
    memorizzato sul telefono (si cambia con "Cambia").
+
+==================================================
+NOVITÀ VERSIONE 21: FUNZIONI IN PIÙ DELLA LIVE
+==================================================
+Sono tutte FACOLTATIVE: le due opzioni qui sotto sono SPENTE di partenza.
+Finché non le accendi, la Live funziona esattamente come prima.
+Le trovi nel riquadro "📡 Live per i giocatori", dopo aver collegato
+Firebase.
+
+BACKUP ONLINE AUTOMATICO (sempre attivo quando la Live è collegata)
+   Ogni volta che salvi un torneo, e ogni 10 minuti se qualcosa è cambiato,
+   l'app salva una copia di tutti i dati (iscritti, storico, impostazioni)
+   sul tuo Firebase. Non salva la password né l'accesso.
+   Se cambi computer o il Mac si rompe: apri l'app, collega la Live con la
+   tua email e password, poi in "💾 Backup dei dati" premi
+   "☁️ Recupera dal backup online".
+   Non serve cambiare le regole.
+   IMPORTANTE, una volta sola: se la Live era già collegata prima di
+   questa versione, premi "Scollega" e ricollegati con email e password.
+   Il backup viene salvato in un indirizzo che si ricava dalla tua email
+   E dalla tua password: chi non conosce la password non può trovarlo.
+   (Se un giorno cambi la password di Firebase, il backup ripartirà da
+   zero con quella nuova: salvane subito uno con "☁️ Salva online adesso".)
+
+📱 RISULTATI ANCHE DAL TELEFONO  (opzione "Risultati anche dal telefono")
+   Accesa questa opzione, nella pagina della Live compare il pulsante
+   "✍️ Inserisci risultati". Si entra con la STESSA email e password di
+   Firebase che usi sul Mac: chi non le conosce non può inserire nulla.
+   Poi si tocca un punteggio, si scrivono i gol e si preme "Invia": dopo
+   pochi secondi il risultato compare sul Mac (con un avviso "📱 Dal
+   telefono") e da lì a tutti. Il Mac resta quello che comanda: deve
+   restare acceso, collegato e con la Live attiva. Se dopo 25 secondi il
+   risultato non è arrivato, il telefono avvisa. I risultati mandati
+   mentre la Live era spenta vengono scartati quando la riaccendi, così
+   non sovrascrivono quelli che hai scritto tu nel frattempo.
+   Se tieni aperte più finestre dell'app (per esempio una in Modalità TV),
+   i risultati dal telefono li riceve una sola: quella normale.
+   Non serve cambiare le regole.
+
+📝 ISCRIZIONI DAL LINK  (opzione "Iscrizioni dal link")
+   Accesa questa opzione, nella pagina della Live compare il riquadro
+   "Iscriviti al prossimo torneo" (nome + portiere/attaccante).
+   Le richieste arrivano nella scheda Giocatori, nel riquadro
+   "📥 Iscrizioni dal link": "✓ Aggiungi" la inserisce tra gli iscritti,
+   "✕" la scarta. Nessuno entra in elenco senza il tuo ok.
+
+   QUESTA opzione richiede una regola in più su Firebase.
+   Realtime Database > "Regole": sostituisci tutto con questo (mettendo la
+   tua email nei TRE punti indicati) e premi "Pubblica":
+
+   {
+     "rules": {
+       ".read": false,
+       ".write": false,
+       "live": {
+         "$id": {
+           ".read": true,
+           ".write": "auth != null && auth.token.email === 'LA_TUA_EMAIL'"
+         }
+       },
+       "signup": {
+         "$id": {
+           ".read": "auth != null && auth.token.email === 'LA_TUA_EMAIL'",
+           "$entry": {
+             ".write": "!data.exists() || (auth != null && auth.token.email === 'LA_TUA_EMAIL')",
+             ".validate": "newData.hasChildren(['name','role']) && newData.child('name').isString() && newData.child('name').val().length < 40"
+           }
+         }
+       }
+     }
+   }
+
+   Cosa significa: chiunque abbia il link può LASCIARE una richiesta, ma
+   solo tu puoi LEGGERLE e cancellarle. Se manca la regola, nella scheda
+   Giocatori compare l'avviso "Firebase non permette ancora le iscrizioni".
