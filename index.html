@@ -962,6 +962,8 @@
   #liveInline .li-title{ font-weight:900; font-size:16px; color:#c1121f; }
   #liveInline .li-sub{ font-size:13px; color:var(--ink-soft); margin:4px 0 8px; line-height:1.4; }
   #liveInline .li-link{ font-size:11px; color:var(--ink-soft); word-break:break-all; margin-bottom:8px; }
+  #liveInline .li-opts{ display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:10px; font-size:13.5px; font-weight:700; color:#14294a; }
+  #liveInline .li-opts label{ display:flex; align-items:center; gap:6px; cursor:pointer; } #liveInline .li-opts input{ width:18px; height:18px; margin:0; }
   #liveInline .li-btns{ display:flex; gap:8px; flex-wrap:wrap; } #liveInline .li-btns .btn{ flex:1 1 140px; min-width:0; padding:8px 10px; font-size:13px; }
   .top-actions .btn-ghost{
     background: rgba(255,255,255,0.10); color: var(--chalk); border:1.5px solid rgba(230,226,211,0.55);
@@ -1385,7 +1387,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 38</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 39</span></div>
 
 </div>
 
@@ -8872,14 +8874,19 @@ module.exports = QRCode;
       inlineLink = key;
       box.innerHTML = '<canvas id="liQr"></canvas><div class="li-txt"><div class="li-title">' + (i.enabled ? '● In diretta' : 'Live spenta') + ' · inquadra il QR</div>' +
         '<div class="li-sub">' + (i.enabled ? 'I giocatori vedono risultati, classifiche e quando tocca a loro.' : 'Accendila col pulsante rosso: il QR e il link restano sempre gli stessi.') + '</div>' +
-        '<div class="li-link">' + esc(i.link) + '</div><div class="li-btns"><button class="btn btn-primary" type="button" id="liCopy">📋 Copia link</button><button class="btn btn-whatsapp" type="button" id="liWa">💬 WhatsApp</button></div></div>';
+        '<div class="li-link">' + esc(i.link) + '</div><div class="li-btns"><button class="btn btn-primary" type="button" id="liCopy">📋 Copia link</button><button class="btn btn-whatsapp" type="button" id="liWa">💬 WhatsApp</button></div>' +
+        '<div class="li-opts"><label><input type="checkbox" data-mirror="optRemote"> 📱 Risultati anche dal telefono</label><label><input type="checkbox" data-mirror="optSignup"> 📝 Iscrizioni dal link</label></div></div>';
       try{ qrCanvas(i.link, document.getElementById("liQr"), 6); }catch(e){}
+      box.querySelectorAll("[data-mirror]").forEach(function(cb){
+        cb.addEventListener("change", function(){ var real = document.getElementById(cb.dataset.mirror); if(!real) return; real.checked = cb.checked; real.dispatchEvent(new Event("change", { bubbles: true })); });
+      });
       document.getElementById("liCopy").addEventListener("click", function(){
         try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(i.link).then(function(){ toast("🔗 Link copiato."); }, function(){ window.prompt("Copia il link:", i.link); }); } else window.prompt("Copia il link:", i.link); }catch(e){ window.prompt("Copia il link:", i.link); }
       });
       document.getElementById("liWa").addEventListener("click", function(){ window.open("https://wa.me/?text=" + encodeURIComponent("🎥 Segui " + ((current && current.name) || "il torneo") + " in diretta 👉 " + i.link), "_blank"); });
     }
-    refreshBtn(); refreshInline(); setInterval(function(){ refreshBtn(); refreshInline(); }, 2000);
+    function syncMirrors(){ document.querySelectorAll("#liveInline [data-mirror]").forEach(function(cb){ var real = document.getElementById(cb.dataset.mirror); if(real && document.activeElement !== cb) cb.checked = real.checked; }); }
+    refreshBtn(); refreshInline(); syncMirrors(); setInterval(function(){ refreshBtn(); refreshInline(); syncMirrors(); }, 2000);
   })();
 
   // ---------- ORARIO DI FINE PREVISTO ----------

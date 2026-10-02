@@ -323,3 +323,7 @@ NOVITÀ (versione 38) - CONTROLLO FINALE
    - Modalità TV: i pulsanti in basso non coprono più il reticolo.
    - Sorteggio più veloce quando qualche ripetizione è inevitabile.
    - Avviso "nuova versione" anche alla prima apertura.
+
+NOVITÀ (versione 39)
+   - Le opzioni "📱 Risultati anche dal telefono" e "📝 Iscrizioni dal link"
+     compaiono anche nel riquadro del QR, sotto il pulsante rosso LIVE.
