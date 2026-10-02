@@ -337,3 +337,7 @@ NOVITÀ (versione 41)
    - "📥 Aggiungi tornei da un'altra versione" (in Backup dei dati): aggiunge
      allo Storico i tornei di un'altra copia dell'app senza cancellare niente
      (incolla il testo esportato o scegli un file di backup).
+
+NOVITÀ (versione 42)
+   - Storico: apri un torneo e in fondo trovi "🗑️ Elimina questo torneo dallo
+     storico" (chiede conferma).

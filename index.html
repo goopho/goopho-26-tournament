@@ -1388,7 +1388,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 41</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 42</span></div>
 
 </div>
 
@@ -6141,7 +6141,19 @@ module.exports = QRCode;
                   '<span>'+esc(m.teamB.keeper.name)+' / '+esc(m.teamB.attacker.name)+'</span></div>';
               });
             });
+            html += '<div style="margin-top:14px;"><button class="btn btn-danger" type="button" data-del-hist style="padding:8px 14px;font-size:13px;">🗑️ Elimina questo torneo dallo storico</button></div>';
             detail.innerHTML = html;
+            var db = detail.querySelector("[data-del-hist]");
+            if(db) db.addEventListener("click", function(ev){
+              ev.stopPropagation();
+              showConfirm("Eliminare dallo storico il torneo \"" + h.name + "\" del " + dateStr + "? Sparisce anche dalla classifica di Stagione.", function(){
+                var ix = history.findIndex(function(x){ return x.id === h.id && x.date === h.date; });
+                if(ix === -1) ix = history.indexOf(h);
+                if(ix > -1){ history.splice(ix, 1); persistHistory(); }
+                renderHistory(); try{ renderSeason(); }catch(e){}
+                toast("🗑️ Torneo eliminato dallo storico.");
+              });
+            });
           }
         });
         wrap.appendChild(item);
