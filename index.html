@@ -1296,6 +1296,7 @@
             <input type="file" id="importDataFile" accept=".json,application/json" style="display:none">
           </div>
           <div class="fb-status" id="backupStatus">Consiglio: esporta i dati dopo ogni torneo.</div>
+          <div class="fb-row"><button class="btn btn-ghost" id="mergeHistBtn" type="button">📥 Aggiungi tornei da un'altra versione (senza cancellare niente)</button></div>
         </div>
       </details>
     </div>
@@ -1387,7 +1388,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 40</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 41</span></div>
 
 </div>
 
@@ -9627,6 +9628,50 @@ module.exports = QRCode;
       ov.appendChild(b);
     }
     document.getElementById("tvModeBtn").addEventListener("click", function(){ tvRotStart = Date.now(); });
+  })();
+
+  // ---------- AGGIUNGI TORNEI DA UN'ALTRA VERSIONE (unisce lo storico, non cancella niente) ----------
+  (function(){
+    var btn = document.getElementById("mergeHistBtn"); if(!btn) return;
+    function extract(obj){
+      if(!obj) return null;
+      if(Array.isArray(obj)) return { h: obj, a: null };
+      var d = obj.data || obj;
+      var h = d.tg_history_v1 || d.history || null, a = d.tg_player_archive_v1 || d.archive || null;
+      if(typeof h === "string"){ try{ h = JSON.parse(h); }catch(e){ h = null; } }
+      if(typeof a === "string"){ try{ a = JSON.parse(a); }catch(e){ a = null; } }
+      return Array.isArray(h) ? { h: h, a: a } : null;
+    }
+    function merge(txt){
+      var obj; try{ obj = JSON.parse(String(txt).trim()); }catch(e){ toast("⚠️ Il testo non è valido: copia tutto, dalla prima all'ultima parentesi."); return false; }
+      var x = extract(obj); if(!x){ toast("⚠️ Non trovo tornei in questi dati."); return false; }
+      var have = {}; history.forEach(function(h){ have[h.id] = 1; });
+      var add = x.h.filter(function(h){ return h && h.id && h.rounds && !have[h.id]; });
+      add.forEach(function(h){ history.push(h); });
+      history.sort(function(a, b){ return String(b.date || b.savedAt || "").localeCompare(String(a.date || a.savedAt || "")); });
+      persistHistory();
+      // nomi abituali: aggiunge chi manca
+      add.forEach(function(h){ (h.standings || []).forEach(function(r){ if(r && r.name){ var k = r.role === "A" ? "attackers" : "keepers", key = norm(r.name); if(!archive[k][key]) archive[k][key] = { name: r.name, n: 1 }; } }); });
+      if(x.a && x.a.keepers) ["keepers","attackers"].forEach(function(k){ Object.keys(x.a[k] || {}).forEach(function(key){ if(!archive[k][key]) archive[k][key] = x.a[k][key]; }); });
+      safeSet(LS_ARCHIVE, archive);
+      try{ renderHistory(); }catch(e){} try{ renderSeason(); }catch(e){} try{ if(typeof renderFavs === "function") renderFavs(); }catch(e){}
+      toast(add.length ? "✅ Aggiunti " + add.length + " tornei allo Storico (" + (x.h.length - add.length) + " erano già presenti)." : "Nessun torneo nuovo: erano già tutti nello Storico.");
+      return true;
+    }
+    btn.addEventListener("click", function(){
+      var ov = document.createElement("div"); ov.className = "modal-overlay"; ov.style.display = "flex"; ov.style.zIndex = "9700";
+      ov.innerHTML = '<div class="modal-box" style="max-width:520px;"><div style="font-weight:900;font-size:17px;color:var(--pitch);margin-bottom:8px;">📥 Aggiungi tornei allo Storico</div>' +
+        '<div style="font-size:13.5px;line-height:1.45;margin-bottom:8px;">Incolla qui i dati copiati dalla vecchia versione (pulsante "📤 Esporta lo storico") oppure scegli un file di backup. I tornei che hai già <b>non vengono toccati</b>: si aggiungono solo quelli che mancano.</div>' +
+        '<textarea id="mergeTxt" rows="6" style="width:100%;font-size:12px;font-family:monospace;" placeholder="Incolla qui…"></textarea>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"><button class="btn btn-ghost" type="button" data-file style="flex:1 1 140px;">📂 Scegli un file</button><button class="btn btn-ghost" type="button" data-x style="flex:1 1 100px;">Annulla</button><button class="btn btn-primary" type="button" data-go style="flex:1 1 140px;">Aggiungi</button></div>' +
+        '<input type="file" accept=".json,.txt,application/json,text/plain" style="display:none"></div>';
+      document.body.appendChild(ov);
+      var fi = ov.querySelector('input[type=file]');
+      ov.querySelector("[data-x]").addEventListener("click", function(){ ov.remove(); });
+      ov.querySelector("[data-go]").addEventListener("click", function(){ if(merge(ov.querySelector("#mergeTxt").value)) ov.remove(); });
+      ov.querySelector("[data-file]").addEventListener("click", function(){ fi.click(); });
+      fi.addEventListener("change", function(){ var f = fi.files && fi.files[0]; if(!f) return; var rd = new FileReader(); rd.onload = function(){ if(merge(rd.result)) ov.remove(); }; rd.readAsText(f); });
+    });
   })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.

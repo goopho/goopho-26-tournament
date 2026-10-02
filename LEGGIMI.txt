@@ -332,3 +332,8 @@ NOVITÀ (versione 40)
    - Backup online: pulsante "🔑 Attiva backup online" direttamente nel
      riquadro Backup (chiede una volta la password), senza dover scollegare
      la Live.
+
+NOVITÀ (versione 41)
+   - "📥 Aggiungi tornei da un'altra versione" (in Backup dei dati): aggiunge
+     allo Storico i tornei di un'altra copia dell'app senza cancellare niente
+     (incolla il testo esportato o scegli un file di backup).
