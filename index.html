@@ -1387,7 +1387,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 39</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 40</span></div>
 
 </div>
 
@@ -7163,13 +7163,44 @@ module.exports = QRCode;
       var el = $("cloudStatus"); if(!el) return;
       var last = null; try{ last = localStorage.getItem(LS_CLOUD); }catch(e){}
       if(!cfg.refreshToken){ el.innerHTML = "☁️ Backup online: si attiva da solo quando colleghi la Live (sezione in fondo)."; el.className = "fb-status"; return; }
-      if(!cfg.bkKey){ el.innerHTML = "☁️ Backup online: per attivarlo, nel riquadro Live premi <b>Scollega</b> e ricollegati una volta (serve la password)."; el.className = "fb-status"; return; }
+      if(!cfg.bkKey){
+        el.innerHTML = '☁️ Backup online non ancora attivo: serve una volta la password di Firebase. <button class="btn btn-primary btn-sm" type="button" id="cloudActivateBtn" style="margin-left:6px;">🔑 Attiva backup online</button>';
+        el.className = "fb-status";
+        var ab = document.getElementById("cloudActivateBtn"); if(ab) ab.addEventListener("click", activateCloud);
+        return;
+      }
       el.innerHTML = "☁️ Backup online automatico <b>attivo</b>" + (last ? " · ultimo: " + new Date(+last).toLocaleString("it-IT") : " · ancora nessuno") + ". Si aggiorna quando salvi un torneo e ogni 10 minuti se qualcosa è cambiato.";
       el.className = "fb-status on";
     }
+    // attiva il backup chiedendo la password (senza scollegare la Live)
+    function activateCloud(){
+      var ov = document.createElement("div"); ov.className = "modal-overlay"; ov.style.display = "flex"; ov.style.zIndex = "9700";
+      ov.innerHTML = '<div class="modal-box"><div style="font-weight:900;font-size:17px;color:var(--pitch);margin-bottom:8px;">🔑 Attiva il backup online</div>' +
+        '<div style="font-size:13.5px;line-height:1.45;margin-bottom:10px;">Scrivi la password di Firebase di <b>' + esc(cfg.email || "") + '</b> (la stessa con cui hai collegato la Live). Serve una volta sola e non viene salvata.</div>' +
+        '<input type="password" id="cloudPw" autocomplete="current-password" placeholder="Password" style="width:100%;">' +
+        '<div id="cloudPwErr" style="color:#c1121f;font-size:13px;min-height:18px;margin-top:6px;"></div>' +
+        '<div style="display:flex;gap:8px;margin-top:8px;"><button class="btn btn-ghost" type="button" data-x style="flex:1;">Annulla</button><button class="btn btn-primary" type="button" data-go style="flex:1;">Attiva</button></div></div>';
+      document.body.appendChild(ov);
+      var inp = ov.querySelector("#cloudPw"), er = ov.querySelector("#cloudPwErr");
+      setTimeout(function(){ try{ inp.focus(); }catch(e){} }, 50);
+      ov.querySelector("[data-x]").addEventListener("click", function(){ ov.remove(); });
+      function go(){
+        var pw = inp.value; if(!pw){ er.textContent = "Scrivi la password."; return; }
+        er.textContent = "Controllo…";
+        fetch(AUTH_URL + encodeURIComponent(cfg.apiKey), { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: cfg.email, password: pw, returnSecureToken: true }) })
+          .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error((j.error && j.error.message) || "login"); return j; }); })
+          .then(function(j){
+            cfg.refreshToken = j.refreshToken; idToken = j.idToken; idTokenExp = Date.now() + (parseInt(j.expiresIn, 10) || 3600) * 1000;
+            return makeBkKey(cfg.email, pw).then(function(k){ cfg.bkKey = k; save(); ov.remove(); cloudStatus(); toast("☁️ Backup online attivato."); return cloudBackup(true); });
+          })
+          .catch(function(e){ er.textContent = /INVALID|PASSWORD|EMAIL_NOT_FOUND/.test(String(e && e.message)) ? "Password non corretta." : "Non riesco a collegarmi: controlla internet."; });
+      }
+      ov.querySelector("[data-go]").addEventListener("click", go);
+      inp.addEventListener("keydown", function(e){ if(e.key === "Enter") go(); });
+    }
     function cloudBackup(manual){
       if(!cfg.refreshToken || !cfg.dbUrl || !cfg.email) { if(manual) toast("Collega prima la Live (email e password di Firebase)."); return Promise.resolve(false); }
-      if(!cfg.bkKey){ if(manual) toast("Per il backup online: Scollega la Live e ricollegati una volta con la password."); return Promise.resolve(false); }
+      if(!cfg.bkKey){ if(manual) activateCloud(); return Promise.resolve(false); }
       var data = collectAll(), sig = JSON.stringify(data);
       if(!manual && sig === lastCloudSig) return Promise.resolve(true);
       var payload = { app: "GOOPHO 26", version: 1, exportedAt: new Date().toISOString(), data: data };

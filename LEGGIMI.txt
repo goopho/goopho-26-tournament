@@ -327,3 +327,8 @@ NOVITÀ (versione 38) - CONTROLLO FINALE
 NOVITÀ (versione 39)
    - Le opzioni "📱 Risultati anche dal telefono" e "📝 Iscrizioni dal link"
      compaiono anche nel riquadro del QR, sotto il pulsante rosso LIVE.
+
+NOVITÀ (versione 40)
+   - Backup online: pulsante "🔑 Attiva backup online" direttamente nel
+     riquadro Backup (chiede una volta la password), senza dover scollegare
+     la Live.

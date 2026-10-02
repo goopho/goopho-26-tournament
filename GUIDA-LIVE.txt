@@ -120,7 +120,8 @@ BACKUP ONLINE AUTOMATICO (sempre attivo quando la Live è collegata)
    "☁️ Recupera dal backup online".
    Non serve cambiare le regole.
    IMPORTANTE, una volta sola: se la Live era già collegata prima di
-   questa versione, premi "Scollega" e ricollegati con email e password.
+   questa versione, in "💾 Backup dei dati" premi "🔑 Attiva backup online"
+   e scrivi la password di Firebase (non serve scollegare la Live).
    Il backup viene salvato in un indirizzo che si ricava dalla tua email
    E dalla tua password: chi non conosce la password non può trovarlo.
    (Se un giorno cambi la password di Firebase, il backup ripartirà da
