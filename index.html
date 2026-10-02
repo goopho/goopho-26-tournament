@@ -27,7 +27,7 @@
   #tvOverlay .tv-head{ display:flex; align-items:center; justify-content:space-between; gap:20px; padding:1.6vh 2.4vw 0.6vh; }
   #tvOverlay .tv-title{ font-size:clamp(18px, 3.2vw, 64px); font-weight:800; letter-spacing:-0.01em; text-shadow:0 3px 14px rgba(0,0,0,0.35); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #tvOverlay .tv-clock{ font-size:clamp(16px, 2.6vw, 52px); font-weight:600; font-variant-numeric:tabular-nums; opacity:.9; }
-  #tvOverlay .tv-viewport{ flex:1; position:relative; overflow:hidden; }
+  #tvOverlay .tv-viewport{ flex:1; position:relative; overflow:hidden; margin-bottom:34px; }
   #tvOverlay .tv-stage{ position:absolute; left:50%; top:0; transform-origin: top center; display:grid; gap:28px; align-items:start; }
   #tvOverlay .tv-stage .card{ margin:0; width:auto; min-width:540px; }
   #tvOverlay .tv-stage [id^="tieBreakPanel"], #tvOverlay .tv-stage .btn, #tvOverlay .tv-stage input{ display:none !important; }
@@ -1385,7 +1385,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 37</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 38</span></div>
 
 </div>
 
@@ -3457,7 +3457,9 @@ module.exports = QRCode;
     for(var i = 0; i < 60; i++){
       var r = generateDrawOnce(keepers, attackers, maxRounds), rp = drawPartnerRepeats(r);
       if(rp < bestRep){ best = r; bestRep = rp; }
-      if(bestRep === 0 || Date.now() - t0 > 2000) break;
+      var slots = 0; r.forEach(function(rd){ slots += (rd.matches || []).length * 2; });
+      var minRep = Math.max(0, slots - keepers.length * attackers.length);   // ripetizioni inevitabili
+      if(bestRep <= minRep || Date.now() - t0 > 2000) break;
     }
     return best;
   }
@@ -4330,6 +4332,7 @@ module.exports = QRCode;
     renderSwatches();
     document.getElementById("matchesPerPlayer").value = 5;
     document.getElementById("drawMode").value = "rotation";
+    setTimeout(function(){ try{ syncFasciaUI(); }catch(e){} }, 0);
     manualPairs = {};
     pairOpts = { mode: "random", assign: {}, seeds: {} };
     persistManualPairs();
@@ -8642,7 +8645,9 @@ module.exports = QRCode;
       ".gx-table{ border-collapse:separate; border-spacing:3px; font-size:16px; }" +
       ".gx-table th, .gx-table td{ text-align:center; padding:6px 8px; border-radius:7px; white-space:nowrap; }" +
       ".gx-table td small{ display:block; font-size:10.5px; font-weight:700; opacity:.85; margin-top:1px; max-width:84px; overflow:hidden; text-overflow:ellipsis; }" +
-      ".gx-table td small.gx-vs{ font-size:9.5px; font-weight:600; opacity:.75; max-width:128px; white-space:nowrap; margin:1px auto 0; }" +
+      ".gx-table td small.gx-vs{ font-size:10.5px; font-weight:700; opacity:.9; max-width:150px; white-space:nowrap; margin:1px auto 0; }" +
+      ".gx-giallo td small{ max-width:150px; }" +
+      "#gridInline .gx-grid:has(.gx-giallo){ grid-template-columns:1fr !important; }" +
       ".gx-rowh{ text-align:left !important; font-weight:800; background:rgba(20,41,74,0.06); }" +
       ".gx-nq .gx-rowh{ opacity:.6; }" +
       ".gx-cut td, .gx-cut th{ box-shadow:0 3px 0 -1px #d4af37; }" +
@@ -9320,6 +9325,8 @@ module.exports = QRCode;
   document.getElementById("fasciaBCount").addEventListener("input", function(){ setFinalPref("fasciaBCount", fasciaBCountVal()); });
   document.getElementById("fasciaACount").addEventListener("input", function(){ setFinalPref("fasciaACount", fasciaACountVal()); });
   restoreFasciaUI();
+  try{ if(current && current.rounds && current.rounds.length) renderStandings(); }catch(e){}
+  document.getElementById("genPlayoffBtn").addEventListener("click", function(){ setTimeout(function(){ try{ renderStandings(); }catch(e){} }, 0); });
   setTimeout(updFinalSetup, 0); window.addEventListener("load", function(){ updFinalSetup(); });
   (function(){ var _rr5 = renderRounds; renderRounds = function(){ _rr5.apply(this, arguments); restoreFasciaUI(); }; })();
 
@@ -9598,7 +9605,8 @@ if("serviceWorker" in navigator && location.protocol !== "file:"){
       setInterval(function(){ reg.update().catch(function(){}); }, 30 * 60 * 1000);
     }).catch(function(){});
     navigator.serviceWorker.addEventListener("controllerchange", function(){
-      if(!hadController || document.getElementById("swUpdateBar")) return;
+      if(!hadController){ hadController = true; return; }   // primo avvio: è solo l'installazione
+      if(document.getElementById("swUpdateBar")) return;
       var bar = document.createElement("div"); bar.id = "swUpdateBar";
       bar.style.cssText = "position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;background:#ffd868;color:#14294a;font:700 15px -apple-system,BlinkMacSystemFont,sans-serif;padding:12px 18px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.45);display:flex;gap:12px;align-items:center;";
       bar.innerHTML = '✨ È pronta una nuova versione di GOOPHO 26 <button type="button" style="border:0;border-radius:999px;background:#14294a;color:#fff;font-weight:800;padding:8px 14px;cursor:pointer;">Aggiorna</button>';

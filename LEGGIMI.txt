@@ -313,3 +313,13 @@ NOVITÀ (versione 37)
      permettono. Il sorteggio prova più combinazioni finché ci riesce.
    - Reticolo giocatori x giornate: sotto il risultato, oltre al compagno,
      compaiono gli avversari ("vs …").
+
+NOVITÀ (versione 38) - CONTROLLO FINALE
+   - La descrizione della Fase finale rispetta subito le scelte salvate
+     (prima, dopo aver ricaricato la pagina, poteva mostrare numeri vecchi).
+   - "Nuovo torneo" rimette subito i campi giusti della Fase finale.
+   - Reticolo Giallo nella pagina: portieri e attaccanti uno sotto l'altro, a
+     tutta larghezza, con nomi e avversari più leggibili.
+   - Modalità TV: i pulsanti in basso non coprono più il reticolo.
+   - Sorteggio più veloce quando qualche ripetizione è inevitabile.
+   - Avviso "nuova versione" anche alla prima apertura.
