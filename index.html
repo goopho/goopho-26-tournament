@@ -952,6 +952,22 @@
   #backupCard{ --rc1:#4d8dff; --rc2:#1a45d8; }
   #fbLiveCard{ --rc1:#ff5a5a; --rc2:#c01f2e; }
   #rulesCard{ --rc1:#a07bff; --rc2:#6232e0; }
+  #themeCard{ --rc1:#ff6fb5; --rc2:#c2187a; }
+  .th-top{ display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; justify-content:space-between; margin:12px 0; }
+  .th-live{ display:flex; gap:8px; align-items:center; font-weight:700; font-size:13.5px; cursor:pointer; } .th-live input{ width:18px; height:18px; margin:0; }
+  .th-grid{ columns:300px; column-gap:12px; }
+  .th-group{ border:1.5px solid var(--line); border-radius:12px; padding:8px 12px 10px; margin:0 0 12px; min-width:0; background:rgba(255,255,255,0.35); break-inside:avoid; display:block; width:100%; box-sizing:border-box; }
+  .th-group legend{ font-weight:900; font-size:13.5px; padding:0 6px; color:var(--pitch); }
+  .th-row{ display:flex; align-items:center; gap:8px; padding:5px 0; border-top:1px solid rgba(20,41,74,0.07); }
+  .th-row:first-of-type{ border-top:none; }
+  .th-l{ flex:1 1 auto; min-width:0; font-size:13px; }
+  .th-row.changed .th-l{ font-weight:800; }
+  .th-c{ display:flex; align-items:center; gap:6px; flex:0 0 auto; }
+  .th-c input[type=color]{ width:46px; height:30px; padding:0 2px; border:1px solid var(--line); border-radius:8px; background:#fff; cursor:pointer; }
+  .th-c input[type=range]{ width:110px; } .th-val{ font-size:12px; font-weight:700; min-width:40px; text-align:right; font-variant-numeric:tabular-nums; }
+  .th-c select{ max-width:150px; font-size:13px; padding:4px 6px; }
+  .th-reset{ border:none; background:none; color:var(--ink-soft); font-size:15px; cursor:pointer; padding:2px 4px; border-radius:6px; visibility:hidden; }
+  .th-row.changed .th-reset{ visibility:visible; } .th-reset:hover{ background:rgba(20,41,74,0.08); }
   .top-actions .btn{ flex:1 1 calc(50% - 8px); min-width:150px; }
   .top-actions .btn-livecam.lc-big{ flex:1 1 100%; font-size:21px; padding:16px 20px; letter-spacing:.06em; border-radius:22px; margin-top:6px; gap:14px; }
   .btn-livecam .lc-cam{ display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%; background:#fff; font-size:24px; box-shadow:0 0 0 3px rgba(255,255,255,0.35); }
@@ -1388,7 +1404,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 43</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 44</span></div>
 
 </div>
 
@@ -7077,6 +7093,7 @@ module.exports = QRCode;
       try{ var pf = window.__profilesForCurrent ? window.__profilesForCurrent() : null; if(pf) payload.prof = JSON.stringify(pf); }catch(e){}
       if(cfg.allowRemote) payload.k = cfg.apiKey;
       if(cfg.signupOpen) payload.su = true;
+      try{ var th = window.__themeForLive && window.__themeForLive(); if(th) payload.th = JSON.stringify(th); }catch(e){}
       getToken().then(function(tok){
         return fetch(cfg.dbUrl + "/live/" + encodeURIComponent(cfg.liveId) + ".json?auth=" + encodeURIComponent(tok), {
           method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
@@ -7380,7 +7397,7 @@ module.exports = QRCode;
           if(obj.updatedAt && obj.updatedAt === lastStamp) return;
           lastStamp = obj.updatedAt || null;
           try{ current = obj.data ? relinkGroupRounds(JSON.parse(obj.data)) : null; }catch(e){ return; }
-          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; }catch(e){}
+          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; window.__liveTheme = obj.th ? JSON.parse(obj.th) : null; }catch(e){}
         }
         render();
       }
@@ -9685,6 +9702,184 @@ module.exports = QRCode;
       fi.addEventListener("change", function(){ var f = fi.files && fi.files[0]; if(!f) return; var rd = new FileReader(); rd.onload = function(){ if(merge(rd.result)) ov.remove(); }; rd.readAsText(f); });
     });
   })();
+
+  // ---------- ASPETTO PERSONALIZZABILE (colori, caratteri, dimensioni) ----------
+  // Si salva in questo browser (e nei backup). Si cambia solo ciò che l'organizzatore tocca:
+  // tutto il resto resta com'è. Con la Live accesa i giocatori vedono lo stesso aspetto.
+  var LS_THEME = "tg_theme_v1";
+  var THEME_FONTS = ["", "Montserrat", "Poppins", "Nunito", "Rubik", "Raleway", "Oswald", "Barlow Condensed", "Bebas Neue", "Anton", "Titan One", "Baloo 2", "Lobster", "Playfair Display", "Roboto Slab", "Comfortaa"];
+  var THEME_SPEC = [
+    { t: "🌌 Sfondo della pagina (anche in TV)", items: [
+      { k: "bg", l: "Colore di fondo", d: "#050d33" },
+      { k: "glow", l: "Luce in alto a sinistra", d: "#1a4dff" }
+    ]},
+    { t: "🗂️ Riquadri (finestre)", items: [
+      { k: "card", l: "Sfondo dei riquadri", d: "#e6e2d3" },
+      { k: "cardText", l: "Testo nei riquadri", d: "#1a2233" },
+      { k: "radius", l: "Angoli arrotondati", type: "range", min: 0, max: 30, d: 14, u: "px" },
+      { k: "zoom", l: "Grandezza generale della pagina", type: "range", min: 80, max: 130, d: 100, u: "%" }
+    ]},
+    { t: "🔠 Titoli dei riquadri", items: [
+      { k: "titleFont", l: "Carattere", type: "font", d: "" },
+      { k: "titleColor", l: "Colore", d: "#0b2170" },
+      { k: "titleSize", l: "Dimensione", type: "range", min: 70, max: 170, d: 100, u: "%" }
+    ]},
+    { t: "🏆 Titolo grande nell'immagine", items: [
+      { k: "heroFont", l: "Carattere", type: "font", d: "" },
+      { k: "heroColor", l: "Colore della scritta grande", d: "#ffffff" },
+      { k: "heroSize", l: "Dimensione", type: "range", min: 50, max: 130, d: 100, u: "%" }
+    ]},
+    { t: "✏️ Testo normale", items: [
+      { k: "textFont", l: "Carattere", type: "font", d: "" }
+    ]},
+    { t: "🔘 Pulsanti", items: [
+      { k: "btnFont", l: "Carattere", type: "font", d: "" },
+      { k: "btnSize", l: "Dimensione", type: "range", min: 80, max: 140, d: 100, u: "%" },
+      { k: "btnSave", l: "Salva / Sorteggia (oro)", d: "#f5a623" },
+      { k: "btnSaveText", l: "Testo dei pulsanti oro", d: "#050d33" },
+      { k: "btnShare", l: "Condividi (verde)", d: "#22c55e" },
+      { k: "btnTv", l: "Modalità TV", d: "#d0142c" },
+      { k: "btnView", l: "Reticolo / Stampe", d: "#1a86ff" },
+      { k: "btnUndo", l: "Annulla", d: "#6d3df0" },
+      { k: "btnRisk", l: "Azzera / Nuovo torneo", d: "#f2561d" },
+      { k: "btnLive", l: "LIVE per i giocatori", d: "#c1121f" },
+      { k: "btnText", l: "Testo dei pulsanti colorati", d: "#ffffff" }
+    ]},
+    { t: "📊 Classifiche", items: [
+      { k: "lbKeep", l: "Classifica portieri", d: "#1c5fe0" },
+      { k: "lbAtt", l: "Classifica attaccanti", d: "#e02a18" }
+    ]},
+    { t: "👥 Iscritti", items: [
+      { k: "chipKeep", l: "Portieri", d: "#1a4dff" },
+      { k: "chipAtt", l: "Attaccanti", d: "#d81e2c" }
+    ]},
+    { t: "📂 Riquadri in fondo", items: [
+      { k: "rcLate", l: "Coppia in ritardo", d: "#138a43" },
+      { k: "rcSub", l: "Sostituisci un giocatore", d: "#0d7f74" },
+      { k: "rcRetire", l: "Ritiro di una coppia", d: "#e0461b" },
+      { k: "rcBackup", l: "Backup dei dati", d: "#1a45d8" },
+      { k: "rcLive", l: "Live per i giocatori", d: "#c01f2e" },
+      { k: "rcRules", l: "Guida", d: "#6232e0" },
+      { k: "rcTheme", l: "Aspetto dell'app", d: "#c2187a" }
+    ]}
+  ];
+  function themeGet(){ try{ return JSON.parse(localStorage.getItem(LS_THEME) || "{}") || {}; }catch(e){ return {}; } }
+  function themeSet(t){ try{ localStorage.setItem(LS_THEME, JSON.stringify(t)); }catch(e){} }
+  function hexRgb(h){ h = String(h || "").replace("#", ""); if(h.length === 3) h = h.replace(/./g, "$&$&"); var n = parseInt(h, 16) || 0; return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; }
+  function mix(h, to, a){ var c = hexRgb(h), t = to === "w" ? [255, 255, 255] : [0, 0, 0]; return "rgb(" + c.map(function(v, i){ return Math.round(v + (t[i] - v) * a); }).join(",") + ")"; }
+  function rgba(h, a){ var c = hexRgb(h); return "rgba(" + c.join(",") + "," + a + ")"; }
+  function grad(h){ return "linear-gradient(180deg, " + mix(h, "w", 0.22) + ", " + h + ")"; }
+  function fontStack(f){ return "'" + f + "', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"; }
+  var loadedFonts = {};
+  function loadFont(f){
+    if(!f || loadedFonts[f]) return; loadedFonts[f] = 1;
+    var l = document.createElement("link"); l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=" + encodeURIComponent(f).replace(/%20/g, "+") + ":wght@400;600;700;800;900&display=swap";
+    document.head.appendChild(l);
+  }
+  function themeCss(t){
+    var c = [], I = " !important";
+    function has(k){ return t[k] !== undefined && t[k] !== null && t[k] !== ""; }
+    if(has("bg") || has("glow")){
+      var bg = t.bg || "#050d33", gl = t.glow || "#1a4dff";
+      var img = "radial-gradient(ellipse at 18% -5%, " + rgba(gl, 0.75) + " 0%, " + rgba(gl, 0.25) + " 30%, transparent 55%), radial-gradient(ellipse at 100% 45%, " + rgba(gl, 0.16) + " 0%, transparent 45%)";
+      c.push("body, #tvOverlay, #gridOverlay{ background-color:" + bg + I + "; background-image:" + img + I + "; }");
+    }
+    if(has("card")) c.push(".card:not(.leaderboard-card):not(#cardTournamentName){ background:" + t.card + I + "; } .card.rules-card > details{ background:" + t.card + "; }");
+    if(has("cardText")) c.push(".card:not(.leaderboard-card):not(#cardTournamentName), .card:not(.leaderboard-card) p, .card:not(.leaderboard-card) .draw-summary, .rules-body p, .card:not(.leaderboard-card) label{ color:" + t.cardText + I + "; }");
+    if(has("radius")) c.push(".card{ border-radius:" + t.radius + "px" + I + "; }");
+    if(has("zoom") && +t.zoom !== 100) c.push(".wrap{ zoom:" + (t.zoom / 100) + "; }");
+    if(has("textFont")){ loadFont(t.textFont); c.push("body, .card, input, select, textarea, .draw-summary{ font-family:" + fontStack(t.textFont) + "; }"); }
+    if(has("titleFont")){ loadFont(t.titleFont); c.push(".card h2, .rules-card > details > summary, .fs-title, #gridCard summary, .ta-label, .leaderboard-title, #tvOverlay .tv-title, #tvOverlay .tv-next-title{ font-family:" + fontStack(t.titleFont) + I + "; }"); }
+    if(has("titleColor")) c.push(".card:not(.leaderboard-card) h2, .final-setup .fs-title, #gridCard summary, #cardMatchesPerPlayer label.field{ color:" + t.titleColor + I + "; }");
+    if(has("titleSize") && +t.titleSize !== 100){ var s = t.titleSize / 100; c.push(".card h2{ font-size:" + (15 * s) + "px" + I + "; } .rules-card > details > summary{ font-size:" + (16 * s) + "px" + I + "; } .final-setup .fs-title{ font-size:" + (16 * s) + "px" + I + "; }"); }
+    if(has("heroFont")){ loadFont(t.heroFont); c.push("#cardTournamentName .brand-heading-main, #cardTournamentName .brand-heading-sub{ font-family:" + fontStack(t.heroFont) + "; }"); }
+    if(has("heroColor")) c.push("#cardTournamentName .brand-heading-main{ color:" + t.heroColor + "; }");
+    if(has("heroSize") && +t.heroSize !== 100){ var hs = t.heroSize / 100; c.push("#cardTournamentName .brand-heading-main{ font-size:calc(clamp(26px, 8vw, 72px) * " + hs + "); } #cardTournamentName .brand-heading-sub{ font-size:calc(clamp(22px, 6.4vw, 54px) * " + hs + "); }"); }
+    if(has("btnFont")){ loadFont(t.btnFont); c.push(".btn{ font-family:" + fontStack(t.btnFont) + I + "; }"); }
+    if(has("btnSize") && +t.btnSize !== 100) c.push(".btn{ zoom:" + (t.btnSize / 100) + "; }");
+    if(has("btnSave")) c.push(".btn-primary{ background:" + grad(t.btnSave) + I + "; box-shadow:0 6px 16px " + rgba(t.btnSave, 0.4) + I + "; }");
+    if(has("btnSaveText")) c.push(".btn-primary{ color:" + t.btnSaveText + I + "; }");
+    if(has("btnShare")) c.push(".btn-whatsapp, .top-actions .btn-share{ background:" + grad(t.btnShare) + I + "; border:none" + I + "; box-shadow:0 6px 16px " + rgba(t.btnShare, 0.4) + I + "; }");
+    if(has("btnTv")) c.push(".top-actions .ta-group #tvModeBtn, .top-actions .ta-group #tvWinBtn{ background:" + grad(t.btnTv) + I + "; box-shadow:0 6px 16px " + rgba(t.btnTv, 0.4) + I + "; }");
+    if(has("btnView")) c.push(".top-actions .btn-view{ background:" + grad(t.btnView) + I + "; box-shadow:0 6px 16px " + rgba(t.btnView, 0.4) + I + "; }");
+    if(has("btnUndo")) c.push(".top-actions .ta-group #undoBtn{ background:" + grad(t.btnUndo) + I + "; }");
+    if(has("btnRisk")) c.push(".top-actions .btn-risk{ background:" + grad(t.btnRisk) + I + "; box-shadow:0 6px 16px " + rgba(t.btnRisk, 0.4) + I + "; }");
+    if(has("btnLive")) c.push(".btn-livecam{ background:linear-gradient(135deg, " + mix(t.btnLive, "w", 0.18) + ", " + t.btnLive + ")" + I + "; box-shadow:0 6px 18px " + rgba(t.btnLive, 0.45) + I + "; } #liveInline{ border-color:" + t.btnLive + I + "; }");
+    if(has("btnText")) c.push(".btn-whatsapp, .top-actions .btn-share, .top-actions .ta-group #tvModeBtn, .top-actions .ta-group #tvWinBtn, .top-actions .btn-view, .top-actions .ta-group #undoBtn, .top-actions .btn-risk, .btn-livecam .lc-txt{ color:" + t.btnText + I + "; }");
+    function lb(sel, h){ return sel + "{ background: radial-gradient(circle at 20% 0%, " + mix(h, "w", 0.25) + " 0%, transparent 62%), linear-gradient(165deg, " + mix(h, "k", 0.55) + ", " + h + " 80%)" + I + "; }"; }
+    if(has("lbKeep")) c.push(lb("#standingsCard.leaderboard-card, #tvOverlay .card.leaderboard-card.glb-blue", t.lbKeep));
+    if(has("lbAtt")) c.push(lb("#standingsCardAtt.leaderboard-card, #tvOverlay .card.leaderboard-card.glb-red", t.lbAtt));
+    function lt(sel, h){ return sel + "{ background:linear-gradient(135deg, " + mix(h, "w", 0.12) + " 0%, " + mix(h, "k", 0.4) + " 100%)" + I + "; }"; }
+    if(has("lbKeep")) c.push(lt("#standingsCard .leaderboard-title, #tvOverlay .glb-blue .leaderboard-title", t.lbKeep));
+    if(has("lbAtt")) c.push(lt("#standingsCardAtt .leaderboard-title, #tvOverlay .glb-red .leaderboard-title", t.lbAtt));
+    if(has("chipKeep")){ c.push("#listKeepers .player-chip{ background:" + grad(t.chipKeep) + I + "; } .roster-col:nth-child(1) h3{ background:" + t.chipKeep + I + "; } #favKeepers .fav-chip{ color:" + mix(t.chipKeep, "k", 0.15) + I + "; border-color:" + rgba(t.chipKeep, 0.55) + I + "; }"); }
+    if(has("chipAtt")){ c.push("#listAttackers .player-chip{ background:" + grad(t.chipAtt) + I + "; } .roster-col:nth-child(2) h3{ background:" + t.chipAtt + I + "; } #favAttackers .fav-chip{ color:" + mix(t.chipAtt, "k", 0.15) + I + "; border-color:" + rgba(t.chipAtt, 0.55) + I + "; }"); }
+    [["rcLate", "#lateCard"], ["rcSub", "#subCard"], ["rcRetire", "#retireCard"], ["rcBackup", "#backupCard"], ["rcLive", "#fbLiveCard"], ["rcRules", "#rulesCard"], ["rcTheme", "#themeCard"]].forEach(function(x){
+      if(has(x[0])) c.push(x[1] + "{ --rc1:" + mix(t[x[0]], "w", 0.28) + "; --rc2:" + t[x[0]] + "; }");
+    });
+    return c.join("\n");
+  }
+  function applyTheme(t){
+    var el = document.getElementById("userThemeCss");
+    if(!el){ el = document.createElement("style"); el.id = "userThemeCss"; }
+    document.body.appendChild(el);   // sempre per ultimo, così vince sugli stili dell'app
+    el.textContent = themeCss(t || {});
+    var mt = document.querySelector('meta[name="theme-color"]'); if(mt) mt.setAttribute("content", (t && t.bg) || "#050d33");
+    try{ fitBrandHeading(); }catch(e){}
+  }
+  window.__themeForLive = function(){ var t = themeGet(); return (t._noLive || !Object.keys(t).some(function(k){ return k.charAt(0) !== "_"; })) ? null : t; };
+
+  if(window.__fbViewer){
+    // giocatori: aspetto scelto dall'organizzatore
+    var lastTh = null;
+    var _vhT = window.__viewerHook;
+    window.__viewerHook = function(){ if(_vhT) _vhT(); var th = window.__liveTheme ? JSON.stringify(window.__liveTheme) : ""; if(th !== lastTh){ lastTh = th; applyTheme(window.__liveTheme || {}); } };
+  } else {
+    applyTheme(themeGet());
+    (function(){
+      var anchor = document.getElementById("backupCard"); if(!anchor) return;
+      var card = document.createElement("div"); card.className = "card rules-card"; card.id = "themeCard";
+      card.innerHTML = '<details id="themeDetails"><summary>🎨 Aspetto dell\'app (colori, caratteri, dimensioni)</summary><div class="rules-body"><p>Cambia i colori e i caratteri come preferisci: si vede subito e resta salvato. Quello che non tocchi resta com\'è; ogni voce ha il suo ↺ per tornare all\'originale.</p>' +
+        '<div class="th-top"><label class="th-live"><input type="checkbox" id="thLive"> Mostra lo stesso aspetto ai giocatori nella Live</label><button class="btn btn-ghost btn-sm" type="button" id="thResetAll">↺ Ripristina tutto</button></div>' +
+        '<div class="th-grid" id="thGrid"></div></div></details>';
+      anchor.parentNode.insertBefore(card, anchor.nextSibling);
+      var grid = card.querySelector("#thGrid");
+      var save; function persist(t){ clearTimeout(save); save = setTimeout(function(){ themeSet(t); if(window.__fbLiveSchedule) window.__fbLiveSchedule(); }, 300); }
+      function build(){
+        var t = themeGet();
+        grid.innerHTML = THEME_SPEC.map(function(g){
+          return '<fieldset class="th-group"><legend>' + g.t + '</legend>' + g.items.map(function(it){
+            var v = t[it.k] !== undefined ? t[it.k] : it.d, ctl;
+            if(it.type === "font") ctl = '<select data-k="' + it.k + '">' + THEME_FONTS.map(function(f){ return '<option value="' + f + '"' + (f === v ? " selected" : "") + (f ? ' style="font-family:\'' + f + '\'"' : "") + '>' + (f || "Originale") + '</option>'; }).join("") + '</select>';
+            else if(it.type === "range") ctl = '<input type="range" data-k="' + it.k + '" min="' + it.min + '" max="' + it.max + '" value="' + v + '"><span class="th-val">' + v + it.u + '</span>';
+            else ctl = '<input type="color" data-k="' + it.k + '" value="' + v + '">';
+            return '<div class="th-row' + (t[it.k] !== undefined ? " changed" : "") + '"><span class="th-l">' + it.l + '</span><span class="th-c">' + ctl + '</span><button type="button" class="th-reset" data-r="' + it.k + '" title="Torna all\'originale">↺</button></div>';
+          }).join("") + '</fieldset>';
+        }).join("");
+        card.querySelector("#thLive").checked = !t._noLive;
+        THEME_FONTS.forEach(loadFont);
+      }
+      grid.addEventListener("input", function(e){
+        var el = e.target, k = el.dataset && el.dataset.k; if(!k) return;
+        var t = themeGet(), spec = null; THEME_SPEC.forEach(function(g){ g.items.forEach(function(it){ if(it.k === k) spec = it; }); });
+        t[k] = spec && spec.type === "range" ? +el.value : el.value;
+        if(spec && spec.type === "font" && !el.value) delete t[k];
+        if(spec && spec.type === "range"){ var sv = el.parentNode.querySelector(".th-val"); if(sv) sv.textContent = el.value + spec.u; }
+        el.closest(".th-row").classList.toggle("changed", t[k] !== undefined);
+        themeSet(t); applyTheme(t); persist(t);
+      });
+      grid.addEventListener("click", function(e){
+        var b = e.target.closest && e.target.closest("[data-r]"); if(!b) return;
+        var t = themeGet(); delete t[b.dataset.r]; themeSet(t); applyTheme(t); persist(t); build();
+      });
+      card.querySelector("#thResetAll").addEventListener("click", function(){
+        showConfirm("Tornare a tutti i colori e caratteri originali?", function(){ var t = themeGet(), keep = { _noLive: t._noLive }; if(!keep._noLive) keep = {}; themeSet(keep); applyTheme(keep); persist(keep); build(); toast("Aspetto originale ripristinato."); });
+      });
+      card.querySelector("#thLive").addEventListener("change", function(){ var t = themeGet(); if(this.checked) delete t._noLive; else t._noLive = true; themeSet(t); persist(t); });
+      card.querySelector("#themeDetails").addEventListener("toggle", function(){ if(this.open) build(); });
+    })();
+  }
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
   try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}
