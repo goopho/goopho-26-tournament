@@ -341,3 +341,6 @@ NOVITÀ (versione 41)
 NOVITÀ (versione 42)
    - Storico: apri un torneo e in fondo trovi "🗑️ Elimina questo torneo dallo
      storico" (chiede conferma).
+
+NOVITÀ (versione 43)
+   - Modalità rinominate: Giallo · Sorteggio · Coppie fisse.

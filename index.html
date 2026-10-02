@@ -1097,8 +1097,8 @@
       <label class="field" for="drawMode">Modalità squadre</label>
       <select id="drawMode">
         <option value="rotation" selected="">🔄 Giallo (compagno cambia ogni giornata)</option>
-        <option value="fixed">📌 Fisso (coppie sorteggiate, uguali per tutto il torneo)</option>
-        <option value="manual">🤝 Coppie fisse scelte (le formi tu)</option>
+        <option value="fixed">🎲 Sorteggio (coppie sorteggiate, uguali per tutto il torneo)</option>
+        <option value="manual">🤝 Coppie fisse (le formi tu)</option>
       </select>
       <label class="field" for="tablesCount" style="margin-top:12px;">🎯 Biliardini disponibili</label>
       <input type="number" id="tablesCount" min="1" max="12" value="2">
@@ -1139,7 +1139,7 @@
         <div id="manualPairsList"></div>
         <div class="draw-summary" id="manualPairsInfo" style="margin-top:8px;"></div>
       </div>
-      <div class="draw-summary" id="fixedModeNote" style="display:none; margin-top:12px;">Nel sorteggio fisso non si sceglie il numero di giornate: fino a 9 coppie si gioca un girone unico all'italiana; da 10 coppie in su le coppie vengono divise in più gironi (max 9 a girone), oppure scegli tu manualmente il numero di gironi qui sopra. Da ogni girone passano alla fase finale le prime 4 in classifica (numero modificabile nella sezione "Fase finale"); con 2 gironi e 4 qualificate la 1ª incontra la 4ª dell'altro girone e la 2ª la 3ª.</div>
+      <div class="draw-summary" id="fixedModeNote" style="display:none; margin-top:12px;">Nel Sorteggio non si sceglie il numero di giornate: fino a 9 coppie si gioca un girone unico all'italiana; da 10 coppie in su le coppie vengono divise in più gironi (max 9 a girone), oppure scegli tu manualmente il numero di gironi qui sopra. Da ogni girone passano alla fase finale le prime 4 in classifica (numero modificabile nella sezione "Fase finale"); con 2 gironi e 4 qualificate la 1ª incontra la 4ª dell'altro girone e la 2ª la 3ª.</div>
     </div>
 
     <button class="btn btn-primary btn-block" id="drawBtn" style="font-size:15px; padding:14px;">🎲 Sorteggia partite</button>
@@ -1388,7 +1388,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 42</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 43</span></div>
 
 </div>
 
@@ -9320,7 +9320,7 @@ module.exports = QRCode;
   // modalità squadre: tre schede colorate al posto del menu a tendina
   (function(){
     var sel = document.getElementById("drawMode"); if(!sel) return;
-    var info = { rotation: ["🔄 Giallo", "Il compagno cambia ogni giornata"], fixed: ["📌 Fisso", "Coppie sorteggiate, uguali per tutto il torneo"], manual: ["🤝 Coppie scelte", "Le coppie le formi tu"] };
+    var info = { rotation: ["🔄 Giallo", "Il compagno cambia ogni giornata"], fixed: ["🎲 Sorteggio", "Coppie sorteggiate, uguali per tutto il torneo"], manual: ["🤝 Coppie fisse", "Le coppie le formi tu"] };
     var box = document.createElement("div"); box.className = "mode-pick"; box.id = "modePick";
     Array.prototype.forEach.call(sel.options, function(o){
       var b = document.createElement("button"); b.type = "button"; b.className = "mp-" + o.value; b.dataset.v = o.value;
