@@ -1385,7 +1385,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 36</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 37</span></div>
 
 </div>
 
@@ -3443,7 +3443,25 @@ module.exports = QRCode;
   // in un turno, invece di far giocare due volte la stessa squadra nello
   // stesso turno, un portiere e/o un attaccante riposano quel turno,
   // ruotando in modo equo (chi ha riposato meno viene scelto per primo).
+  // Rifà il sorteggio intero (fino a ~2 secondi) finché nessuna coppia portiere+attaccante
+  // si ripete in tutta la serata; se non è possibile, tiene il sorteggio con meno ripetizioni.
+  function drawPartnerRepeats(rounds){
+    var seen = {}, rep = 0, opp = {}, orep = 0;
+    rounds.forEach(function(r){ (r.matches || []).forEach(function(m){
+      [m.teamA, m.teamB].forEach(function(t){ var k = pairKey(t.keeper.id, t.attacker.id); if(seen[k]) rep++; seen[k] = 1; });
+    }); });
+    return rep;
+  }
   function generateDraw(keepers, attackers, maxRounds){
+    var best = null, bestRep = Infinity, t0 = Date.now();
+    for(var i = 0; i < 60; i++){
+      var r = generateDrawOnce(keepers, attackers, maxRounds), rp = drawPartnerRepeats(r);
+      if(rp < bestRep){ best = r; bestRep = rp; }
+      if(bestRep === 0 || Date.now() - t0 > 2000) break;
+    }
+    return best;
+  }
+  function generateDrawOnce(keepers, attackers, maxRounds){
     maxRounds = maxRounds || 5;
     var matchesPlayed = {}; // playerId -> count
     var restCounts = {}; // playerId -> numero di turni di riposo fatti finora
@@ -3564,6 +3582,7 @@ module.exports = QRCode;
     bestAttempt.teams.forEach(function(team){
       partnerSet[pairKey(team.keeper.id, team.attacker.id)] = true;
     });
+    bestAttempt.matches.forEach(function(m){ [m.teamA, m.teamB].forEach(function(t){ partnerSet[pairKey(t.keeper.id, t.attacker.id)] = true; }); });
     bestAttempt.matches.forEach(function(m){
       [m.teamA.keeper.id, m.teamA.attacker.id].forEach(function(p1){
         [m.teamB.keeper.id, m.teamB.attacker.id].forEach(function(p2){
@@ -3587,9 +3606,9 @@ module.exports = QRCode;
   // a chi lo ha già raggiunto o superato. A parità, riposa chi ha riposato
   // meno finora, e poi chi ha già giocato più partite (per restare
   // equilibrati nel tempo).
-  function pickResting(list, matchesPlayed, restCounts, target){
+  function pickResting(list, matchesPlayed, restCounts, target, okFn){
     var candidates = shuffle(list);
-    candidates.sort(function(a,b){
+    function cmp(a,b){
       if(target !== undefined){
         var belowA = (matchesPlayed[a.id]||0) < target ? 1 : 0;
         var belowB = (matchesPlayed[b.id]||0) < target ? 1 : 0;
@@ -3599,7 +3618,10 @@ module.exports = QRCode;
       if(ra !== rb) return ra - rb;
       var ma = matchesPlayed[a.id]||0, mb = matchesPlayed[b.id]||0;
       return mb - ma;
-    });
+    }
+    candidates.sort(cmp);
+    // a parità di diritto a riposare, preferisce chi soddisfa okFn
+    if(okFn) for(var i = 0; i < candidates.length && cmp(candidates[i], candidates[0]) === 0; i++) if(okFn(candidates[i])) return candidates[i];
     return candidates[0];
   }
 
@@ -3620,13 +3642,14 @@ module.exports = QRCode;
   // giocatore in esubero: tra chi ha già una squadra normale in questo
   // turno, viene scelto (a rotazione equa) chi ha fatto da Talpa meno
   // volte finora, così il ruolo gira tra tutti gli iscritti nel tempo.
-  function pickTalpa(candidates, talpaCounts){
+  function pickTalpa(candidates, talpaCounts, isNewWith){
     if(!candidates || !candidates.length) return null;
     var arr = shuffle(candidates);
     arr.sort(function(a,b){
       var ta = (talpaCounts && talpaCounts[a.id]) || 0, tb = (talpaCounts && talpaCounts[b.id]) || 0;
       return ta - tb;
     });
+    if(isNewWith){ for(var i = 0; i < arr.length; i++) if(isNewWith(arr[i])) return arr[i]; }
     return arr[0];
   }
 
@@ -3693,7 +3716,8 @@ module.exports = QRCode;
         effKeepers = keepers.filter(function(p){ return p.id !== benchedKeeper.id; });
       }
       if(attackers.length > targetLen){
-        benchedAttacker = pickResting(attackers, matchesPlayed, restCounts, target);
+        benchedAttacker = pickResting(attackers, matchesPlayed, restCounts, target, function(a){ return !benchedKeeper || !partnerSet[pairKey(benchedKeeper.id, a.id)]; });
+
         effAttackers = attackers.filter(function(p){ return p.id !== benchedAttacker.id; });
       }
     }
@@ -3729,7 +3753,7 @@ module.exports = QRCode;
         for(var ii=0;ii<aIdx.length;ii++){
           var i = aIdx[ii];
           if(usedAttackerIdx[i]) continue;
-          if(rules[r](i, pairKey(k.id, aExt[i].id))){ pick = i; if(r > 0) violations += (r >= 3 ? 5 : 1); break; }
+          if(rules[r](i, pairKey(k.id, aExt[i].id))){ pick = i; violations += [0, 3, 20, 23, 60][r]; break; }
         }
       }
       if(pick !== -1){
@@ -3808,7 +3832,19 @@ module.exports = QRCode;
     // extra, il giocatore in esubero fa punteggio normalmente, mentre la
     // "Talpa" (il prestito) non guadagna punti per quella partita (la sua
     // partita normale del turno conta invece come sempre).
-    if(benchedKeeper && benchedAttacker){
+    if(benchedKeeper && benchedAttacker && partnerSet[pairKey(benchedKeeper.id, benchedAttacker.id)]){
+      // I due in esubero sono già stati compagni: invece di rimetterli insieme, ognuno
+      // gioca con una "Talpa" dell'altro ruolo e si affrontano (fanno punti solo loro due).
+      var tA = pickTalpa(teams.map(function(tm){ return tm.attacker; }), talpaCounts, function(a){ return !partnerSet[pairKey(benchedKeeper.id, a.id)]; });
+      var tK = tA ? pickTalpa(teams.map(function(tm){ return tm.keeper; }), talpaCounts, function(k){ return !partnerSet[pairKey(k.id, benchedAttacker.id)] && !teams.some(function(tm){ return tm.keeper.id === k.id && tm.attacker.id === tA.id; }); }) : null;
+      if(tA && tK){
+        var xA = { keeper: benchedKeeper, attacker: tA }, xB = { keeper: tK, attacker: benchedAttacker };
+        teams.push(xA, xB);
+        matches.push({ id: uid(), teamA: xA, teamB: xB, scoreA: null, scoreB: null, talpaPlayerId: tA.id, talpaIds: [tA.id, tK.id] });
+      } else {
+        byes.push(benchedKeeper, benchedAttacker);
+      }
+    } else if(benchedKeeper && benchedAttacker){
       // Caso raro (stesso numero dispari in entrambi i ruoli): i due
       // giocatori in esubero formano insieme una coppia reale a tutti gli
       // effetti, quindi giocano una partita extra e fanno ENTRAMBI
@@ -3822,7 +3858,7 @@ module.exports = QRCode;
         byes.push(benchedKeeper, benchedAttacker);
       }
     } else if(benchedAttacker){
-      var talpaKeeper = pickTalpa(teams.map(function(tm){ return tm.keeper; }), talpaCounts);
+      var talpaKeeper = pickTalpa(teams.map(function(tm){ return tm.keeper; }), talpaCounts, function(k){ return !partnerSet[pairKey(k.id, benchedAttacker.id)]; });
       var extraTeamK = talpaKeeper ? { keeper: talpaKeeper, attacker: benchedAttacker } : null;
       var oppK = extraTeamK ? pickOpponentForExtra(teams, opponentSet, extraTeamK, partnerSet) : null;
       if(extraTeamK && oppK){
@@ -3832,7 +3868,7 @@ module.exports = QRCode;
         byes.push(benchedAttacker);
       }
     } else if(benchedKeeper){
-      var talpaAttacker = pickTalpa(teams.map(function(tm){ return tm.attacker; }), talpaCounts);
+      var talpaAttacker = pickTalpa(teams.map(function(tm){ return tm.attacker; }), talpaCounts, function(a){ return !partnerSet[pairKey(benchedKeeper.id, a.id)]; });
       var extraTeamA = talpaAttacker ? { keeper: benchedKeeper, attacker: talpaAttacker } : null;
       var oppA = extraTeamA ? pickOpponentForExtra(teams, opponentSet, extraTeamA, partnerSet) : null;
       if(extraTeamA && oppA){
@@ -3844,6 +3880,10 @@ module.exports = QRCode;
     }
 
     markRepeatAppearances(matches);
+    // anche le coppie della partita extra (Talpa e jolly) non devono ripetersi tra le giornate
+    var seenPairs = {};
+    matches.forEach(function(m){ [m.teamA, m.teamB].forEach(function(t){ var key = pairKey(t.keeper.id, t.attacker.id); if(seenPairs[key]) return; seenPairs[key] = 1; }); });
+    matches.slice(-1).forEach(function(m){ if(!m.talpaPlayerId && !m.jollySide) return; [m.teamA, m.teamB].forEach(function(t){ if(partnerSet[pairKey(t.keeper.id, t.attacker.id)]) violations += 20; }); });
     return { teams: teams, matches: matches, byes: byes, violations: violations };
   }
 
@@ -8552,13 +8592,17 @@ module.exports = QRCode;
       if(!cnt) return '<td class="gx-rest" title="riposo">😴</td>';
       if(!main){ return '<td class="gx-todo" title="solo partita extra (Talpa/jolly)">T</td>'; }
       var m = main.m, t = main.t, partner = t.keeper.id === pid ? t.attacker : t.keeper;
-      var sub = '<small>' + (isTalpa(partner) ? "Talpa" : esc(partner.name)) + (extra ? " +T" : "") + '</small>';
+      var ot = main.sd === "A" ? m.teamB : m.teamA;
+      function nm(p){ return isTalpa(p) ? "Talpa" : p.name; }
+      var vsTxt = nm(ot.keeper) + " · " + nm(ot.attacker);
+      var sub = '<small>' + esc(nm(partner)) + (extra ? " +T" : "") + '</small><small class="gx-vs">vs ' + esc(vsTxt) + '</small>';
+      var tip = ' title="' + esc("Con " + nm(partner) + " contro " + nm(ot.keeper) + " e " + nm(ot.attacker)) + '"';
       if(!gxScored(m)){
         var tn = current.onTable && current.onTable[m.id];
-        return tn ? '<td class="gx-live">🎯 T' + tn + sub + '</td>' : '<td class="gx-todo">·' + sub + '</td>';
+        return tn ? '<td class="gx-live"' + tip + '>🎯 T' + tn + sub + '</td>' : '<td class="gx-todo"' + tip + '>·' + sub + '</td>';
       }
       var own = main.sd === "A" ? m.scoreA : m.scoreB, opp = main.sd === "A" ? m.scoreB : m.scoreA;
-      return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '">' + own + '-' + opp + sub + '</td>';
+      return '<td class="' + (own > opp ? "gx-win" : (own < opp ? "gx-loss" : "gx-draw")) + '"' + tip + '>' + own + '-' + opp + sub + '</td>';
     }
     var html = '<div class="gx-grid" style="grid-template-columns:repeat(' + cols + ', auto);">';
     [["P","Portieri","#1c5fe0"],["A","Attaccanti","#e02a18"]].forEach(function(role){
@@ -8575,7 +8619,7 @@ module.exports = QRCode;
             '<td class="gx-pt">' + r.pt + '</td><td class="gx-s">' + r.pg + '</td><td class="gx-s">' + (dr > 0 ? "+" : "") + dr + '</td></tr>';
         }).join("") + '</tbody></table></div></div>';
     });
-    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span><span>😴 riposo · sotto il risultato il compagno di quella giornata · "+T" = ha giocato anche una partita in più da Talpa (senza punti)</span></div>';
+    html += '</div><div class="gx-legend"><span class="gx-key gx-win">vinta</span><span class="gx-key gx-loss">persa</span><span class="gx-key gx-todo">· da giocare</span><span class="gx-key gx-live">🎯 in campo</span><span>😴 riposo · sotto il risultato il compagno di quella giornata e, dopo "vs", gli avversari · "+T" = ha giocato anche una partita in più da Talpa (senza punti)</span></div>';
     return html;
   }
   function gridHtml(cols){
@@ -8598,6 +8642,7 @@ module.exports = QRCode;
       ".gx-table{ border-collapse:separate; border-spacing:3px; font-size:16px; }" +
       ".gx-table th, .gx-table td{ text-align:center; padding:6px 8px; border-radius:7px; white-space:nowrap; }" +
       ".gx-table td small{ display:block; font-size:10.5px; font-weight:700; opacity:.85; margin-top:1px; max-width:84px; overflow:hidden; text-overflow:ellipsis; }" +
+      ".gx-table td small.gx-vs{ font-size:9.5px; font-weight:600; opacity:.75; max-width:128px; white-space:nowrap; margin:1px auto 0; }" +
       ".gx-rowh{ text-align:left !important; font-weight:800; background:rgba(20,41,74,0.06); }" +
       ".gx-nq .gx-rowh{ opacity:.6; }" +
       ".gx-cut td, .gx-cut th{ box-shadow:0 3px 0 -1px #d4af37; }" +

@@ -306,3 +306,10 @@ NOVITÀ (versione 36)
      giocatori che giocano già (in quella partita non fanno punti, come prima).
      Inoltre chi gioca due volte non viene mai messo in coppia con un altro
      che gioca due volte.
+
+NOVITÀ (versione 37)
+   - Giallo: in tutta la serata una coppia portiere+attaccante non si ripete
+     mai (nemmeno nelle partite extra con Talpa/jolly), quando i numeri lo
+     permettono. Il sorteggio prova più combinazioni finché ci riesce.
+   - Reticolo giocatori x giornate: sotto il risultato, oltre al compagno,
+     compaiono gli avversari ("vs …").
