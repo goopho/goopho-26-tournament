@@ -1404,7 +1404,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 44</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 47</span></div>
 
 </div>
 
@@ -4582,7 +4582,7 @@ module.exports = QRCode;
   // sono dispari, ma non deve mai accumulare statistiche né comparire in
   // classifica. Il suo eventuale compagno reale in quella partita continua
   // invece a fare punteggio normalmente.
-  function isTalpa(p){ return !!p && (p.name || "").trim().toLowerCase() === "talpa"; }
+  function isTalpa(p){ return !!p && (p.standIn === true || (p.name || "").trim().toLowerCase() === "talpa"); }
   function computeStandings(rounds){
     var stats = {}; // id -> {name, role, pg,v,n,p,gf,gs,pt}
     function ensure(p, role){
@@ -5037,6 +5037,7 @@ module.exports = QRCode;
     } else {
       var gz = gialloSizes(n);
       msg = "Fascia A: " + gz.a + " coppie, formate dai primi " + gz.a + " portieri e dai primi " + gz.a + " attaccanti in classifica incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Gli accoppiamenti del tabellone seguono la classifica: la 1ª coppia incontra l'ultima, la 2ª la penultima, e così via" + (isPow2(gz.a) ? "." : " (non essendo 2, 4, 8, 16 o 32, si gioca un primo turno con ripescaggio delle migliori perdenti).");
+      msg += " Dopo i Quarti e dopo le Semifinali chi passa il turno forma nuove coppie con lo stesso incrocio (anche per la Finale e il 3°/4° posto).";
       msg += gz.b >= 2 ? " Fascia B: le successive " + gz.b + " coppie, con la stessa logica." : " Nessuna Fascia B.";
       if(gz.out > 0) msg += " Restano fuori gli ultimi " + gz.out + " portieri e " + gz.out + " attaccanti in classifica.";
     }
@@ -5601,7 +5602,7 @@ module.exports = QRCode;
       var fasciaA = buildAnyFascia(rankedCrossTeams(kRows.slice(0, gsz.a), aRows.slice(0, gsz.a)), "A");
       var fasciaB = gsz.b >= 2 ? buildAnyFascia(rankedCrossTeams(kRows.slice(gsz.a, gsz.a + gsz.b), aRows.slice(gsz.a, gsz.a + gsz.b)), "B") : null;
 
-      current.playoffs = { fasciaA: fasciaA, fasciaB: fasciaB, totalTeams: n };
+      current.playoffs = { fasciaA: fasciaA, fasciaB: fasciaB, totalTeams: n, remixFinal: true };
       persistCurrent();
       renderPlayoffBracket();
       toast("Sorteggio del tabellone completato! Fascia A: " + gsz.a + " coppie" + (fasciaB ? ", Fascia B: " + gsz.b + " coppie" : ", nessuna Fascia B") + ".");
@@ -5667,7 +5668,7 @@ module.exports = QRCode;
     return remixed;
   }
 
-  function cascadeFascia(f, skipRemix){
+  function cascadeFascia(f, skipRemix, remixFinal){
     if(!f || f.type === "triangle") return;
     for(var ri=0; ri<f.rounds.length-1; ri++){
       if(ri === 0 && f.repechage){ cascadeRepechage(f); continue; }
@@ -5676,7 +5677,8 @@ module.exports = QRCode;
       var nextMatches = f.rounds[ri+1].matches;
       var winners = matches.map(playoffWinner);
       var allDecided = winners.length > 0 && winners.every(function(w){ return !!w; });
-      if(round.stage === "Quarti di finale" && allDecided && !skipRemix){
+      // nuove coppie dopo i Quarti e (tabelloni nuovi) anche dopo le Semifinali, prima della Finale
+      if((round.stage === "Quarti di finale" || (remixFinal && round.stage === "Semifinale")) && allDecided && !skipRemix){
         var remixed = remixQuartiSurvivors(winners);
         remixed.forEach(function(t, i){
           var target = nextMatches[Math.floor(i/2)];
@@ -5690,8 +5692,14 @@ module.exports = QRCode;
         });
       }
       if(ri === f.rounds.length-2 && f.third){
-        f.third.teamA = playoffLoser(matches[0]);
-        f.third.teamB = playoffLoser(matches[1]);
+        var l0 = playoffLoser(matches[0]), l1 = playoffLoser(matches[1]);
+        if(remixFinal && !skipRemix && round.stage === "Semifinale" && l0 && l1){
+          var rl = remixQuartiSurvivors([l0, l1]);
+          f.third.teamA = rl[0]; f.third.teamB = rl[1];
+        } else {
+          f.third.teamA = l0;
+          f.third.teamB = l1;
+        }
       }
     }
   }
@@ -5719,8 +5727,9 @@ module.exports = QRCode;
     // Nel sorteggio a coppie fisse le squadre non vengono mai rimescolate,
     // nemmeno dopo i quarti: restano le stesse dall'inizio alla fine.
     var skipRemix = !!current.fixedTeams;
-    cascadeFascia(current.playoffs.fasciaA, skipRemix);
-    cascadeFascia(current.playoffs.fasciaB, skipRemix);
+    var rf = !!current.playoffs.remixFinal;
+    cascadeFascia(current.playoffs.fasciaA, skipRemix, rf);
+    cascadeFascia(current.playoffs.fasciaB, skipRemix, rf);
   }
 
   function teamLabel(t){
@@ -7939,7 +7948,7 @@ module.exports = QRCode;
     if(!current || !current.rounds) return map;
     current.rounds.forEach(function(r){ r.matches.forEach(function(m){
       [["P", m.teamA.keeper], ["A", m.teamA.attacker], ["P", m.teamB.keeper], ["A", m.teamB.attacker]].forEach(function(x){
-        var pl = x[1]; if(!map[pl.id]) map[pl.id] = { p: pl, role: x[0], left: 0 };
+        var pl = x[1]; if(pl && pl.standIn) pl = { id: pl.id, name: "Talpa" }; if(!map[pl.id]) map[pl.id] = { p: pl, role: x[0], left: 0 };
         if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined) map[pl.id].left++;
       });
     }); });
@@ -8659,7 +8668,7 @@ module.exports = QRCode;
       if(!main){ return '<td class="gx-todo" title="solo partita extra (Talpa/jolly)">T</td>'; }
       var m = main.m, t = main.t, partner = t.keeper.id === pid ? t.attacker : t.keeper;
       var ot = main.sd === "A" ? m.teamB : m.teamA;
-      function nm(p){ return isTalpa(p) ? "Talpa" : p.name; }
+      function nm(p){ return isTalpa(p) ? (p.standIn ? p.name : "Talpa") : p.name; }
       var vsTxt = nm(ot.keeper) + " · " + nm(ot.attacker);
       var sub = '<small>' + esc(nm(partner)) + (extra ? " +T" : "") + '</small><small class="gx-vs">vs ' + esc(vsTxt) + '</small>';
       var tip = ' title="' + esc("Con " + nm(partner) + " contro " + nm(ot.keeper) + " e " + nm(ot.attacker)) + '"';
@@ -9055,11 +9064,15 @@ module.exports = QRCode;
     if(!fresh.length || !voiceOn()) return;
     chime();
     setTimeout(function(){
-      fresh.forEach(function(id){
+      // ogni chiamata viene ripetuta due volte, per chi è distratto
+      var calls = fresh.map(function(id){
         var it = info.byId[id];
-        function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; }
-        speak("Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + (it.tag ? ". " + spokenTag(it.tag) : "") + ".");
+        function nm(p){ return String(p.name || "").replace(/\s*\(Talpa\)\s*$/i, " come talpa"); }
+        function who(t){ return t ? nm(t.keeper) + " e " + nm(t.attacker) : ""; }
+        return "Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + (it.tag ? ". " + spokenTag(it.tag) : "") + ".";
       });
+      calls.forEach(speak);
+      calls.forEach(function(c, i){ speak((i === 0 ? "Ripeto. " : "") + c); });
     }, 700);
   }
   (function(){
@@ -9880,6 +9893,63 @@ module.exports = QRCode;
       card.querySelector("#themeDetails").addEventListener("toggle", function(){ if(this.open) build(); });
     })();
   }
+
+
+  // ---------- TALPA A CASO ----------
+  // Dove in calendario c'è il giocatore fittizio "Talpa", l'app sceglie da sola
+  // chi lo sostituisce: di preferenza chi in quella giornata riposa (prima dello
+  // stesso ruolo), facendo girare il compito. Chi fa la Talpa gioca ma non prende
+  // punti. Si sceglie solo per le partite non ancora giocate e la scelta resta.
+  function fillTalpaStandIns(){
+    if(READ_ONLY_VIEW || !current || !current.rounds || !current.rounds.length) return false;
+    var changed = false, count = {};
+    var all = players.keepers.map(function(p){ return [p, "P"]; }).concat(players.attackers.map(function(p){ return [p, "A"]; }))
+      .filter(function(x){ return !isTalpa(x[0]); });
+    function played(m){ return m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined; }
+    // chi è ancora al torneo: compare nell'ultima giornata o in partite da giocare
+    var present = {}, lastRound = null;
+    current.rounds.forEach(function(r){ if(!r.recovery) lastRound = r; });
+    current.rounds.forEach(function(r){ r.matches.forEach(function(m){
+      [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(p){
+        if(!p) return;
+        if(p.standIn && p.subId) count[p.subId] = (count[p.subId] || 0) + 1;
+        if(r === lastRound || !played(m)) present[p.id] = true;
+      });
+    }); });
+    var pool = all.filter(function(x){ return present[x[0].id]; });
+    if(!pool.length) return false;
+    current.rounds.forEach(function(r){
+      var busy = {};
+      r.matches.forEach(function(m){ [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(p){ if(p) busy[p.standIn ? p.subId : p.id] = true; }); });
+      var posOf = {};
+      r.matches.forEach(function(m, mi){ [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(p){ if(p){ var k = p.standIn ? p.subId : p.id; if(posOf[k] === undefined) posOf[k] = mi; } }); });
+      r.matches.forEach(function(m, mi){
+        if(played(m)) return;
+        [["teamA", "keeper", "P"], ["teamA", "attacker", "A"], ["teamB", "keeper", "P"], ["teamB", "attacker", "A"]].forEach(function(sl){
+          var p = m[sl[0]][sl[1]];
+          if(!p || p.standIn || !isTalpa(p)) return;
+          var inMatch = {}; [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(q){ if(q) inMatch[q.standIn ? q.subId : q.id] = true; });
+          // prima chi riposa; se giocano tutti, chi ha la sua partita più lontana da questa (così non è in campo nello stesso momento)
+          var cand = pool.filter(function(x){ return !inMatch[x[0].id]; });
+          if(!cand.length) return;
+          function dist(x){ return busy[x[0].id] ? Math.abs((posOf[x[0].id] === undefined ? 99 : posOf[x[0].id]) - mi) : 1000; }
+          cand.sort(function(a, b){
+            return dist(b) - dist(a) || ((a[1] === sl[2]) ? 0 : 1) - ((b[1] === sl[2]) ? 0 : 1) || (count[a[0].id] || 0) - (count[b[0].id] || 0) || (Math.random() - 0.5);
+          });
+          var pick = cand[0][0];
+          m[sl[0]][sl[1]] = { id: p.id, name: pick.name + " (Talpa)", standIn: true, subId: pick.id };
+          count[pick.id] = (count[pick.id] || 0) + 1; busy[pick.id] = true; if(posOf[pick.id] === undefined) posOf[pick.id] = mi; changed = true;
+        });
+      });
+    });
+    return changed;
+  }
+  beforePersistHooks.unshift(function(){ try{ fillTalpaStandIns(); }catch(e){ console.error(e); } });
+  (function(){
+    var _rrT = renderRounds;
+    renderRounds = function(){ var ch = false; try{ ch = fillTalpaStandIns(); }catch(e){} if(ch) safeSet(LS_CURRENT, current); return _rrT.apply(this, arguments); };
+    setTimeout(function(){ try{ if(fillTalpaStandIns()){ persistCurrent(); rerenderAll(); } }catch(e){ console.error(e); } }, 0);
+  })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
   try{ localStorage.removeItem("tg_pin_v1"); localStorage.removeItem("tg_pin_reset_v1"); sessionStorage.removeItem("tg_pin_unlocked"); }catch(e){}
