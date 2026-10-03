@@ -1404,7 +1404,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 47</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 48</span></div>
 
 </div>
 
@@ -9041,14 +9041,35 @@ module.exports = QRCode;
       });
     }catch(e){}
   }
-  function speak(text){
+  // Le frasi vengono dette una alla volta (la successiva parte quando finisce la
+  // precedente): alcuni browser (Safari, Chrome) perdono le frasi messe in coda
+  // tutte insieme, e così la ripetizione non si sentiva.
+  var ttsQueue = [], ttsBusy = false, ttsCur = null, ttsTimer = null;
+  function ttsNext(){
+    clearTimeout(ttsTimer);
+    if(!ttsQueue.length){ ttsBusy = false; ttsCur = null; return; }
+    ttsBusy = true;
+    var text = ttsQueue.shift();
     try{
-      if(!window.speechSynthesis) return;
       var u = new SpeechSynthesisUtterance(text);
       u.lang = "it-IT"; u.rate = 0.95;
       var vs = speechSynthesis.getVoices().filter(function(v){ return /^it/i.test(v.lang); });
       if(vs.length) u.voice = vs[0];
+      var done = false;
+      function fin(){ if(done) return; done = true; setTimeout(ttsNext, 450); }
+      u.onend = fin; u.onerror = fin;
+      ttsCur = u;                                   // tenuta in memoria finché parla
+      try{ speechSynthesis.resume(); }catch(e){}
       speechSynthesis.speak(u);
+      // rete di sicurezza: se il browser non avvisa la fine, si va avanti lo stesso
+      ttsTimer = setTimeout(fin, 1500 + text.length * 110);
+    }catch(e){ ttsBusy = false; }
+  }
+  function speak(text){
+    try{
+      if(!window.speechSynthesis) return;
+      ttsQueue.push(text);
+      if(!ttsBusy) ttsNext();
     }catch(e){}
   }
   function spokenTag(tag){
