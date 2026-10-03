@@ -1,7 +1,7 @@
 // GOOPHO 26 - service worker: rende l'app utilizzabile anche senza internet.
 // Quando pubblichi una nuova versione dell'app, cambia il numero qui sotto
 // (es. v2, v3...) così i dispositivi scaricano l'aggiornamento.
-const VERSION = "goopho26-v50";
+const VERSION = "goopho26-v52";
 const APP_SHELL = [
   "./",
   "./index.html",

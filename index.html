@@ -1018,7 +1018,28 @@
   .cam-foot{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; padding:10px 14px; font-size:13px; }
   .cam-foot a{ margin-left:auto; color:#9fc0ff; font-weight:700; }
   .cam-tab{ border:0; border-radius:999px; padding:5px 12px; font:inherit; font-weight:800; background:rgba(255,255,255,.12); color:#fff; cursor:pointer; } .cam-tab.on{ background:#ffd868; color:#3a2a00; }
-  #camFab{ position:fixed; left:14px; bottom:14px; z-index:9000; border:0; border-radius:999px; padding:12px 16px; font:inherit; font-weight:900; font-size:15px; background:#c1121f; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4); cursor:pointer; }
+  body.vx-on #tvOverlay .tv-stage [data-vx-tab]{ display:block !important; }
+  body.tv-phone #tvOverlay .tv-stage .tv-next{ order:-1; }
+  @media (max-width:560px){ body.tv-phone #tvOverlay .tv-stage .card{ zoom:.66; } }
+  body.tv-phone #tvOverlay .tv-viewport{ overflow-y:auto; -webkit-overflow-scrolling:touch; margin:0 0 52px 0 !important; padding:0 !important; width:auto !important; align-self:stretch; }
+  body.tv-phone #tvOverlay .tv-stage{ position:static; left:auto; transform:none !important; display:flex !important; flex-direction:column; gap:12px; width:auto !important; padding:4px 10px 18px; }
+  body.tv-phone #tvOverlay .tv-stage .card{ min-width:0 !important; width:auto !important; overflow-x:auto; }
+  body.tv-phone #tvOverlay .tv-next, body.tv-phone #tvOverlay .tv-next.side{ width:100% !important; max-width:none !important; min-width:0 !important; box-sizing:border-box; align-self:stretch; padding:10px 12px; grid-column:auto; }
+  body.tv-phone #tvOverlay .tv-stage > *{ width:100% !important; max-width:none !important; min-width:0 !important; box-sizing:border-box; align-self:stretch; }
+  body.tv-phone #tvOverlay .tv-next-list{ grid-template-columns:1fr !important; }
+  body.tv-phone #tvOverlay .tv-next-item{ font-size:14px; padding:7px 9px; }
+  body.tv-phone #tvOverlay .tv-next-title{ font-size:16px; margin-bottom:6px; }
+  body.tv-phone #tvOverlay .tv-head{ padding:10px 50px 6px 12px; }
+  body.tv-phone #tvOverlay .tv-title{ font-size:20px; }
+  body.tv-phone #tvOverlay .tv-clock{ font-size:17px; }
+  body.tv-phone #tvOverlay .tv-qr, body.tv-phone #tvOverlay .tv-foot{ display:none !important; }
+  body.tv-phone #tvOverlay .tv-back{ bottom:10px; left:8px; font-size:12px; padding:7px 10px; opacity:.9; max-width:31%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  body.tv-phone #tvOverlay .tv-back.tv-voice{ left:34.5%; }
+  body.tv-phone #tvOverlay .tv-back.tv-rot{ display:none; }
+  body.tv-phone #tvCam{ left:10px; right:10px; width:auto; bottom:54px; }
+  body.tv-phone #tvCaption{ bottom:56px; font-size:15px; }
+  .cam-barbtn{ background:linear-gradient(180deg,#ff4b4b,#d0142c) !important; color:#fff !important; border:0 !important; font-weight:900; }
+  #camFab:not(.cam-barbtn){ position:fixed; left:14px; bottom:80px; z-index:9000; border:0; border-radius:999px; padding:12px 16px; font:inherit; font-weight:900; font-size:15px; background:#c1121f; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4); cursor:pointer; }
   body.tv-on #camFab{ display:none; }
   .cam-row{ display:flex; gap:8px; align-items:center; margin:6px 0; } .cam-row .cam-n{ font-weight:800; width:76px; flex:none; } .cam-row input{ flex:1; min-width:0; }
   #tvCam{ position:absolute; right:1.4vw; bottom:44px; width:24vw; z-index:14; background:#000; border:3px solid #ffd868; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.6); }
@@ -1430,7 +1451,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 50</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 52</span></div>
 
 </div>
 
@@ -2846,10 +2867,10 @@ module.exports = QRCode;
     }
   }
   (function toastInitClean(){ var t = document.getElementById("toast"); if(t){ t.classList.remove("show"); t.textContent = ""; } })();
-  function toast(msg){
+  function toast(msg, ms){
     var t = document.getElementById("toast");
     t.textContent = msg; t.classList.add("show");
-    clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove("show"); }, 2200);
+    clearTimeout(t._h); t._h = setTimeout(function(){ t.classList.remove("show"); }, ms || Math.max(2200, Math.min(9000, String(msg).length * 45)));
   }
   function showConfirm(message, onConfirm){
     var modal = document.getElementById("confirmModal");
@@ -7689,9 +7710,14 @@ module.exports = QRCode;
     }
     return cards;
   }
+  function tvIsPhone(){ return Math.min(window.innerWidth, window.innerHeight) < 600; }
   function tvFit(){
     var vp = document.getElementById("tvViewport"), st = document.getElementById("tvStage");
     if(!vp || !st) return;
+    // sul telefono niente "televisore rimpicciolito": colonna unica che si scorre
+    var phone = tvIsPhone() && document.body.classList.contains("tv-on");
+    document.body.classList.toggle("tv-phone", phone);
+    if(phone){ st.style.transform = "none"; st.style.top = "0"; return; }
     st.style.transform = "translateX(-50%) scale(1)";
     var w = st.scrollWidth, h = st.scrollHeight;
     var sc = Math.min(vp.clientWidth * 0.96 / w, vp.clientHeight * 0.98 / h);
@@ -9148,6 +9174,22 @@ module.exports = QRCode;
   // Le frasi vengono dette una alla volta (la successiva parte quando finisce la
   // precedente): alcuni browser (Safari, Chrome) perdono le frasi messe in coda
   // tutte insieme, e così la ripetizione non si sentiva.
+  // sceglie la voce italiana più naturale disponibile (Premium/Avanzata, poi Google, poi le altre)
+  function bestVoice(){
+    var vs = []; try{ vs = speechSynthesis.getVoices().filter(function(v){ return /^it/i.test(v.lang); }); }catch(e){}
+    if(!vs.length) return null;
+    function score(v){
+      var n = (v.name || "") + " " + (v.voiceURI || "");
+      if(/premium/i.test(n)) return 100;
+      if(/enhanced|avanzat|migliorat|natural|neural/i.test(n)) return 90;
+      if(/google/i.test(n)) return 80;
+      if(/federica|alice|luca|paola|emma|elsa|isabella|diego|giorgio/i.test(n)) return 60;
+      if(/eloquence|grandma|grandpa|reed|rocko|sandy|shelley|flo/i.test(n)) return 5;
+      return v.localService === false ? 40 : 30;
+    }
+    return vs.slice().sort(function(a, b){ return score(b) - score(a); })[0];
+  }
+  try{ if(window.speechSynthesis){ speechSynthesis.getVoices(); speechSynthesis.addEventListener && speechSynthesis.addEventListener("voiceschanged", function(){}); } }catch(e){}
   var ttsQueue = [], ttsBusy = false, ttsCur = null, ttsTimer = null, ttsStartedAt = 0;
   function ttsNext(){
     clearTimeout(ttsTimer);
@@ -9156,9 +9198,8 @@ module.exports = QRCode;
     var text = ttsQueue.shift();
     try{
       var u = new SpeechSynthesisUtterance(text);
-      u.lang = "it-IT"; u.rate = 0.95;
-      var vs = speechSynthesis.getVoices().filter(function(v){ return /^it/i.test(v.lang); });
-      if(vs.length) u.voice = vs[0];
+      u.lang = "it-IT"; u.rate = 0.86; u.pitch = 1;
+      var bv = bestVoice(); if(bv) u.voice = bv;
       var done = false;
       function fin(){ if(done) return; done = true; setTimeout(ttsNext, 450); }
       u.onend = fin;
@@ -9191,7 +9232,7 @@ module.exports = QRCode;
     if(/^Annunci vocali/.test(text)) return;
     var c = document.getElementById("tvCaption");
     if(!c){ c = document.createElement("div"); c.id = "tvCaption"; ov.appendChild(c); }
-    c.textContent = "📢 " + text.replace(/^Ripeto\.\s*/, "");
+    c.textContent = "📢 " + text.replace(/^Ripeto\.\s*/, "").replace(/,\s+e\s+/g, " e ").replace(/,\s+contro,\s+/g, "  contro  ").replace(/\.\s+Al tavolo\s+(\d+)\.?$/, "  →  Tavolo $1").replace(/\s{3,}/g, "  ");
     c.classList.add("show");
     clearTimeout(capTimer); capTimer = setTimeout(function(){ c.classList.remove("show"); }, 14000);
   }
@@ -9227,7 +9268,7 @@ module.exports = QRCode;
     fresh.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; });
     if(!fresh.length) return;
     if(mode === "caption" || !voiceOn()){
-      fresh.forEach(function(id){ var it = info.byId[id]; function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; } tvCaption("Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + "."); });
+      fresh.forEach(function(id){ var it = info.byId[id]; function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; } tvCaption(who(it.a) + ", contro, " + who(it.b) + ". Al tavolo " + on[id] + "."); });
       return;
     }
     chime();
@@ -9236,8 +9277,8 @@ module.exports = QRCode;
       var calls = fresh.map(function(id){
         var it = info.byId[id];
         function nm(p){ return String(p.name || "").replace(/\s*\(Talpa\)\s*$/i, " come talpa"); }
-        function who(t){ return t ? nm(t.keeper) + " e " + nm(t.attacker) : ""; }
-        return "Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + (it.tag ? ". " + spokenTag(it.tag) : "") + ".";
+        function who(t){ return t ? nm(t.keeper) + ", e " + nm(t.attacker) : ""; }
+        return who(it.a) + ",  contro,  " + who(it.b) + ".  Al tavolo " + on[id] + ".";
       });
       calls.forEach(speak);
       calls.forEach(function(c, i){ speak((i === 0 ? "Ripeto. " : "") + c); });
@@ -9263,7 +9304,8 @@ module.exports = QRCode;
       setTimeout(function(){
         var vs = []; try{ vs = speechSynthesis.getVoices(); }catch(e){}
         var it = vs.filter(function(v){ return /^it/i.test(v.lang); });
-        if(ttsStartedAt >= t0) toast("🔊 Voce funzionante" + (it.length ? " (" + it[0].name + ")" : "") + ". Se non senti niente, alza il volume del computer.");
+        var bv = bestVoice(), good = bv && /premium|enhanced|avanzat|migliorat|natural|neural|google/i.test(bv.name + " " + (bv.voiceURI || ""));
+        if(ttsStartedAt >= t0) toast("🔊 Voce funzionante" + (bv ? " (" + bv.name + ")" : "") + ". Se non senti niente, alza il volume del computer." + (good ? "" : " Per una voce più naturale sul Mac: Impostazioni di Sistema → Accessibilità → Contenuti letti → Voce di sistema → Gestisci voci → Italiano, scarica una voce \"Premium\" o \"Avanzata\" e riapri l'app."), good ? 4000 : 12000);
         else if(vs.length && !it.length) toast("🔇 Manca una voce italiana sul computer. Mac: Impostazioni di Sistema → Accessibilità → Contenuti letti → Voce di sistema → aggiungi una voce italiana.");
         else toast("🔇 Il browser non ha parlato. Controlla il volume, chiudi e riapri il browser, oppure prova con Chrome.");
       }, 2500);
@@ -9829,7 +9871,7 @@ module.exports = QRCode;
   var LS_TV_ROT = "tg_tv_rotate_v1", TV_ROT_STD = 30000, TV_ROT_GRID = 20000, tvRotStart = Date.now();
   function tvRotOn(){ try{ return localStorage.getItem(LS_TV_ROT) !== "0"; }catch(e){ return true; } }
   function tvRotPhase(){
-    if(!tvRotOn() || !gridAvailable()) return null;
+    if(!tvRotOn() || !gridAvailable() || tvIsPhone()) return null;
     var t = (Date.now() - tvRotStart) % (TV_ROT_STD + TV_ROT_GRID);
     return t < TV_ROT_STD ? { grid: false, left: Math.ceil((TV_ROT_STD - t) / 1000) } : { grid: true, left: Math.ceil((TV_ROT_STD + TV_ROT_GRID - t) / 1000) };
   }
@@ -10195,7 +10237,10 @@ module.exports = QRCode;
     var list = Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).sort(function(a, b){ return a - b; });
     var f = document.getElementById("camFab");
     if(!list.length || !(window.__fbViewer)){ if(f) f.remove(); return; }
-    if(!f){ f = document.createElement("button"); f.type = "button"; f.id = "camFab"; document.body.appendChild(f);
+    if(!f){
+      f = document.createElement("button"); f.type = "button"; f.id = "camFab";
+      var bar = document.querySelector("#spectatorNote .fb-viewer-bar");
+      if(bar){ f.className = "btn btn-sm cam-barbtn"; bar.appendChild(f); } else document.body.appendChild(f);
       f.addEventListener("click", function(){
         var l = Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).sort(function(a, b){ return a - b; });
         if(l.length === 1){ openCam(+l[0]); return; }
@@ -10221,7 +10266,7 @@ module.exports = QRCode;
   }
   (function(){
     var _tvrC = tvRender; tvRender = function(){ var r = _tvrC.apply(this, arguments); try{ tvCamUpdate(); }catch(e){} return r; };
-    var _exC = exitTvMode; exitTvMode = function(){ var r = _exC.apply(this, arguments); var b = document.getElementById("tvCam"); if(b) b.remove(); tvCamShown = ""; return r; };
+    var _exC = exitTvMode; exitTvMode = function(){ var r = _exC.apply(this, arguments); document.body.classList.remove("tv-phone"); var b = document.getElementById("tvCam"); if(b) b.remove(); tvCamShown = ""; return r; };
     if(window.__fbViewer){ var _vhC = window.__viewerHook; window.__viewerHook = function(){ if(_vhC) _vhC(); try{ camFab(); refreshTableBadges(); }catch(e){} }; }
   })();
   // riquadro di impostazione (dopo la Live)
