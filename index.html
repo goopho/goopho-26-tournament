@@ -1036,7 +1036,7 @@
   body.tv-phone #tvOverlay .tv-back{ bottom:10px; left:8px; font-size:12px; padding:7px 10px; opacity:.9; max-width:31%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   body.tv-phone #tvOverlay .tv-back.tv-voice{ left:34.5%; }
   body.tv-phone #tvOverlay .tv-back.tv-rot{ display:none; }
-  body.tv-phone #tvCam{ left:10px; right:10px; width:auto; bottom:54px; }
+  body.tv-phone #tvCam{ position:relative; left:auto; right:auto; bottom:auto; width:auto; margin:0 10px 56px; flex:none; }
   body.tv-phone #tvCaption{ bottom:56px; font-size:15px; }
   .cam-barbtn{ background:linear-gradient(180deg,#ff4b4b,#d0142c) !important; color:#fff !important; border:0 !important; font-weight:900; }
   #camFab:not(.cam-barbtn){ position:fixed; left:14px; bottom:80px; z-index:9000; border:0; border-radius:999px; padding:12px 16px; font:inherit; font-weight:900; font-size:15px; background:#c1121f; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4); cursor:pointer; }
@@ -1053,6 +1053,25 @@
   details.case summary::before{ content:"▸ "; color:#c1121f; }
   details.case[open] summary::before{ content:"▾ "; }
   details.case p{ margin:0; padding:0 12px 10px 26px; font-size:13.5px; line-height:1.5; }
+  html.caps body *:not(input):not(textarea):not(select):not(option){ text-transform:uppercase !important; }
+  html.caps input[type="text"]:not(#fbDbUrl):not(#fbApiKey):not(#fbPublicUrl), html.caps input:not([type]){ text-transform:uppercase; }
+  .vx-alerts{ display:flex; flex-direction:column; gap:7px; margin-top:12px; padding-top:10px; border-top:1px solid rgba(20,41,74,0.12); font-size:13px; }
+  .vx-alerts label{ display:flex; gap:8px; align-items:center; cursor:pointer; }
+  .vx-alerts input{ width:18px; height:18px; margin:0; flex:none; }
+  .vx-ok{ font-size:12.5px; color:#1a7f43; font-weight:800; }
+  #elimCard .el-wrap > summary{ cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px; }
+  #elimCard .el-wrap > summary::-webkit-details-marker{ display:none; }
+  #elimCard .el-title{ font-weight:900; font-size:18px; color:var(--pitch); }
+  #elimCard .el-count{ background:#2c7be5; color:#fff; border-radius:999px; padding:2px 10px; font-weight:900; font-size:13px; }
+  #elimCard .el-sub{ font-size:13px; color:var(--ink-soft); margin:6px 0 10px; }
+  #elimCard .el-row{ display:flex; gap:10px; align-items:flex-start; padding:9px 11px; border-radius:12px; background:rgba(44,123,229,0.07); margin:7px 0; }
+  #elimCard .el-role{ flex:none; width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:12px; color:#fff; }
+  #elimCard .el-role.p{ background:#1a4dff; } #elimCard .el-role.a{ background:#d0142c; }
+  #elimCard .el-body{ flex:1; min-width:0; }
+  #elimCard .el-name{ font-weight:900; font-size:15px; }
+  #elimCard .el-where{ font-weight:700; font-size:11.5px; color:#8a5a00; background:#fff2c9; border-radius:999px; padding:1px 8px; margin-left:4px; white-space:nowrap; }
+  #elimCard .el-msg{ font-size:14px; margin-top:3px; line-height:1.4; }
+  #elimCard .el-stats{ font-size:11.5px; color:var(--ink-soft); margin-top:3px; }
   .modal-box{ background:#fff; border-radius:14px; padding:20px; max-width:340px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
   .modal-box p{ margin:0 0 18px; font-size:14.5px; line-height:1.5; color:var(--ink); }
   .modal-actions{ display:flex; gap:10px; }
@@ -1209,7 +1228,7 @@
         <div id="manualPairsList"></div>
         <div class="draw-summary" id="manualPairsInfo" style="margin-top:8px;"></div>
       </div>
-      <div class="draw-summary" id="fixedModeNote" style="display:none; margin-top:12px;">Nel Sorteggio non si sceglie il numero di giornate: fino a 9 coppie si gioca un girone unico all'italiana; da 10 coppie in su le coppie vengono divise in più gironi (max 9 a girone), oppure scegli tu manualmente il numero di gironi qui sopra. Da ogni girone passano alla fase finale le prime 4 in classifica (numero modificabile nella sezione "Fase finale"); con 2 gironi e 4 qualificate la 1ª incontra la 4ª dell'altro girone e la 2ª la 3ª.</div>
+      <div class="draw-summary" id="fixedModeNote" style="display:none; margin-top:12px;">In Sorteggio e Coppie fisse non si sceglie il numero di giornate: fino a 9 coppie si gioca un girone unico all'italiana; da 10 coppie in su le coppie vengono divise in più gironi (max 9 a girone), oppure scegli tu manualmente il numero di gironi qui sopra. Da ogni girone passano alla fase finale le prime 4 in classifica (numero modificabile nella sezione "Fase finale"); con 2 gironi e 4 qualificate la 1ª incontra la 4ª dell'altro girone e la 2ª la 3ª.</div>
     </div>
 
     <button class="btn btn-primary btn-block" id="drawBtn" style="font-size:15px; padding:14px;">🎲 Sorteggia partite</button>
@@ -1250,11 +1269,11 @@
 
     <div class="card" id="playoffCard" style="">
       <h2>🏁 Fase Finale</h2>
-      <div id="playoffIntro" class="draw-summary">Fascia A: i primi 8 portieri e i primi 8 attaccanti in classifica formano le squadre in modo meritocratico incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Anche gli accoppiamenti del tabellone (Quarti di finale → Semifinale → Finale) seguono la classifica: il 1° incontra l'ultimo del girone, il 2° il penultimo, e così via, per tenere separati i migliori fino ai turni successivi. Ogni incontro, dagli ottavi/quarti fino alla finale, si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.</div>
+      <div id="playoffIntro" class="draw-summary"></div>
       <div id="fasciaAWrap" style="display:none; margin-top:10px;">
         <label class="field" for="fasciaACount">Coppie in Fascia A</label>
         <input type="number" id="fasciaACount" min="2" max="32" placeholder="Auto">
-        <div class="draw-summary" style="margin-top:6px;">Vuoto = automatico (8, oppure 4 o 2 se siete in pochi). Le coppie si formano incrociando la classifica (1° portiere con 2° attaccante, 2° portiere con 1° attaccante…). Con un numero diverso da 2, 4, 8, 16 si gioca un primo turno con ripescaggio.</div>
+        <div class="draw-summary" style="margin-top:6px;">Vuoto = automatico (8, oppure 4 o 2 se siete in pochi). Le coppie si formano incrociando la classifica (1° portiere con 2° attaccante, 2° portiere con 1° attaccante…). Con un numero diverso da 2, 4, 8, 16 si gioca un primo turno con ripescaggio (con un numero dispari la meglio classificata passa il turno; con 3 coppie si gioca un triangolare).</div>
       </div>
       <div id="qualifyWrap" style="display:none; margin-top:10px;">
         <label class="field" for="qualifyPerGroup">Coppie che passano da ogni girone</label>
@@ -1407,58 +1426,59 @@
         <summary>📖 Come funziona il torneo — guida per l'organizzatore</summary>
         <div class="rules-body">
 
-          <h3>1. Le coppie</h3>
-          <p><b>Modalità Giallo 🔄 (di default):</b> a ogni giornata i portieri vengono ri-accoppiati automaticamente con un attaccante diverso da quelli con cui hanno già giocato (mai la stessa coppia due volte, e si evita anche di rincontrare lo stesso avversario). Se i numeri non tornano, un giocatore di troppo può fare da "Talpa" prestandosi a un'altra squadra per una partita extra (senza punteggio), e un eventuale turno di recupero finale pareggia chi ha giocato meno partite delle altre.<br>
-          <b>Modalità Sorteggio 🎲:</b> ogni portiere viene abbinato una sola volta a un attaccante e resta con quel compagno per tutto il torneo, girone e fase finale compresi (chi resta senza compagno va in panchina).<br>
-          <b>Modalità Coppie fisse 🤝:</b> come il Sorteggio, ma le coppie non vengono sorteggiate: le formi tu abbinando a ogni portiere il suo attaccante nel riquadro "Forma le coppie". Il sorteggio crea solo il calendario (girone unico o più gironi, anche nel numero che scegli tu) e le coppie restano le stesse fino alla finale. Chi non ha un compagno va in panchina. I gironi si possono comporre in tre modi: <b>🎲 sorteggio casuale</b>; <b>✋ scelta manuale</b> (indichi tu la lettera del girone per ogni coppia); <b>⭐ teste di serie</b> (indichi una testa di serie per girone, che viene messa in un girone diverso dalle altre, e le altre coppie vengono sorteggiate in modo che i gironi siano il più possibile equilibrati).</p>
+          <h3>1. Le modalità</h3>
+          <p><b>Giallo 🔄 (consigliata):</b> a ogni giornata ogni portiere gioca con un attaccante <b>diverso</b>: mai lo stesso compagno due volte (se i numeri lo permettono) e, dove si può, senza rincontrare gli stessi avversari. La classifica è <b>individuale</b> (portieri e attaccanti). Se i numeri non tornano nessuno sta a guardare: chi resta senza compagno gioca una partita extra con una "Talpa" (vedi i casi particolari).<br>
+          <b>Sorteggio 🎲:</b> le coppie portiere + attaccante vengono sorteggiate una volta sola e restano le stesse per tutto il torneo, fase finale compresa. Chi resta senza compagno va in panchina.<br>
+          <b>Coppie fisse 🤝:</b> come il Sorteggio, ma le coppie le formi tu nel riquadro "Forma le coppie". I gironi si compongono in tre modi: <b>🎲 sorteggio casuale</b>; <b>✋ scelta manuale</b> (indichi tu il girone di ogni coppia); <b>⭐ teste di serie</b> (una per girone, le altre coppie sorteggiate; i gironi hanno lo stesso numero di coppie).</p>
 
-          <h3>2. Il girone</h3>
-          <p>Ogni partita del girone si gioca <b>al meglio dei 7 gol</b> (vince chi arriva prima a 7). Punti in classifica: <b>3 punti</b> per una vittoria con 2 o più gol di scarto, <b>2 a 1</b> se lo scarto è di un solo gol.</p>
+          <h3>2. Le partite</h3>
+          <p>Si gioca <b>a chi arriva prima a 7 gol</b>. In <b>Giallo</b> si gioca a giornate (di base 5): in ogni giornata ognuno ha una partita che conta. In <b>Sorteggio</b> e <b>Coppie fisse</b> si gioca un girone all'italiana: ogni coppia incontra tutte le altre del suo girone una volta, in un unico elenco senza giornate (fino a 9 coppie un girone unico, da 10 in su più gironi, oppure il numero che scegli tu). L'app chiama le partite sui biliardini liberi e non mette mai in campo un giocatore in due partite contemporaneamente.</p>
 
-          <h3>3. Classifica e spareggi</h3>
-          <p>La classifica ordina per: punti → differenza reti → gol fatti. In caso di ulteriore parità, decide lo scontro diretto fra i due giocatori nelle giornate già giocate; se non si sono mai incontrati (o il diretto è pari), l'app permette di inserire una partita di spareggio dedicata.</p>
+          <h3>3. Punti, classifica e spareggi</h3>
+          <p>Vittoria con <b>2 o più gol di scarto</b>: 3 punti al vincitore. Vittoria con <b>1 gol di scarto</b>: 2 punti al vincitore e 1 al perdente. In Giallo ci sono due classifiche individuali (<b>Leaderboard Portieri</b> e <b>Leaderboard Attaccanti</b>); in Sorteggio e Coppie fisse c'è una classifica delle coppie per ogni girone. A pari punti decidono, nell'ordine: <b>differenza reti → gol fatti → scontro diretto</b>. Se resta la parità l'app la segnala e permette di giocare una <b>partita di spareggio</b>, che decide.</p>
 
           <h3>4. Fase finale (Fascia A / Fascia B)</h3>
-          <p>I migliori classificati (fino a 8) formano la <b>Fascia A</b>, i successivi (fino a 8) la <b>Fascia B</b>; chi resta fuori da entrambe non accede alla fase finale. Con le coppie fisse divise in gironi, invece, <b>tutte le qualificate formano la Fascia A</b> e tutte le non qualificate la Fascia B: nessuno viene eliminato. Il tabellone segue il merito (1ª contro ultima, 2ª contro penultima…) e di base <b>nessuno riposa</b>: se le coppie non sono 2, 4, 8 o 16, tutte giocano il primo turno e passano le vincenti più le migliori perdenti (<b>ripescaggio</b>: prima chi ha vinto una partita dello scontro, poi differenza reti, poi gol fatti). Una fascia di 3 coppie gioca un <b>triangolare</b> a partite secche. Solo con un numero dispari di coppie (5, 7, 9…) la meglio classificata passa il primo turno. Il numero di coppie che passa da ogni girone si sceglie nella sezione "Fase finale" (4 se non indicato): le qualificate vengono ordinate per piazzamento (tutte le prime, poi le seconde, ecc.) e poi per punti e differenza reti, e con l'opzione <b>"Evita rivincite del girone al primo turno"</b> (attiva di base) al primo turno si evita, quando possibile, che si incontrino due coppie dello stesso girone, scambiando solo avversari con lo stesso piazzamento (es. una 3ª con un'altra 3ª) così il merito resta rispettato. Con l'opzione <b>"Chi salta il primo turno"</b> le prime classificate (ed eventualmente le migliori seconde, se lo scegli) riposano, le altre qualificate giocano il primo turno tra loro e le vincenti raggiungono le prime; tutte le coppie non qualificate formano la Fascia B. Quando i numeri non danno un tabellone completo (2, 4, 8 coppie), le meglio classificate passano il turno senza giocare. Le coppie della fase finale si formano incrociando le posizioni di classifica (1° portiere con 2° attaccante, 2° con 1°, e così a scalare) per non concentrare i più forti nella stessa coppia. Il tabellone è a eliminazione diretta con accoppiamenti da classifica (il 1° incontra l'ultimo, il 2° il penultimo, ecc.), fino a Finale e Finale 3°/4° posto.</p>
+          <p><b>In Giallo:</b> la Fascia A è formata di base dai primi 8 portieri e dai primi 8 attaccanti (4 o 2 se siete in pochi; il numero si può cambiare). Se avanza una sola coppia, entra in Fascia A. La Fascia B di base raccoglie tutti gli altri (fino a 32 coppie in tutto); si può scegliere quante coppie o nessuna. Chi non entra in nessuna fascia è eliminato, compresi i portieri o gli attaccanti "in più" quando i due ruoli non sono in pari numero. Le coppie si formano <b>incrociando la classifica</b> (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4° e così via), per non mettere insieme i più forti. <b>Dopo i Quarti e dopo le Semifinali</b> chi passa forma <b>nuove coppie</b> con lo stesso incrocio (anche per Finale e 3°/4° posto): in Semifinale si affrontano la 1ª e la 2ª nuova coppia, la 3ª e la 4ª. L'organizzatore può cambiare le coppie a mano (<b>✏️ Cambia le coppie</b>) prima che l'incontro cominci.<br>
+          <b>In Sorteggio e Coppie fisse:</b> da ogni girone passano in Fascia A le prime (di base 4, numero modificabile), ordinate per piazzamento e poi per punti e differenza reti; le altre vanno in Fascia B, se attiva. Le coppie non cambiano mai. Opzioni: <b>"Evita rivincite del girone al primo turno"</b> (scambia solo avversari con lo stesso piazzamento) e <b>"Chi salta il primo turno"</b> (le prime, ed eventualmente le migliori seconde, riposano; se i numeri non danno un tabellone completo riposano anche al turno dopo).<br>
+          <b>Il tabellone</b> segue la classifica: la 1ª contro l'ultima, la 2ª contro la penultima… Se le coppie non sono 2, 4, 8, 16 o 32, tutte giocano il primo turno e passano le vincenti più le <b>migliori perdenti</b> (ripescaggio: vittorie nell'incontro, poi differenza reti, poi gol fatti). Con un numero dispari la meglio classificata passa il primo turno senza giocare. Con 3 coppie si gioca un <b>triangolare</b> a partite secche.</p>
 
-          <h3>5. Come si gioca ogni turno della fase finale</h3>
-          <p>Ogni incontro (Quarti, Semifinale, Finale, 3°/4° posto) si gioca <b>andata e ritorno</b>, sempre al meglio dei 7 gol. Se ogni squadra vince una gara, si gioca una terza gara decisiva, <b>la bella</b>, per stabilire chi passa il turno.</p>
+          <h3>5. Come si gioca un incontro della fase finale</h3>
+          <p>Ogni incontro si gioca <b>andata e ritorno</b>, sempre a 7 gol. Se ogni coppia vince una partita si gioca <b>la bella</b>. Il triangolare invece si gioca a partite secche.</p>
 
-          <h3>6. Podio e leaderboard</h3>
-          <p>Al termine di ogni Fascia si forma un podio: 🥇 chi vince la Finale, 🥈 chi la perde, 🥉 chi vince la Finale 3°/4° posto. Oltre alla classifica generale, l'app calcola due classifiche individuali separate — <b>Leaderboard Portieri</b> e <b>Leaderboard Attaccanti</b> — utili perché in modalità Giallo ogni giocatore cambia compagno a ogni giornata.</p>
+          <h3>6. Podio</h3>
+          <p>Per ogni Fascia: 🥇 chi vince la Finale, 🥈 chi la perde, 🥉 chi vince la Finale 3°/4° posto. In fondo trovi anche chi è uscito dal torneo, con un pensiero per ognuno 💙.</p>
 
           <h3>7. Casi particolari: cosa succede e perché</h3>
-          <p>L'app segue sempre tre regole: <b>tutti giocano lo stesso numero di partite che contano</b>, <b>nessuno resta a guardare</b> (dove possibile) e <b>non si ripete il compagno</b>. Qui sotto ogni situazione e come viene risolta: tocca una voce per aprirla.</p>
+          <p>L'app segue sempre tre regole: <b>tutti giocano lo stesso numero di partite che contano</b>, <b>nessuno resta a guardare</b> (in Giallo) e <b>non si ripete il compagno</b> (se i numeri lo permettono). Qui sotto ogni situazione e come viene risolta: tocca una voce per aprirla.</p>
           <div class="case-group"><div class="case-title">Modalità Giallo 🔄</div>
-            <details class="case"><summary>Portieri e attaccanti in numero uguale (es. 16 + 16)</summary><p>Si formano 16 coppie, cioè 8 partite per giornata: tutti giocano una volta. A ogni giornata il compagno cambia e non si ripete mai; l'app cerca anche di non far rincontrare gli stessi avversari.</p></details>
-            <details class="case"><summary>Numero di coppie dispari (es. 15 + 15)</summary><p>Con 15 coppie una resterebbe senza avversari. L'app aggiunge una <b>partita extra</b>: quella coppia gioca contro una coppia <b>🃏 Jolly</b>, formata da due giocatori che hanno già giocato la loro partita. Il risultato conta <b>solo per la coppia rimasta</b>; i Jolly non fanno punti. Il ruolo di Jolly gira, così non tocca sempre agli stessi.</p></details>
-            <details class="case"><summary>Un giocatore in più in un ruolo (es. 16 portieri + 17 attaccanti)</summary><p>16 portieri e 16 attaccanti giocano le 8 partite normali. L'attaccante in più gioca una <b>partita extra</b> in coppia con un portiere che fa da <b>🕳️ Talpa</b> (nome in rosso) contro una coppia Jolly. Fa punti <b>solo l'attaccante in più</b>: Talpa e Jolly hanno già giocato e quella partita non conta per loro. L'attaccante in più cambia a ogni giornata. Con un portiere in più succede lo stesso a ruoli invertiti.</p></details>
-            <details class="case"><summary>Più giocatori in più (es. 16 portieri + 20 attaccanti)</summary><p>Per ogni attaccante in più un portiere gioca una seconda partita come <b>Talpa</b> (non fa punti). Gli attaccanti in più giocano tra loro le partite extra e fanno punti normalmente; se servono, si aggiunge una coppia Jolly. Il compito di Talpa gira tra tutti i portieri, giornata dopo giornata.</p></details>
-            <details class="case"><summary>Iscritto il giocatore fittizio «Talpa»</summary><p>Se tra gli iscritti c'è un giocatore chiamato «Talpa», l'app sceglie da sola chi lo sostituisce in ogni partita non ancora giocata: prima chi in quella giornata riposa, facendo girare il compito. Compare come «Nome (Talpa)» e non fa punti. Si può sempre scegliere una persona precisa con 🔁 Sostituisci.</p></details>
+            <details class="case"><summary>Portieri e attaccanti in numero uguale (es. 16 + 16)</summary><p>Si formano 16 coppie, cioè 8 partite per giornata: tutti giocano una volta. A ogni giornata il compagno cambia e non si ripete; l'app cerca anche di non far rincontrare gli stessi avversari.</p></details>
+            <details class="case"><summary>Numero di coppie dispari (es. 15 + 15)</summary><p>Una coppia resterebbe senza avversari: gioca una <b>partita extra</b> contro una coppia <b>🃏 Jolly</b>, formata al momento da due giocatori che hanno già giocato (di preferenza un'accoppiata nuova). I Jolly non fanno punti: <b>conta solo per chi è rimasto</b>. Se invece i due rimasti erano già stati compagni, ognuno gioca con una Talpa e si sfidano.</p></details>
+            <details class="case"><summary>Un giocatore in più in un ruolo (es. 16 portieri + 17 attaccanti)</summary><p>Le 8 partite normali si giocano regolarmente. L'attaccante in più gioca una <b>partita extra</b> in coppia con un portiere che fa da <b>🕳️ Talpa</b> (nome in rosso) contro una coppia Jolly: fa punti <b>solo l'attaccante in più</b>, gli altri hanno già giocato. L'attaccante in più viene scelto a ogni giornata, di preferenza tra chi ha giocato di più fino a quel momento (può ricapitare alla stessa persona). Con un portiere in più succede lo stesso a ruoli invertiti.</p></details>
+            <details class="case"><summary>Più giocatori in più (es. 16 portieri + 20 attaccanti)</summary><p>Per ogni attaccante in più un portiere gioca <b>due partite</b> nella giornata: nella seconda fa da <b>Talpa</b> e non prende punti, mentre il suo compagno e gli avversari fanno punti normalmente. Il compito di Talpa gira tra i portieri.</p></details>
+            <details class="case"><summary>Iscritto il giocatore fittizio «Talpa»</summary><p>Se tra gli iscritti c'è un giocatore chiamato «Talpa», l'app sceglie da sola chi lo sostituisce in ogni partita non ancora giocata: prima chi in quella giornata riposa, facendo girare il compito. Compare come «Nome (Talpa)», non fa punti e non viene mai chiamato in due partite insieme. Si può scegliere una persona precisa con <b>🔁 Sostituisci</b>.</p></details>
             <details class="case"><summary>Pochi giocatori (es. 4 portieri + 5 attaccanti)</summary><p>In 5 giornate non ci sono abbastanza compagni diversi per tutti: qualche coppia si ripete per forza. L'app fa molti tentativi e sceglie il calendario con meno ripetizioni possibili.</p></details>
-            <details class="case"><summary>Qualcuno ha giocato meno partite</summary><p>Se per i numeri qualcuno è rimasto indietro con le partite che contano, alla fine si aggiunge una <b>giornata di recupero</b> solo per loro (con una coppia Jolly se serve): così tutti chiudono il girone con lo stesso numero di partite valide.</p></details>
+            <details class="case"><summary>Qualcuno è rimasto indietro con le partite</summary><p>Se serve, alla fine si aggiunge una <b>giornata di recupero</b> per chi ha giocato meno partite che contano (capita di rado).</p></details>
             <details class="case"><summary>Chi gioca due partite nella stessa giornata</summary><p>Talpa e Jolly giocano due volte nella stessa giornata. L'app non le mette mai sui tavoli nello stesso momento: una partita va in campo solo quando tutti e quattro i giocatori sono liberi.</p></details>
           </div>
           <div class="case-group"><div class="case-title">Modalità Sorteggio 🎲 e Coppie fisse 🤝</div>
-            <details class="case"><summary>Come si gioca il girone</summary><p>Girone all'italiana: ogni coppia incontra tutte le altre una volta (es. 7 coppie = 21 partite). Con un numero di coppie dispari, a ogni giornata una coppia riposa.</p></details>
-            <details class="case"><summary>Portieri e attaccanti in numero diverso</summary><p>Le coppie restano le stesse per tutto il torneo, quindi chi non trova un compagno <b>va in panchina</b>. Per farlo giocare si può iscrivere «Talpa» nel ruolo che manca.</p></details>
-            <details class="case"><summary>Arriva tardi una coppia o una coppia si ritira</summary><p><b>➕ Coppia arrivata in ritardo</b>: si aggiunge a un girone e gioca contro tutte le coppie di quel girone. <b>🚫 Ritiro</b>: le sue partite ancora da giocare sono date vinte 7-0 agli avversari e la coppia non entra in fase finale (si può annullare).</p></details>
+            <details class="case"><summary>Come si gioca il girone</summary><p>Girone all'italiana: ogni coppia incontra tutte le altre del suo girone una volta (es. 7 coppie = 21 partite), in un unico elenco senza giornate. L'app chiama le partite sui biliardini liberi.</p></details>
+            <details class="case"><summary>Portieri e attaccanti in numero diverso</summary><p>Le coppie restano le stesse per tutto il torneo, quindi chi non trova un compagno <b>va in panchina</b>. Per farlo giocare si può iscrivere «Talpa» nel ruolo che manca: quella coppia gioca e fa punti come le altre (la Talpa la fa chi capita).</p></details>
+            <details class="case"><summary>Arriva tardi una coppia o una coppia si ritira</summary><p><b>➕ Coppia arrivata in ritardo</b>: si aggiunge a un girone e gioca contro tutte le coppie di quel girone (finché la fase finale non è creata). <b>🚫 Ritiro</b>: le sue partite ancora da giocare sono date vinte 7-0 agli avversari e la coppia non entra in fase finale (si può annullare).</p></details>
           </div>
           <div class="case-group"><div class="case-title">Durante il torneo</div>
             <details class="case"><summary>Un giocatore se ne va o arriva tardi (Giallo)</summary><p><b>🔁 Sostituisci un giocatore</b>: chi entra prende il suo posto in tutte le partite ancora da giocare. Le partite già giocate restano com'erano.</p></details>
-            <details class="case"><summary>Risultato inserito sbagliato</summary><p>Basta correggere il numero. Con <b>↩️ Annulla</b> si torna indietro all'ultima modifica. Un 7-7 o un risultato senza nessuno a 7 viene evidenziato come sospetto.</p></details>
+            <details class="case"><summary>Risultato inserito sbagliato</summary><p>Basta correggere il numero: anche nella fase finale, se il vincitore non cambia, i risultati dei turni successivi restano. Con <b>↩️ Annulla</b> si torna indietro all'ultima modifica. Un 7-7 o un risultato senza nessuno a 7 viene evidenziato come sospetto.</p></details>
           </div>
           <div class="case-group"><div class="case-title">Classifica</div>
             <details class="case"><summary>Come si fanno i punti</summary><p>Si gioca a chi arriva prima a 7 gol. Vittoria con 2 o più gol di scarto: 3 punti al vincitore. Vittoria con 1 gol di scarto: 2 punti al vincitore e 1 al perdente. Talpa e Jolly non prendono punti in quella partita.</p></details>
-            <details class="case"><summary>Parità in classifica</summary><p>Si guardano nell'ordine: punti → differenza reti → gol fatti → scontro diretto. Se ancora pari, l'app propone una partita di spareggio.</p></details>
+            <details class="case"><summary>Parità in classifica</summary><p>Si guardano nell'ordine: punti → differenza reti → gol fatti → scontro diretto. Se resta la parità, l'app la segnala e si può giocare una partita di spareggio, che decide.</p></details>
           </div>
           <div class="case-group"><div class="case-title">Fase finale</div>
-            <details class="case"><summary>Chi entra</summary><p>Fascia A: i primi 8 portieri e i primi 8 attaccanti. Fascia B: i successivi 8 e 8. Chi resta oltre è fuori. (Con le coppie fisse divise in gironi passano le qualificate di ogni girone.)</p></details>
-            <details class="case"><summary>Come si formano le coppie</summary><p>Si incrocia la classifica per non mettere insieme i più forti: 1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4° e così via. Dopo i Quarti e dopo le Semifinali chi passa forma <b>nuove coppie</b> con lo stesso incrocio (anche per Finale e 3°/4° posto). L'organizzatore può cambiarle a mano con <b>✏️ Cambia le coppie</b> finché l'incontro non è iniziato.</p></details>
-            <details class="case"><summary>Numero di coppie che non torna (non 2, 4, 8, 16)</summary><p>Tutte giocano il primo turno e passano le vincenti più le <b>migliori perdenti</b> (ripescaggio: prima chi ha vinto una partita dell'incontro, poi differenza reti, poi gol fatti). Con un numero dispari la meglio classificata passa il turno. Con 3 coppie si gioca un <b>triangolare</b>.</p></details>
-            <details class="case"><summary>Come si gioca un incontro</summary><p>Andata e ritorno, sempre a 7 gol. Se ognuna vince una partita si gioca la <b>bella</b>. Chi vince passa il turno; in Finale e 3°/4° posto si decide il podio.</p></details>
+            <details class="case"><summary>Chi entra</summary><p>Giallo: Fascia A di base i primi 8 portieri e 8 attaccanti (4 o 2 se siete in pochi, o il numero che scegli); Fascia B di base tutti gli altri, oppure quanti ne scegli, oppure nessuno. Sorteggio e Coppie fisse: le prime di ogni girone in Fascia A, le altre in Fascia B se attiva. Chi non entra è eliminato.</p></details>
+            <details class="case"><summary>Come si formano le coppie (Giallo)</summary><p>Si incrocia la classifica: 1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4° e così via. Dopo i Quarti e dopo le Semifinali chi passa forma <b>nuove coppie</b> con lo stesso incrocio; in Semifinale si affrontano la 1ª e la 2ª nuova coppia, la 3ª e la 4ª. L'organizzatore può cambiarle a mano con <b>✏️ Cambia le coppie</b> finché l'incontro non è iniziato. In Sorteggio e Coppie fisse le coppie non cambiano mai.</p></details>
+            <details class="case"><summary>Numero di coppie che non torna (non 2, 4, 8, 16, 32)</summary><p>Tutte giocano il primo turno e passano le vincenti più le <b>migliori perdenti</b> (ripescaggio: prima chi ha vinto una partita dell'incontro, poi differenza reti, poi gol fatti). Con un numero dispari la meglio classificata passa il primo turno. Con 3 coppie si gioca un <b>triangolare</b>.</p></details>
+            <details class="case"><summary>Come si gioca un incontro</summary><p>Andata e ritorno, sempre a 7 gol. Se ognuna vince una partita si gioca la <b>bella</b>. Il triangolare si gioca a partite secche.</p></details>
           </div>
-
 
         </div>
       </details>
@@ -1492,7 +1512,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 53</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 55</span></div>
 
 </div>
 
@@ -4336,7 +4356,7 @@ module.exports = QRCode;
     if(isFixed){
       var built = isManual ? buildManualTeams() : buildFixedTeams(players.keepers, players.attackers);
       if(built.teams.length < 2){
-        toast(isManual ? "Forma almeno 2 coppie (portiere + attaccante) nel riquadro \"Forma le coppie\"." : "Servono almeno 2 coppie complete (portiere + attaccante) per il sorteggio fisso.");
+        toast(isManual ? "Forma almeno 2 coppie (portiere + attaccante) nel riquadro \"Forma le coppie\"." : "Servono almeno 2 coppie complete (portiere + attaccante) per la modalità Sorteggio.");
         return;
       }
       fixedTeamsList = built.teams;
@@ -4753,11 +4773,14 @@ module.exports = QRCode;
     // Se non si sono mai affrontati nel torneo, ma l'organizzatore ha fatto
     // disputare uno spareggio dedicato tra questi due specifici giocatori,
     // usiamo quel risultato al posto di lasciare l'ordine al caso.
-    if(!found && current && current.tiebreaks){
+    if((!found || diff === 0) && current && current.tiebreaks){
+      var tbDiff = 0, tbFound = false;
       current.tiebreaks.forEach(function(tb){
-        if(tb.idA===idA && tb.idB===idB){ diff += (tb.scoreA - tb.scoreB); found = true; }
-        else if(tb.idA===idB && tb.idB===idA){ diff += (tb.scoreB - tb.scoreA); found = true; }
+        if(tb.scoreA === null || tb.scoreA === undefined || tb.scoreB === null || tb.scoreB === undefined) return;
+        if(tb.idA===idA && tb.idB===idB){ tbDiff += (tb.scoreA - tb.scoreB); tbFound = true; }
+        else if(tb.idA===idB && tb.idB===idA){ tbDiff += (tb.scoreB - tb.scoreA); tbFound = true; }
       });
+      if(tbFound){ diff = tbDiff; found = true; }
     }
     return found ? diff : null;
   }
@@ -4981,7 +5004,7 @@ module.exports = QRCode;
     var rows = computeStandings(group.rounds);
     var byId = {}; rows.forEach(function(r){ byId[r.id] = r; });
     return group.teams.map(function(t){
-      var kr = byId[t.keeper.id] || { pg:0, v:0, n:0, p:0, gf:0, gs:0, pt:0 };
+      var kr = byId[t.keeper.id] || byId[t.attacker.id] || { pg:0, v:0, n:0, p:0, gf:0, gs:0, pt:0 };
       return { team: t, pg:kr.pg, v:kr.v, n:kr.n, p:kr.p, gf:kr.gf, gs:kr.gs, pt:kr.pt };
     }).sort(function(a,b){
       if(b.pt !== a.pt) return b.pt - a.pt;
@@ -5111,7 +5134,7 @@ module.exports = QRCode;
     if(isGrouped && current.firstsBye){
       var qq = qualifyPerGroup(), G = current.groups.length;
       var ks = current.byeSeconds || 0;
-      msg = "Fascia A: " + byeModeLabel().toLowerCase() + " (" + (G + ks) + " coppie) saltano il primo turno. " + (qq > 1 ? "Le altre qualificate (fino alla " + qq + "ª di ogni girone) giocano il primo turno tra loro (la migliore contro la peggiore" + (avoidRematchOn() ? ", evitando quando possibile le rivincite del girone" : "") + ") e le vincenti raggiungono le prime. Se i conti non tornano, le prime meglio classificate riposano anche al turno successivo. " : "") + "Fascia B: tutte le coppie dalla " + (qq+1) + "ª posizione in giù, con tabellone ordinato per classifica (se non sono 2, 4 o 8 le migliori passano il primo turno). Le coppie restano sempre le stesse fino alla fine.";
+      msg = "Fascia A: " + byeModeLabel().toLowerCase() + " (" + (G + ks) + " coppie) saltano il primo turno. " + (qq > 1 ? "Le altre qualificate (fino alla " + qq + "ª di ogni girone) giocano il primo turno tra loro (la migliore contro la peggiore" + (avoidRematchOn() ? ", evitando quando possibile le rivincite del girone" : "") + ") e le vincenti raggiungono le prime. Se i conti non tornano, le prime meglio classificate riposano anche al turno successivo. " : "") + "Fascia B: tutte le coppie dalla " + (qq+1) + "ª posizione in giù, con tabellone ordinato per classifica: nessuno riposa (se servono, ripescaggio delle migliori perdenti). Le coppie restano sempre le stesse fino alla fine.";
       msg += " Ogni incontro si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.";
       el.textContent = msg;
       return;
@@ -5121,10 +5144,10 @@ module.exports = QRCode;
     } else if(isGrouped){
       msg = "Dai " + current.groups.length + (current.groups.length===1 ? " girone" : " gironi") + " passano in Fascia A le prime " + qualifyPerGroup() + " squadre di ciascuno (" + n + " in tutto), con tabellone per merito: ordinate per piazzamento nel girone e poi per punti e differenza reti, la 1ª incontra l'ultima, la 2ª la penultima e così via" + ([2,4,8,16,32].indexOf(Math.min(n,32)) === -1 ? " (non essendo 2, 4, 8, 16 o 32, nessuno riposa: tutte giocano il primo turno e passano le vincenti più le migliori perdenti, col ripescaggio" + (n % 2 === 1 ? "; con un numero dispari di coppie la meglio classificata passa il primo turno" : "") + ")" : "") + (avoidRematchOn() ? "; al primo turno si evitano, quando possibile, le rivincite del girone scambiando solo avversari con lo stesso piazzamento" : "") + ". Le coppie restano sempre le stesse fino alla fine.";
     } else if(current && current.fixedTeams){
-      msg = "Fascia A: le prime " + primarySize + " coppie fisse in classifica entrano nel tabellone (" + stageA.join(" → ") + ") mantenendo la stessa coppia portiere+attaccante sorteggiata a inizio torneo, fino alla fine della fase finale. Gli accoppiamenti seguono la classifica: la 1ª incontra l'ultima del girone, la 2ª la penultima, e così via.";
+      msg = "Fascia A: le prime " + primarySize + " coppie fisse in classifica entrano nel tabellone (" + stageA.join(" → ") + ") mantenendo la stessa coppia portiere+attaccante formata a inizio torneo, fino alla fine della fase finale. Gli accoppiamenti seguono la classifica: la 1ª incontra l'ultima del tabellone, la 2ª la penultima, e così via.";
     } else {
       var gz = gialloSizes(n);
-      msg = "Fascia A: " + gz.a + " coppie, formate dai primi " + gz.a + " portieri e dai primi " + gz.a + " attaccanti in classifica incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Gli accoppiamenti del tabellone seguono la classifica: la 1ª coppia incontra l'ultima, la 2ª la penultima, e così via" + (isPow2(gz.a) ? "." : " (non essendo 2, 4, 8, 16 o 32, si gioca un primo turno con ripescaggio delle migliori perdenti).");
+      msg = "Fascia A: " + gz.a + " coppie, formate dai primi " + gz.a + " portieri e dai primi " + gz.a + " attaccanti in classifica incrociando le posizioni (1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4°, e così a scalare). Gli accoppiamenti del tabellone seguono la classifica: la 1ª coppia incontra l'ultima, la 2ª la penultima, e così via" + (isPow2(gz.a) ? "." : (gz.a === 3 ? " (con 3 coppie si gioca un triangolare a partite secche)." : " (non essendo 2, 4, 8, 16 o 32, tutte giocano il primo turno e passano le vincenti più le migliori perdenti" + (gz.a % 2 === 1 ? "; con un numero dispari la meglio classificata passa il turno" : "") + ")."));
       msg += " Dopo i Quarti e dopo le Semifinali chi passa il turno forma nuove coppie con lo stesso incrocio (anche per la Finale e il 3°/4° posto).";
       msg += gz.b >= 2 ? " Fascia B: le successive " + gz.b + " coppie, con la stessa logica." : " Nessuna Fascia B.";
       if(gz.out > 0) msg += " Restano fuori gli ultimi " + gz.out + " portieri e " + gz.out + " attaccanti in classifica.";
@@ -5150,9 +5173,9 @@ module.exports = QRCode;
     } else if(current && current.fixedTeams && remaining > 0){
       msg += " Le ultime " + remaining + " qualificate non entrano nel tabellone (troppo poche per formare una Fascia B).";
     }
-    msg += " Ogni incontro, dagli ottavi/quarti fino alla finale, si gioca andata e ritorno (con eventuale bella in caso di 1-1 nelle vittorie), sempre alla meglio dei 7 gol.";
+    msg += " Ogni incontro del tabellone (escluso il triangolare) si gioca andata e ritorno, con la bella se ognuna vince una partita, sempre a 7 gol.";
     if(current && current.fixedTeams){
-      msg += " Essendo un sorteggio a coppie fisse, qui le coppie NON vengono rimescolate dopo i quarti: restano le stesse fino alla fine.";
+      msg += " Con Sorteggio e Coppie fisse le coppie non vengono mai rimescolate: restano le stesse fino alla fine.";
     }
     el.textContent = msg;
   }
@@ -5616,7 +5639,7 @@ module.exports = QRCode;
           var rowById = {};
           rows.forEach(function(r){ rowById[r.id] = r; });
           rankedTeams = current.teams.slice().sort(function(t1,t2){
-            var r1 = rowById[t1.keeper.id], r2 = rowById[t2.keeper.id];
+            var r1 = rowById[t1.keeper.id] || rowById[t1.attacker.id], r2 = rowById[t2.keeper.id] || rowById[t2.attacker.id];
             var p1 = r1 ? r1.pt : 0, p2 = r2 ? r2.pt : 0;
             if(p2 !== p1) return p2 - p1;
             var dr1 = r1 ? (r1.gf - r1.gs) : 0, dr2 = r2 ? (r2.gf - r2.gs) : 0;
@@ -5793,19 +5816,24 @@ module.exports = QRCode;
   }
   function cascadePlayoffs(){
     if(!current || !current.playoffs) return;
-    var _sig = {};
-    function _ids(m){ return (m.teamA ? m.teamA.keeper.id : "-") + "|" + (m.teamB ? m.teamB.keeper.id : "-"); }
+    // Ogni risultato "appartiene" ai quattro giocatori che l'hanno giocato (legSig).
+    // Si cancella solo quando nell'incontro arrivano davvero giocatori diversi:
+    // mentre si corregge un punteggio (casella vuota per un attimo) i risultati
+    // dei turni dopo restano dove sono.
+    function sig(m){ return (m.teamA && m.teamB) ? [m.teamA.keeper.id, m.teamA.attacker.id, m.teamB.keeper.id, m.teamB.attacker.id].join("|") : null; }
+    forEachFasciaMatch(current, function(m){ if(m.legs && m.legs.some(legDone) && !m.legSig){ var s0 = sig(m); if(s0) m.legSig = s0; } });
     for(var _pass = 0; _pass < 8; _pass++){
-      _sig = {}; forEachFasciaMatch(current, function(m){ _sig[m.id] = _ids(m); });
       cascadePlayoffsCore();
       var cleared = false;
       forEachFasciaMatch(current, function(m){
         if(m.bye || m.voidSlot || !m.legs) return;
-        if(_sig[m.id] !== undefined && _sig[m.id] !== _ids(m) && m.legs.some(legDone)){
+        if(!m.legs.some(legDone)){ delete m.legSig; return; }
+        var s1 = sig(m); if(!s1) return;
+        if(m.legSig && m.legSig !== s1){
           // le coppie di questo incontro sono cambiate: i risultati erano di altri
           m.legs = m.legs.map(function(){ return { scoreA: null, scoreB: null }; });
-          delete m.forfeit; m._legsDone = 0; m.lastAt = null; cleared = true;
-        }
+          delete m.forfeit; delete m.legSig; m._legsDone = 0; m.lastAt = null; cleared = true;
+        } else if(!m.legSig) m.legSig = s1;
       });
       if(!cleared) break;
     }
@@ -5917,6 +5945,7 @@ module.exports = QRCode;
   }
   function canPairEdit(m){
     if(!m || m.bye || m.voidSlot || !m.teamA || !m.teamB || !m.legs) return false;
+    if(current && current.fixedTeams) return false;   // con le coppie fisse le coppie non si toccano
     var f = fasciaOfMatch(m.id); if(!f || f.type === "triangle") return false;
     return !m.legs.some(function(l){ return l && ((l.scoreA !== null && l.scoreA !== undefined) || (l.scoreB !== null && l.scoreB !== undefined)); });
   }
@@ -5932,10 +5961,9 @@ module.exports = QRCode;
       var byId = {}; matchPlayers(mm).forEach(function(p){ byId[p.id] = p; });
       var want = [mt.ak, mt.aa, mt.bk, mt.ba];
       var same = want.every(function(id){ return !!byId[id]; }) && Object.keys(byId).length === 4;
-      if(!same){ delete mm.manualTeams; return; }
-      var sa = mm.teamA.seed, sb = mm.teamB.seed;
-      mm.teamA = { keeper: byId[mt.ak], attacker: byId[mt.aa], seed: sa };
-      mm.teamB = { keeper: byId[mt.bk], attacker: byId[mt.ba], seed: sb };
+      if(!same){ delete mm.manualTeams; delete mm.origTeams; return; }
+      mm.teamA = Object.assign({}, mm.teamA, { keeper: byId[mt.ak], attacker: byId[mt.aa] });
+      mm.teamB = Object.assign({}, mm.teamB, { keeper: byId[mt.bk], attacker: byId[mt.ba] });
     });
   }
   function openPairEdit(id){
@@ -5958,10 +5986,12 @@ module.exports = QRCode;
     ov.querySelector("[data-x]").addEventListener("click", function(){ ov.remove(); });
     ov.querySelector("[data-swap]").addEventListener("click", function(){ var t = sels[1].value; sels[1].value = sels[3].value; sels[3].value = t; });
     var rs = ov.querySelector("[data-reset]");
-    if(rs) rs.addEventListener("click", function(){ delete m.manualTeams; ov.remove(); cascadePlayoffs(); persistCurrent(); renderPlayoffBracket(); toast("Coppie riportate come da tabellone."); });
+    if(rs) rs.addEventListener("click", function(){ delete m.manualTeams; if(m.origTeams){ m.teamA = m.origTeams.teamA; m.teamB = m.origTeams.teamB; delete m.origTeams; } ov.remove(); cascadePlayoffs(); persistCurrent(); renderPlayoffBracket(); toast("Coppie riportate come da tabellone."); });
     ov.querySelector("[data-ok]").addEventListener("click", function(){
       var v = Array.prototype.map.call(sels, function(x){ return +x.value; });
       if(v.filter(function(x, i){ return v.indexOf(x) === i; }).length !== 4){ ov.querySelector(".pe-err").textContent = "Ogni giocatore deve comparire una volta sola."; return; }
+      if(v.join() === "0,1,2,3"){ ov.remove(); return; }   // niente cambiato
+      if(!m.origTeams) m.origTeams = { teamA: JSON.parse(JSON.stringify(m.teamA)), teamB: JSON.parse(JSON.stringify(m.teamB)) };
       m.manualTeams = { ak: pl[v[0]].id, aa: pl[v[1]].id, bk: pl[v[2]].id, ba: pl[v[3]].id };
       applyManualTeams(fasciaOfMatch(m.id));
       ov.remove(); persistCurrent(); renderPlayoffBracket();
@@ -6124,20 +6154,23 @@ module.exports = QRCode;
   // ---------- CONDIVIDI RIASSUNTO SU WHATSAPP ----------
   // Costruisce un messaggio testuale con classifiche e podio della fase
   // finale, da mandare su WhatsApp per "commemorare la serata".
+  function shareU(x){ x = String(x == null ? "" : x); try{ return capsOn() ? x.toUpperCase() : x; }catch(e){ return x; } }
   function fasciaPodiumLines(f){
     var pod = fasciaPodium(f);
     if(!pod) return "";
     var w = pod.w, l = pod.l, w3 = pod.w3;
-    var lines = "🥇 " + w.keeper.name + " - " + w.attacker.name;
-    if(l) lines += "\n🥈 " + l.keeper.name + " - " + l.attacker.name;
-    if(w3) lines += "\n🥉 " + w3.keeper.name + " - " + w3.attacker.name;
+    var lines = "🥇 *" + shareU(w.keeper.name + " - " + w.attacker.name) + "*  👑";
+    if(l) lines += "\n🥈 " + shareU(l.keeper.name + " - " + l.attacker.name);
+    if(w3) lines += "\n🥉 " + shareU(w3.keeper.name + " - " + w3.attacker.name);
     return lines;
   }
   function standingsShareLines(list){
     if(!list.length) return "";
     return list.map(function(r, i){
-      var medal = RANK_MEDALS[i] || (i+1) + ".";
-      return medal + " " + r.name + " — " + r.pt + " pt";
+      var medal = RANK_MEDALS[i] || (i + 1) + ".";
+      var line = medal + " " + (i < 3 ? "*" + shareU(r.name) + "*" : shareU(r.name)) + " — " + r.pt + " pt";
+      if(i < 3) line += "  _(" + r.v + "V · " + (r.gf - r.gs > 0 ? "+" : "") + (r.gf - r.gs) + ")_";
+      return line;
     }).join("\n");
   }
   function buildTournamentShareText(){
@@ -6146,20 +6179,47 @@ module.exports = QRCode;
     var rows = computeStandings(current.rounds);
     var keeperRows = rows.filter(function(r){ return r.role === "P"; });
     var attackerRows = rows.filter(function(r){ return r.role === "A"; });
-    var totalMatches = current.rounds.reduce(function(a,r){ return a + r.matches.length; }, 0);
-    var text = "🏆 *" + tName + "*\n📅 " + dateStr + "\n\n👥 " + rows.length + " giocatori · ⚽ " + totalMatches + " partite disputate\n";
-    if(keeperRows.length){ text += "\n🥅 *Leaderboard Portieri*\n" + standingsShareLines(keeperRows) + "\n"; }
-    if(attackerRows.length){ text += "\n⚽ *Leaderboard Attaccanti*\n" + standingsShareLines(attackerRows) + "\n"; }
+    var played = [], goals = 0, tight = 0, best = null;
+    current.rounds.forEach(function(r){ r.matches.forEach(function(m){
+      if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined) return;
+      played.push(m); goals += (+m.scoreA) + (+m.scoreB);
+      var d = Math.abs(m.scoreA - m.scoreB);
+      if(d === 1) tight++;
+      if(!best || d > best.d) best = { d: d, m: m };
+    }); });
+    var SEP = "━━━━━━━━━━━━━━━";
+    var text = "🏆🔥 *" + shareU(tName) + "* 🔥🏆\n📅 " + shareU(dateStr) + "\n" + SEP + "\n" +
+      "👥 " + rows.length + " giocatori · ⚽ " + played.length + " partite · 🎯 " + goals + " gol\n";
+    // podio
     if(current.playoffs){
       var podA = fasciaPodiumLines(current.playoffs.fasciaA);
       var podB = current.playoffs.fasciaB ? fasciaPodiumLines(current.playoffs.fasciaB) : "";
       if(podA || podB){
-        text += "\n🏁 *Podio Fase Finale*\n";
-        if(podA) text += (current.playoffs.fasciaB ? "Fascia A:\n" : "") + podA + "\n";
-        if(podB) text += "Fascia B:\n" + podB + "\n";
+        text += "\n🏁 *" + shareU("Il podio") + "*\n";
+        if(podA) text += (current.playoffs.fasciaB ? "_Fascia A_\n" : "") + podA + "\n";
+        if(podB) text += "_Fascia B_\n" + podB + "\n";
       }
     }
-    text += "\n⚽ Grazie a tutti per una grande serata di calcio balilla! 🍻";
+    // premi della serata
+    function top(list, f, minPg){ var b = null; list.forEach(function(r){ if(minPg && r.pg < minPg) return; var v = f(r); if(v === null) return; if(!b || v > b.v) b = { r: r, v: v }; }); return b; }
+    var maxPg = rows.reduce(function(a, r){ return Math.max(a, r.pg); }, 0), half = Math.max(1, Math.ceil(maxPg / 2));
+    var awards = [];
+    if(keeperRows.length) awards.push("👑 Re dei portieri: *" + shareU(keeperRows[0].name) + "* (" + keeperRows[0].pt + " pt)");
+    if(attackerRows.length) awards.push("👑 Re degli attaccanti: *" + shareU(attackerRows[0].name) + "* (" + attackerRows[0].pt + " pt)");
+    var bomb = top(attackerRows, function(r){ return r.gf; }, half);
+    if(bomb && bomb.v > 0) awards.push("💣 Bomber: *" + shareU(bomb.r.name) + "* (" + bomb.v + " gol di squadra)");
+    var wall = top(keeperRows, function(r){ return r.pg ? -r.gs / r.pg : null; }, half);
+    if(wall) awards.push("🧱 Muro: *" + shareU(wall.r.name) + "* (" + String(Math.round(-wall.v * 10) / 10).replace(".", ",") + " gol subiti a partita)");
+    var wins = top(rows, function(r){ return r.v; });
+    if(wins && wins.v > 0) awards.push("🔥 Più vittorie: *" + shareU(wins.r.name) + "* (" + wins.v + " su " + wins.r.pg + ")");
+    if(best && best.d >= 3){ var bm = best.m, aW = bm.scoreA > bm.scoreB; awards.push("⚡ Vittoria più netta: *" + shareU(pairLabel(aW ? bm.teamA : bm.teamB)) + "* " + Math.max(bm.scoreA, bm.scoreB) + "-" + Math.min(bm.scoreA, bm.scoreB)); }
+    if(tight) awards.push("😱 " + tight + (tight === 1 ? " partita decisa" : " partite decise") + " per un solo gol");
+    if(awards.length) text += "\n⭐ *" + shareU("I premi della serata") + "*\n" + awards.join("\n") + "\n";
+    if(keeperRows.length){ text += "\n🧤 *" + shareU("Leaderboard Portieri") + "*\n" + standingsShareLines(keeperRows) + "\n"; }
+    if(attackerRows.length){ text += "\n⚽ *" + shareU("Leaderboard Attaccanti") + "*\n" + standingsShareLines(attackerRows) + "\n"; }
+    text += SEP + "\n🍻 " + shareU("Grazie a tutti per una grande serata di calcio balilla!") + "\n💪 " + shareU("Ci vediamo al prossimo torneo!");
+    text = shareU(text);   // stampatello su tutto il messaggio (il link resta com'è)
+    try{ var lk = window.__liveLink && window.__liveLink(); if(lk) text += "\n🎥 " + shareU("Rivivi la serata") + ": " + lk; }catch(e){}
     return text;
   }
   // Condivisione su WhatsApp: alcune reti/dispositivi bloccano i domini
@@ -6539,7 +6599,7 @@ module.exports = QRCode;
   }
   function isScored(m){ return m && m.scoreA !== null && m.scoreA !== undefined && m.scoreB !== null && m.scoreB !== undefined; }
   function legDone(l){ return l && l.scoreA !== null && l.scoreA !== undefined && l.scoreB !== null && l.scoreB !== undefined; }
-  function teamPlayers(t){ var out = []; if(t){ if(t.keeper && t.keeper.id) out.push(t.keeper.id); if(t.attacker && t.attacker.id) out.push(t.attacker.id); } return out; }
+  function teamPlayers(t){ var out = []; function pid(p){ return p.standIn && p.subId ? p.subId : p.id; } if(t){ if(t.keeper && t.keeper.id) out.push(pid(t.keeper)); if(t.attacker && t.attacker.id) out.push(pid(t.attacker)); } return out; }
   function pairLabel(t){ return t ? (t.keeper.name + " - " + t.attacker.name) : "?"; }
   function forEachFasciaMatch(c, fn){
     var po = c && c.playoffs; if(!po) return;
@@ -7269,6 +7329,7 @@ module.exports = QRCode;
       if(cfg.signupOpen) payload.su = true;
       try{ var th = window.__themeForLive && window.__themeForLive(); if(th) payload.th = JSON.stringify(th); }catch(e){}
       try{ var cmz = window.__camsForLive && window.__camsForLive(); if(cmz) payload.cams = cmz; }catch(e){}
+      try{ payload.caps = window.__capsOn ? window.__capsOn() : true; }catch(e){}
       getToken().then(function(tok){
         return fetch(cfg.dbUrl + "/live/" + encodeURIComponent(cfg.liveId) + ".json?auth=" + encodeURIComponent(tok), {
           method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
@@ -7572,7 +7633,7 @@ module.exports = QRCode;
           if(obj.updatedAt && obj.updatedAt === lastStamp) return;
           lastStamp = obj.updatedAt || null;
           try{ current = obj.data ? relinkGroupRounds(JSON.parse(obj.data)) : null; }catch(e){ return; }
-          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; window.__liveTheme = obj.th ? JSON.parse(obj.th) : null; window.__liveCams = obj.cams || null; }catch(e){}
+          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; window.__liveTheme = obj.th ? JSON.parse(obj.th) : null; window.__liveCams = obj.cams || null; window.__liveCaps = obj.caps !== false; if(window.__applyCaps) window.__applyCaps(); }catch(e){}
         }
         render();
       }
@@ -8168,8 +8229,10 @@ module.exports = QRCode;
     var clash = null;
     current.rounds.forEach(function(r, ri){ r.matches.forEach(function(m){
       if(clash || (m.scoreA !== null && m.scoreA !== undefined)) return;
-      var ids = [m.teamA.keeper.id, m.teamA.attacker.id, m.teamB.keeper.id, m.teamB.attacker.id];
-      if(ids.indexOf(outId) !== -1 && ids.indexOf(incoming.id) !== -1) clash = r.recovery ? "nel recupero" : "nella giornata " + (ri + 1);
+      var ids = [], subs = [];
+      [m.teamA.keeper, m.teamA.attacker, m.teamB.keeper, m.teamB.attacker].forEach(function(p){ ids.push(p.id); if(p.standIn && p.subId) subs.push(p.subId); });
+      var outIn = ids.indexOf(outId) !== -1 || subs.indexOf(outId) !== -1, inIn = ids.indexOf(incoming.id) !== -1 || subs.indexOf(incoming.id) !== -1;
+      if(outIn && ids.indexOf(outId) !== -1 && inIn) clash = r.recovery ? "nel recupero" : "nella giornata " + (ri + 1);
     }); });
     if(clash){ toast("⚠️ " + incoming.name + " gioca già nella stessa partita di " + x.p.name + " (" + clash + "): scegli un altro sostituto."); return; }
     showConfirm("Nelle " + x.left + (x.left === 1 ? " partita ancora da giocare" : " partite ancora da giocare") + ", " + x.p.name + " viene sostituito da " + incoming.name + ". Le partite già giocate non cambiano. Confermi?", function(){
@@ -8181,6 +8244,8 @@ module.exports = QRCode;
           if(played) return;
           ["teamA","teamB"].forEach(function(t){ ["keeper","attacker"].forEach(function(role){
             if(m[t][role].id === outId){ m[t] = Object.assign({}, m[t]); m[t][role] = incoming; changed++; touched = true; }
+            // chi esce non fa più nemmeno la Talpa: quel posto torna libero e l'app ne sceglie un altro
+            else if(m[t][role].standIn && m[t][role].subId === outId){ m[t] = Object.assign({}, m[t]); m[t][role] = { id: m[t][role].id, name: "Talpa" }; }
           }); });
         });
         if(touched && !r.recovery){
@@ -8228,7 +8293,7 @@ module.exports = QRCode;
       var h = Math.floor(m / 60); return h === 1 ? "1 ora fa" : h + " ore fa";
     }
     function isGrouped(){ return !!(current && current.fixedTeams && current.groups && current.groups.length); }
-    function isMeName(n){ return !!me && me !== "__none" && norm(n) === norm(me); }
+    function isMeName(n){ return !!me && me !== "__none" && norm(String(n || "").replace(/\s*\(Talpa\)\s*$/i, "")) === norm(me); }
     function teamHasMe(t){ return !!t && (isMeName(t.keeper && t.keeper.name) || isMeName(t.attacker && t.attacker.name)); }
     function allPlayers(){
       var map = {};
@@ -8474,17 +8539,59 @@ module.exports = QRCode;
           '<div class="vx-pill"><b>' + st.row.pg + '</b><span>giocate</span></div><div class="vx-pill"><b>' + st.row.v + '</b><span>vinte</span></div><div class="vx-pill"><b>' + (st.row.gf - st.row.gs > 0 ? "+" : "") + (st.row.gf - st.row.gs) + '</b><span>diff. reti</span></div></div>';
       }
       if(stt) html += '<div class="vx-status ' + stt.kind + '">' + stt.html + '</div>';
+      html += meAlertHtml();
       var lp = window.__liveProfiles && window.__liveProfiles[norm(myName.name)];
       if(lp && window.__profileHtml) html += '<details class="vx-pf"><summary>📇 La tua scheda (tornei passati)</summary>' + window.__profileHtml(lp) + '</details>';
       var pfWas = meCard.querySelector(".vx-pf"); if(pfWas && pfWas.open) html = html.replace('<details class="vx-pf">', '<details class="vx-pf" open>');
       meCard.innerHTML = html;
-      if(stt && stt.kind === "now" && lastStatusKind && lastStatusKind !== "now"){ try{ if(navigator.vibrate) navigator.vibrate([300, 150, 300]); }catch(e){} }
+      if(stt && stt.kind === "now" && lastStatusKind && lastStatusKind !== "now"){
+        try{ if(navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 300]); }catch(e){}
+        try{ myTurnAlert(stt); }catch(e){}
+      }
       lastStatusKind = stt ? stt.kind : null;
-      bindMe();
+      bindMe(); bindAlerts(); applyWake();
     }
     function saveMe(v){ me = v; try{ localStorage.setItem(LS_ME, v); }catch(e){} lastStatusKind = null; renderAll(); }
+    // ----- avviso "tocca a te": voce, notifica e schermo acceso -----
+    var LS_MEOPT = "tg_viewer_alert_v1";
+    function meOpt(){ var o = null; try{ o = JSON.parse(localStorage.getItem(LS_MEOPT) || "null"); }catch(e){} return o || { voice: true, wake: false }; }
+    function setMeOpt(o){ try{ localStorage.setItem(LS_MEOPT, JSON.stringify(o)); }catch(e){} }
+    function myTurnAlert(stt){
+      var txt = String(stt.html || "").replace(/<small>/g, ". ").replace(/<[^>]+>/g, "").replace(/🎯\s*/g, "");
+      var tbl = (txt.match(/Tavolo\s+(\d+)/) || [])[1] || "";
+      if(meOpt().voice){ try{ chime(); var say = "Tocca a te! " + (tbl ? "Vai al tavolo " + tbl + "." : ""); speak(say); speak("Ripeto. " + say); }catch(e){} }
+      if(document.hidden && window.Notification && Notification.permission === "granted"){
+        var title = "🎯 Tocca a te!", body = tbl ? "Vai al tavolo " + tbl : "È il tuo turno";
+        try{
+          if(navigator.serviceWorker && navigator.serviceWorker.ready) navigator.serviceWorker.ready.then(function(reg){ reg.showNotification(title, { body: body, tag: "goopho-turno", renotify: true, vibrate: [300, 150, 300], requireInteraction: true }); }).catch(function(){ try{ new Notification(title, { body: body }); }catch(e){} });
+          else new Notification(title, { body: body });
+        }catch(e){}
+      }
+    }
+    var wakeLock = null;
+    function applyWake(){
+      var want = meOpt().wake && me && me !== "__none";
+      try{
+        if(want && !wakeLock && navigator.wakeLock && document.visibilityState === "visible") navigator.wakeLock.request("screen").then(function(l){ wakeLock = l; l.addEventListener("release", function(){ wakeLock = null; }); }).catch(function(){});
+        if(!want && wakeLock){ wakeLock.release(); wakeLock = null; }
+      }catch(e){}
+    }
+    document.addEventListener("visibilitychange", applyWake);
+    function meAlertHtml(){
+      var o = meOpt(), notif = window.Notification ? Notification.permission : "none";
+      return '<div class="vx-alerts">' +
+        '<label><input type="checkbox" data-meopt="voice"' + (o.voice ? ' checked' : '') + '> 🔊 Avviso a voce quando tocca a te</label>' +
+        '<label><input type="checkbox" data-meopt="wake"' + (o.wake ? ' checked' : '') + (navigator.wakeLock ? '' : ' disabled') + '> 📱 Tieni lo schermo acceso' + (navigator.wakeLock ? '' : ' (non disponibile qui)') + '</label>' +
+        (notif === "default" ? '<button type="button" class="vx-link" data-notif>🔔 Attiva le notifiche</button>' : notif === "granted" ? '<span class="vx-ok">🔔 Notifiche attive</span>' : '') +
+        '</div>';
+    }
+    function bindAlerts(){
+      meCard.querySelectorAll("[data-meopt]").forEach(function(cb){ cb.addEventListener("change", function(){ var o = meOpt(); o[cb.dataset.meopt] = cb.checked; setMeOpt(o); applyWake(); if(cb.dataset.meopt === "voice" && cb.checked){ try{ chime(); speak("Avviso a voce attivo."); }catch(e){} } }); });
+      var nb = meCard.querySelector("[data-notif]");
+      if(nb) nb.addEventListener("click", function(){ try{ Notification.requestPermission().then(function(){ renderAll(); }); }catch(e){} });
+    }
     function bindMe(){
-      var ok = $("vxPickOk"); if(ok) ok.addEventListener("click", function(){ var v = $("vxPickSel").value; if(v) saveMe(v); });
+      var ok = $("vxPickOk"); if(ok) ok.addEventListener("click", function(){ var v = $("vxPickSel").value; if(v){ try{ if(window.speechSynthesis){ var u0 = new SpeechSynthesisUtterance(" "); u0.volume = 0; speechSynthesis.speak(u0); } }catch(e){} saveMe(v); } });
       var no = $("vxPickNone"); if(no) no.addEventListener("click", function(){ saveMe("__none"); });
       var ag = $("vxPickAgain"); if(ag) ag.addEventListener("click", function(){ saveMe(""); });
       var ch = $("vxChange"); if(ch) ch.addEventListener("click", function(){ saveMe(""); });
@@ -9292,6 +9399,21 @@ module.exports = QRCode;
     }
     document.addEventListener("click", unlock, true); document.addEventListener("keydown", unlock, true);
   })();
+  // frase d'apertura per la fase finale: "Si preparano per la finale!" ecc.
+  function stagePhrase(it){
+    var tag = String((it && it.tag) || ""), note = String((it && it.note) || ""), f = "";
+    var m = tag.match(/^([AB]) · /); var fx = m ? " della fascia " + m[1] : "";
+    if(/3°\/4°/.test(tag)) f = "Si preparano per la finale del terzo posto" + fx + ".";
+    else if(/Finale/i.test(tag)) f = "Si preparano per la finale" + fx + "!";
+    else if(/Semi/i.test(tag)) f = "Si preparano per la semifinale" + fx + ".";
+    else if(/Quarti/i.test(tag)) f = "Quarti di finale" + fx + ".";
+    else if(/Ottavi/i.test(tag)) f = "Ottavi di finale" + fx + ".";
+    else if(/16esimi/i.test(tag)) f = "Sedicesimi di finale" + fx + ".";
+    else if(/1° turno/.test(tag)) f = "Fase finale" + fx + ", primo turno.";
+    else if(/Triang/i.test(tag)) f = "Triangolare" + fx + ".";
+    if(f && note === "bella") f += " Si gioca la bella!";
+    return f ? f + "  " : "";
+  }
   function spokenTag(tag){
     return String(tag || "").replace(/^Gir\.\s*/i, "girone ").replace(/^G(\d+)$/, "giornata $1").replace("1° turno", "primo turno").replace("Semi", "semifinale").replace("Triang.", "triangolare").replace(/^A · /, "fascia A, ").replace(/^B · /, "fascia B, ");
   }
@@ -9301,13 +9423,32 @@ module.exports = QRCode;
   function tvAnnounceCheck(){
     var tvOn = document.body.classList.contains("tv-on");
     var mode = window.__fbViewer ? (tvOn ? "speak" : null) : (TV_WINDOW ? "caption" : "speak");
-    if(!mode || !current || !current.rounds) return;
+    if(!mode) return;
+    if(!current || !current.rounds || !current.rounds.length){ if(tvAnnounced === null) tvAnnounced = {}; return; }
     var info = computeTables(current), on = current.onTable || {};
     var ids = Object.keys(on).filter(function(id){ return info.byId[id]; });
-    if(tvAnnounced === null){ tvAnnounced = {}; ids.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; }); return; }
+    if(tvAnnounced === null){ tvAnnounced = {}; ids.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; }); if(ids.length) return; }
     var fresh = ids.filter(function(id){ return !tvAnnounced[id + "@" + on[id]]; }).sort(function(a, b){ return on[a] - on[b]; });
     fresh.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; });
     if(!fresh.length) return;
+    // con più schede aperte sullo stesso computer parla una sola: quella dove lavori decide subito,
+    // una scheda in Modalità TV aspetta un attimo e parla solo se nessun'altra l'ha già fatto
+    if(mode === "speak" && !window.__fbViewer && tvOn && !tvAnnounceCheck._late){
+      setTimeout(function(){ tvAnnounceCheck._late = true; try{ announceNow(fresh, info, on, mode); } finally { tvAnnounceCheck._late = false; } }, 600);
+      return;
+    }
+    announceNow(fresh, info, on, mode);
+  }
+  function announceNow(fresh, info, on, mode){
+    if(mode === "speak" && !window.__fbViewer){
+      var shared = {}; try{ shared = JSON.parse(localStorage.getItem("tg_tts_done_v1") || "{}") || {}; }catch(e){}
+      var tnow = Date.now(), mine = [];
+      Object.keys(shared).forEach(function(k){ if(tnow - shared[k] > 30 * 60000) delete shared[k]; });
+      fresh.forEach(function(id){ var k = id + "@" + on[id]; if(!(shared[k] && tnow - shared[k] < 30 * 60000)){ shared[k] = tnow; mine.push(id); } });
+      try{ localStorage.setItem("tg_tts_done_v1", JSON.stringify(shared)); }catch(e){}
+      if(!mine.length) mode = "caption";
+      else fresh = mine;
+    }
     if(mode === "caption" || !voiceOn()){
       fresh.forEach(function(id){ var it = info.byId[id]; function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; } tvCaption(who(it.a) + ", contro, " + who(it.b) + ". Al tavolo " + on[id] + "."); });
       return;
@@ -9319,7 +9460,7 @@ module.exports = QRCode;
         var it = info.byId[id];
         function nm(p){ return String(p.name || "").replace(/\s*\(Talpa\)\s*$/i, " come talpa"); }
         function who(t){ return t ? nm(t.keeper) + ", e " + nm(t.attacker) : ""; }
-        return who(it.a) + ",  contro,  " + who(it.b) + ".  Al tavolo " + on[id] + ".";
+        return stagePhrase(it) + who(it.a) + ",  contro,  " + who(it.b) + ".  Al tavolo " + on[id] + ".";
       });
       calls.forEach(speak);
       calls.forEach(function(c, i){ speak((i === 0 ? "Ripeto. " : "") + c); });
@@ -10130,7 +10271,7 @@ module.exports = QRCode;
       var anchor = document.getElementById("backupCard"); if(!anchor) return;
       var card = document.createElement("div"); card.className = "card rules-card"; card.id = "themeCard";
       card.innerHTML = '<details id="themeDetails"><summary>🎨 Aspetto dell\'app (colori, caratteri, dimensioni)</summary><div class="rules-body"><p>Cambia i colori e i caratteri come preferisci: si vede subito e resta salvato. Quello che non tocchi resta com\'è; ogni voce ha il suo ↺ per tornare all\'originale.</p>' +
-        '<div class="th-top"><label class="th-live"><input type="checkbox" id="thLive"> Mostra lo stesso aspetto ai giocatori nella Live</label><button class="btn btn-ghost btn-sm" type="button" id="thResetAll">↺ Ripristina tutto</button></div>' +
+        '<div class="th-top"><label class="th-live"><input type="checkbox" id="thCaps"> 🔠 Tutto in stampatello (MAIUSCOLO)</label><label class="th-live"><input type="checkbox" id="thLive"> Mostra lo stesso aspetto ai giocatori nella Live</label><button class="btn btn-ghost btn-sm" type="button" id="thResetAll">↺ Ripristina tutto</button></div>' +
         '<div class="th-grid" id="thGrid"></div></div></details>';
       anchor.parentNode.insertBefore(card, anchor.nextSibling);
       var grid = card.querySelector("#thGrid");
@@ -10147,6 +10288,7 @@ module.exports = QRCode;
           }).join("") + '</fieldset>';
         }).join("");
         card.querySelector("#thLive").checked = !t._noLive;
+        card.querySelector("#thCaps").checked = capsOn();
         THEME_FONTS.forEach(loadFont);
       }
       grid.addEventListener("input", function(e){
@@ -10165,6 +10307,7 @@ module.exports = QRCode;
       card.querySelector("#thResetAll").addEventListener("click", function(){
         showConfirm("Tornare a tutti i colori e caratteri originali?", function(){ var t = themeGet(), keep = { _noLive: t._noLive }; if(!keep._noLive) keep = {}; themeSet(keep); applyTheme(keep); persist(keep); build(); toast("Aspetto originale ripristinato."); });
       });
+      card.querySelector("#thCaps").addEventListener("change", function(){ try{ localStorage.setItem(LS_CAPS, this.checked ? "1" : "0"); }catch(e){} applyCaps(); if(window.__fbLiveSchedule) window.__fbLiveSchedule(); toast(this.checked ? "🔠 Tutto in stampatello." : "Stampatello tolto: i nomi si vedono come sono scritti."); });
       card.querySelector("#thLive").addEventListener("change", function(){ var t = themeGet(); if(this.checked) delete t._noLive; else t._noLive = true; themeSet(t); persist(t); });
       card.querySelector("#themeDetails").addEventListener("toggle", function(){ if(this.open) build(); });
     })();
@@ -10177,7 +10320,7 @@ module.exports = QRCode;
   // stesso ruolo), facendo girare il compito. Chi fa la Talpa gioca ma non prende
   // punti. Si sceglie solo per le partite non ancora giocate e la scelta resta.
   function fillTalpaStandIns(){
-    if(READ_ONLY_VIEW || !current || !current.rounds || !current.rounds.length) return false;
+    if(READ_ONLY_VIEW || !current || !current.rounds || !current.rounds.length || current.fixedTeams) return false;
     var changed = false, count = {};
     var all = players.keepers.map(function(p){ return [p, "P"]; }).concat(players.attackers.map(function(p){ return [p, "A"]; }))
       .filter(function(x){ return !isTalpa(x[0]); });
@@ -10213,6 +10356,7 @@ module.exports = QRCode;
             return dist(b) - dist(a) || ((a[1] === sl[2]) ? 0 : 1) - ((b[1] === sl[2]) ? 0 : 1) || (count[a[0].id] || 0) - (count[b[0].id] || 0) || (Math.random() - 0.5);
           });
           var pick = cand[0][0];
+          m[sl[0]] = Object.assign({}, m[sl[0]]);   // copia: la squadra può essere condivisa con altre partite
           m[sl[0]][sl[1]] = { id: p.id, name: pick.name + " (Talpa)", standIn: true, subId: pick.id };
           count[pick.id] = (count[pick.id] || 0) + 1; busy[pick.id] = true; if(posOf[pick.id] === undefined) posOf[pick.id] = mi; changed = true;
         });
@@ -10223,7 +10367,7 @@ module.exports = QRCode;
   beforePersistHooks.unshift(function(){ try{ fillTalpaStandIns(); }catch(e){ console.error(e); } });
   (function(){
     var _rrT = renderRounds;
-    renderRounds = function(){ var ch = false; try{ ch = fillTalpaStandIns(); }catch(e){} if(ch) safeSet(LS_CURRENT, current); return _rrT.apply(this, arguments); };
+    renderRounds = function(){ var ch = false; try{ ch = fillTalpaStandIns(); }catch(e){} if(ch){ try{ current.onTable = computeTables(current).onTable; }catch(e){} safeSet(LS_CURRENT, current); if(window.__fbLiveSchedule) window.__fbLiveSchedule(); } return _rrT.apply(this, arguments); };
     setTimeout(function(){ try{ if(fillTalpaStandIns()){ persistCurrent(); rerenderAll(); } }catch(e){ console.error(e); } }, 0);
   })();
 
@@ -10234,9 +10378,14 @@ module.exports = QRCode;
   // in Modalità TV si può mostrare il video di un tavolo in un riquadro.
   var LS_CAMS = "tg_cams_v1";
   function camsCfg(){ var c = safeGet(LS_CAMS, null); return (c && typeof c === "object") ? c : { urls: {}, tv: 0 }; }
-  function camsMap(){ if(window.__fbViewer) return (window.__liveCams && window.__liveCams.urls) || {}; return camsCfg().urls || {}; }
+  function camsMap(){
+    if(window.__fbViewer) return (window.__liveCams && window.__liveCams.urls) || {};
+    var u = camsCfg().urls || {}, n = tablesCount(), out = {};
+    Object.keys(u).forEach(function(k){ if(+k <= n) out[k] = u[k]; });
+    return out;
+  }
   function camUrl(t){ var u = camsMap()[String(t)]; return (typeof u === "string" && /^https?:\/\//i.test(u.trim())) ? u.trim() : ""; }
-  window.__camsForLive = function(){ var c = camsCfg(), has = Object.keys(c.urls || {}).some(function(k){ return !!c.urls[k]; }); return has ? { urls: c.urls, tv: c.tv || 0 } : null; };
+  window.__camsForLive = function(){ var u = camsMap(), has = Object.keys(u).some(function(k){ return !!u[k]; }), tv = camsCfg().tv || 0; return has ? { urls: u, tv: tv <= tablesCount() ? tv : 0 } : null; };
   function ytEmbed(url, mute){
     var m, id = null, q = "autoplay=1&playsinline=1&rel=0" + (mute ? "&mute=1" : "");
     try{
@@ -10297,6 +10446,7 @@ module.exports = QRCode;
     var ov = document.getElementById("tvOverlay"); if(!ov) return;
     var cfg = window.__fbViewer ? (window.__liveCams || {}) : (TV_WINDOW ? (safeGet(LS_CAMS, null) || {}) : camsCfg());
     var t = +(cfg.tv || 0), urls = cfg.urls || {}, url = t && typeof urls[t] === "string" ? urls[t] : "";
+    if(!window.__fbViewer && t > tablesCount()) url = "";
     var emb = url && document.body.classList.contains("tv-on") ? ytEmbed(url, true) : "";
     var box = document.getElementById("tvCam");
     if(!emb){ if(box) box.remove(); tvCamShown = ""; return; }
@@ -10348,6 +10498,126 @@ module.exports = QRCode;
     card.querySelector("#camTv").addEventListener("change", function(){ var c2 = camsCfg(); c2.tv = +this.value || 0; save(c2); toast(c2.tv ? "In Modalità TV si vedrà il tavolo " + c2.tv + "." : "Nessun video in Modalità TV."); });
     var tc = document.getElementById("tablesCount"); if(tc) tc.addEventListener("change", function(){ setTimeout(draw, 0); });
     draw();
+  })();
+
+
+  // ---------- STAMPATELLO OVUNQUE ----------
+  var LS_CAPS = "tg_caps_v1";
+  function capsOn(){
+    if(window.__fbViewer) return window.__liveCaps !== false;
+    try{ return localStorage.getItem(LS_CAPS) !== "0"; }catch(e){ return true; }
+  }
+  function applyCaps(){ document.documentElement.classList.toggle("caps", capsOn()); }
+  window.__capsOn = capsOn; window.__applyCaps = applyCaps;
+  applyCaps();
+  // anche le stampe e le finestre aperte dall'app escono in stampatello
+  (function(){
+    var _openC = window.open;
+    window.open = function(){
+      var w = _openC.apply(window, arguments);
+      try{
+        if(w && w.document){
+          var d = w.document, wr = d.write;
+          d.write = function(h){
+            if(capsOn() && typeof h === "string" && h.indexOf("</head>") !== -1) h = h.replace("</head>", "<style>body, body *{ text-transform:uppercase; }</style></head>");
+            return wr.apply(d, [h]);
+          };
+        }
+      }catch(e){}
+      return w;
+    };
+  })();
+
+  // ---------- FUORI DAI GIOCHI (eliminati, con un pensiero per ognuno) ----------
+  function elimData(){
+    if(!current || !current.rounds || !current.rounds.length || !current.playoffs) return [];
+    var po = current.playoffs, seen = {}, inFinal = {}, out = [];
+    function real(p){ return p && p.id && !isTalpa(p); }
+    function teamsOf(f){ var t = []; (f.rounds || []).forEach(function(r){ (r.matches || []).forEach(function(m){ if(m.teamA) t.push(m.teamA); if(m.teamB) t.push(m.teamB); }); }); if(f.third){ if(f.third.teamA) t.push(f.third.teamA); if(f.third.teamB) t.push(f.third.teamB); } (f.teams || []).forEach(function(x){ t.push(x); }); return t; }
+    var fasce = [["A", po.fasciaA], ["B", po.fasciaB]].filter(function(x){ return !!x[1]; });
+    fasce.forEach(function(fx){ teamsOf(fx[1]).forEach(function(t){ [t.keeper, t.attacker].forEach(function(p){ if(real(p)) inFinal[p.id] = 1; }); }); });
+    // usciti nel tabellone
+    fasce.forEach(function(fx){
+      var f = fx[1], lbl = po.fasciaB ? "Fascia " + fx[0] + " · " : "";
+      if(f.type === "triangle") return;
+      var rounds = f.rounds || [];
+      rounds.forEach(function(r, ri){
+        (r.matches || []).forEach(function(m){
+          if(m.bye || m.voidSlot || r.stage === "Finale") return;
+          var l = playoffLoser(m); if(!l) return;
+          var later = {};
+          rounds.slice(ri + 1).forEach(function(r2){ (r2.matches || []).forEach(function(m2){ [m2.teamA, m2.teamB].forEach(function(t){ if(t){ later[t.keeper.id] = 1; later[t.attacker.id] = 1; } }); }); });
+          if(f.third){ [f.third.teamA, f.third.teamB].forEach(function(t){ if(t){ later[t.keeper.id] = 1; later[t.attacker.id] = 1; } }); }
+          [[l.keeper, "P"], [l.attacker, "A"]].forEach(function(x){
+            if(!real(x[0]) || later[x[0].id] || seen[x[0].id]) return;
+            seen[x[0].id] = 1; out.push({ p: x[0], role: x[1], where: lbl + stageWhere(r.stage), lvl: 2 + ri });
+          });
+        });
+      });
+      if(f.third){ var l3 = playoffLoser(f.third); if(l3) [[l3.keeper, "P"], [l3.attacker, "A"]].forEach(function(x){ if(!real(x[0]) || seen[x[0].id]) return; seen[x[0].id] = 1; out.push({ p: x[0], role: x[1], where: lbl + "4° posto", lvl: 99 }); }); }
+    });
+    // non qualificati
+    var roleOf = {};
+    current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){ [[m.teamA.keeper, "P"], [m.teamA.attacker, "A"], [m.teamB.keeper, "P"], [m.teamB.attacker, "A"]].forEach(function(x){ if(real(x[0]) && !x[0].standIn && !roleOf[x[0].id]) roleOf[x[0].id] = [x[0], x[1]]; }); }); });
+    Object.keys(roleOf).forEach(function(id){ if(!inFinal[id] && !seen[id]){ seen[id] = 1; out.push({ p: roleOf[id][0], role: roleOf[id][1], where: "Non qualificato per la fase finale", lvl: 0 }); } });
+    // statistiche del girone
+    var rows = {}; try{ computeStandings(current.rounds).forEach(function(r){ rows[r.id] = r; }); }catch(e){}
+    var close = {};
+    current.rounds.forEach(function(r){ (r.matches || []).forEach(function(m){
+      if(m.scoreA === null || m.scoreA === undefined || m.scoreB === null || m.scoreB === undefined || Math.abs(m.scoreA - m.scoreB) !== 1) return;
+      var lose = m.scoreA < m.scoreB ? m.teamA : m.teamB;
+      [lose.keeper, lose.attacker].forEach(function(p){ if(real(p) && !p.standIn && !isTalpaIn(m, p.id)) close[p.id] = (close[p.id] || 0) + 1; });
+    }); });
+    var maxGf = 0; out.forEach(function(e){ var r = rows[e.p.id]; if(r && r.gf > maxGf) maxGf = r.gf; });
+    out.forEach(function(e){ var r = rows[e.p.id] || { pg: 0, v: 0, p: 0, gf: 0, gs: 0, pt: 0 }; e.r = r; e.msg = elimMsg(e, r, close[e.p.id] || 0, maxGf); });
+    out.sort(function(a, b){ return b.lvl - a.lvl || (b.r.pt - a.r.pt) || String(a.p.name).localeCompare(String(b.p.name)); });
+    return out;
+  }
+  function stageWhere(st){
+    st = String(st || "");
+    if(/^Quarti/.test(st)) return "Fuori ai Quarti";
+    if(/^Ottavi/.test(st)) return "Fuori agli Ottavi";
+    if(/^Sedicesimi/.test(st)) return "Fuori ai Sedicesimi";
+    if(/^Semifinale/.test(st)) return "Fuori in Semifinale";
+    if(/^Primo turno/.test(st)) return "Fuori al primo turno";
+    return "Fuori · " + st;
+  }
+  function elimMsg(e, r, nClose, maxGf){
+    var h = 0, nm = String(e.p.name || ""); for(var i = 0; i < nm.length; i++) h = (h * 31 + nm.charCodeAt(i)) >>> 0;
+    if(e.lvl === 99) return "Ai piedi del podio: una serata da protagonista, il bronzo era a un passo. 👏";
+    if(e.lvl >= 2){
+      var pf = ["Ha conquistato la fase finale: già questo vale un applauso. 👏", "Tra i migliori della serata: la fase finale non è roba per tutti.", "Fino all'ultimo pallone: si è arreso solo nel tabellone."];
+      return pf[h % pf.length];
+    }
+    if(r.pg && r.gf === maxGf && r.gf > 0) return "Il bomber dei non qualificati: " + r.gf + " gol segnati! ⚽";
+    if(nClose >= 2) return nClose + " sconfitte per un solo gol: stasera la fortuna aveva da fare altrove. 🍀";
+    if(r.pg && r.v * 2 >= r.pg) return "Bilancio da applausi nel girone (" + r.v + " vinte su " + r.pg + "): mancava davvero poco.";
+    if(e.role === "P" && r.pg && r.gs / r.pg <= 5) return "Muro difensivo: in media solo " + (Math.round(r.gs / r.pg * 10) / 10) + " gol subiti a partita. 🧱";
+    if(r.v >= 1) return (r.v === 1 ? "Una vittoria" : r.v + " vittorie") + " da incorniciare: gli avversari se le ricordano ancora. 💪";
+    var gen = ["Il compagno giusto arriverà: il talento è già qui.", "Senza di te il torneo non sarebbe stato lo stesso. Applausi! 👏", "Grinta da vendere: al prossimo torneo si sale di livello.", "Ogni campione ha avuto una serata così: la rivincita è dietro l'angolo.", "Ha fatto sudare tutti gli avversari, e non è poco. 💦", "Il pubblico ha apprezzato: ci vediamo al prossimo torneo! 🍻"];
+    return gen[h % gen.length];
+  }
+  function renderElim(){
+    var pc = document.getElementById("playoffCard"); if(!pc) return;
+    var card = document.getElementById("elimCard");
+    var list = []; try{ list = elimData(); }catch(e){ console.error(e); }
+    if(!list.length){ if(card) card.style.display = "none"; return; }
+    if(!card){ card = document.createElement("div"); card.className = "card"; card.id = "elimCard"; card.setAttribute("data-vx-tab", "tabellone"); pc.parentNode.insertBefore(card, pc.nextSibling); }
+    card.style.display = "";
+    var wasOpen = card.querySelector("details") ? card.querySelector("details").open : true;
+    card.innerHTML = '<details class="el-wrap"' + (wasOpen ? ' open' : '') + '><summary><span class="el-title">💙 Fuori dai giochi… ma che serata!</span> <span class="el-count">' + list.length + '</span></summary>' +
+      '<div class="el-sub">Il torneo per loro è finito, ma ognuno ha lasciato il segno.</div>' +
+      list.map(function(e){
+        return '<div class="el-row"><div class="el-role ' + (e.role === "P" ? "p" : "a") + '">' + (e.role === "P" ? "P" : "A") + '</div><div class="el-body"><div class="el-name">' + esc(e.p.name) + ' <span class="el-where">' + esc(e.where) + '</span></div>' +
+          '<div class="el-msg">' + esc(e.msg) + '</div>' +
+          (e.r && e.r.pg ? '<div class="el-stats">Girone: ' + e.r.pg + ' giocate · ' + e.r.v + ' vinte · ' + e.r.gf + '-' + e.r.gs + ' gol · ' + e.r.pt + ' punti</div>' : '') + '</div></div>';
+      }).join("") + '</details>';
+  }
+  afterPersistHooks.push(function(){ try{ renderElim(); }catch(e){} });
+  (function(){
+    var _rpE = renderPlayoffBracket; renderPlayoffBracket = function(){ var r = _rpE.apply(this, arguments); try{ renderElim(); }catch(e){} return r; };
+    if(window.__fbViewer){ var _vhE = window.__viewerHook; window.__viewerHook = function(){ if(_vhE) _vhE(); try{ renderElim(); }catch(e){} }; }
+    setTimeout(function(){ try{ renderElim(); }catch(e){} }, 0);
   })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
