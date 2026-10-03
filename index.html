@@ -1045,6 +1045,14 @@
   #tvCam{ position:absolute; right:1.4vw; bottom:44px; width:24vw; z-index:14; background:#000; border:3px solid #ffd868; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.6); }
   #tvCam iframe{ display:block; width:100%; aspect-ratio:16/9; border:0; }
   #tvCam .tvcam-lbl{ position:absolute; left:8px; top:8px; background:rgba(193,18,31,.92); color:#fff; font-weight:900; font-size:clamp(11px,1vw,20px); border-radius:999px; padding:2px 10px; }
+  .case-group{ margin:10px 0 14px; }
+  .case-title{ font-weight:900; font-size:14px; color:var(--pitch); margin:12px 0 6px; text-transform:uppercase; letter-spacing:.03em; }
+  details.case{ background:rgba(20,41,74,0.05); border-radius:10px; margin:6px 0; padding:0; }
+  details.case summary{ cursor:pointer; padding:9px 12px; font-weight:800; font-size:14px; list-style:none; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary::before{ content:"▸ "; color:#c1121f; }
+  details.case[open] summary::before{ content:"▾ "; }
+  details.case p{ margin:0; padding:0 12px 10px 26px; font-size:13.5px; line-height:1.5; }
   .modal-box{ background:#fff; border-radius:14px; padding:20px; max-width:340px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
   .modal-box p{ margin:0 0 18px; font-size:14.5px; line-height:1.5; color:var(--ink); }
   .modal-actions{ display:flex; gap:10px; }
@@ -1401,8 +1409,8 @@
 
           <h3>1. Le coppie</h3>
           <p><b>Modalità Giallo 🔄 (di default):</b> a ogni giornata i portieri vengono ri-accoppiati automaticamente con un attaccante diverso da quelli con cui hanno già giocato (mai la stessa coppia due volte, e si evita anche di rincontrare lo stesso avversario). Se i numeri non tornano, un giocatore di troppo può fare da "Talpa" prestandosi a un'altra squadra per una partita extra (senza punteggio), e un eventuale turno di recupero finale pareggia chi ha giocato meno partite delle altre.<br>
-          <b>Modalità Fisso 📌:</b> ogni portiere viene abbinato una sola volta a un attaccante e resta con quel compagno per tutto il torneo, girone e fase finale compresi (chi resta senza compagno va in panchina).<br>
-          <b>Modalità Coppie fisse scelte 🤝:</b> come il Fisso, ma le coppie non vengono sorteggiate: le formi tu abbinando a ogni portiere il suo attaccante nel riquadro "Forma le coppie". Il sorteggio crea solo il calendario (girone unico o più gironi, anche nel numero che scegli tu) e le coppie restano le stesse fino alla finale. Chi non ha un compagno va in panchina. I gironi si possono comporre in tre modi: <b>🎲 sorteggio casuale</b>; <b>✋ scelta manuale</b> (indichi tu la lettera del girone per ogni coppia); <b>⭐ teste di serie</b> (indichi una testa di serie per girone, che viene messa in un girone diverso dalle altre, e le altre coppie vengono sorteggiate in modo che i gironi siano il più possibile equilibrati).</p>
+          <b>Modalità Sorteggio 🎲:</b> ogni portiere viene abbinato una sola volta a un attaccante e resta con quel compagno per tutto il torneo, girone e fase finale compresi (chi resta senza compagno va in panchina).<br>
+          <b>Modalità Coppie fisse 🤝:</b> come il Sorteggio, ma le coppie non vengono sorteggiate: le formi tu abbinando a ogni portiere il suo attaccante nel riquadro "Forma le coppie". Il sorteggio crea solo il calendario (girone unico o più gironi, anche nel numero che scegli tu) e le coppie restano le stesse fino alla finale. Chi non ha un compagno va in panchina. I gironi si possono comporre in tre modi: <b>🎲 sorteggio casuale</b>; <b>✋ scelta manuale</b> (indichi tu la lettera del girone per ogni coppia); <b>⭐ teste di serie</b> (indichi una testa di serie per girone, che viene messa in un girone diverso dalle altre, e le altre coppie vengono sorteggiate in modo che i gironi siano il più possibile equilibrati).</p>
 
           <h3>2. Il girone</h3>
           <p>Ogni partita del girone si gioca <b>al meglio dei 7 gol</b> (vince chi arriva prima a 7). Punti in classifica: <b>3 punti</b> per una vittoria con 2 o più gol di scarto, <b>2 a 1</b> se lo scarto è di un solo gol.</p>
@@ -1418,6 +1426,39 @@
 
           <h3>6. Podio e leaderboard</h3>
           <p>Al termine di ogni Fascia si forma un podio: 🥇 chi vince la Finale, 🥈 chi la perde, 🥉 chi vince la Finale 3°/4° posto. Oltre alla classifica generale, l'app calcola due classifiche individuali separate — <b>Leaderboard Portieri</b> e <b>Leaderboard Attaccanti</b> — utili perché in modalità Giallo ogni giocatore cambia compagno a ogni giornata.</p>
+
+          <h3>7. Casi particolari: cosa succede e perché</h3>
+          <p>L'app segue sempre tre regole: <b>tutti giocano lo stesso numero di partite che contano</b>, <b>nessuno resta a guardare</b> (dove possibile) e <b>non si ripete il compagno</b>. Qui sotto ogni situazione e come viene risolta: tocca una voce per aprirla.</p>
+          <div class="case-group"><div class="case-title">Modalità Giallo 🔄</div>
+            <details class="case"><summary>Portieri e attaccanti in numero uguale (es. 16 + 16)</summary><p>Si formano 16 coppie, cioè 8 partite per giornata: tutti giocano una volta. A ogni giornata il compagno cambia e non si ripete mai; l'app cerca anche di non far rincontrare gli stessi avversari.</p></details>
+            <details class="case"><summary>Numero di coppie dispari (es. 15 + 15)</summary><p>Con 15 coppie una resterebbe senza avversari. L'app aggiunge una <b>partita extra</b>: quella coppia gioca contro una coppia <b>🃏 Jolly</b>, formata da due giocatori che hanno già giocato la loro partita. Il risultato conta <b>solo per la coppia rimasta</b>; i Jolly non fanno punti. Il ruolo di Jolly gira, così non tocca sempre agli stessi.</p></details>
+            <details class="case"><summary>Un giocatore in più in un ruolo (es. 16 portieri + 17 attaccanti)</summary><p>16 portieri e 16 attaccanti giocano le 8 partite normali. L'attaccante in più gioca una <b>partita extra</b> in coppia con un portiere che fa da <b>🕳️ Talpa</b> (nome in rosso) contro una coppia Jolly. Fa punti <b>solo l'attaccante in più</b>: Talpa e Jolly hanno già giocato e quella partita non conta per loro. L'attaccante in più cambia a ogni giornata. Con un portiere in più succede lo stesso a ruoli invertiti.</p></details>
+            <details class="case"><summary>Più giocatori in più (es. 16 portieri + 20 attaccanti)</summary><p>Per ogni attaccante in più un portiere gioca una seconda partita come <b>Talpa</b> (non fa punti). Gli attaccanti in più giocano tra loro le partite extra e fanno punti normalmente; se servono, si aggiunge una coppia Jolly. Il compito di Talpa gira tra tutti i portieri, giornata dopo giornata.</p></details>
+            <details class="case"><summary>Iscritto il giocatore fittizio «Talpa»</summary><p>Se tra gli iscritti c'è un giocatore chiamato «Talpa», l'app sceglie da sola chi lo sostituisce in ogni partita non ancora giocata: prima chi in quella giornata riposa, facendo girare il compito. Compare come «Nome (Talpa)» e non fa punti. Si può sempre scegliere una persona precisa con 🔁 Sostituisci.</p></details>
+            <details class="case"><summary>Pochi giocatori (es. 4 portieri + 5 attaccanti)</summary><p>In 5 giornate non ci sono abbastanza compagni diversi per tutti: qualche coppia si ripete per forza. L'app fa molti tentativi e sceglie il calendario con meno ripetizioni possibili.</p></details>
+            <details class="case"><summary>Qualcuno ha giocato meno partite</summary><p>Se per i numeri qualcuno è rimasto indietro con le partite che contano, alla fine si aggiunge una <b>giornata di recupero</b> solo per loro (con una coppia Jolly se serve): così tutti chiudono il girone con lo stesso numero di partite valide.</p></details>
+            <details class="case"><summary>Chi gioca due partite nella stessa giornata</summary><p>Talpa e Jolly giocano due volte nella stessa giornata. L'app non le mette mai sui tavoli nello stesso momento: una partita va in campo solo quando tutti e quattro i giocatori sono liberi.</p></details>
+          </div>
+          <div class="case-group"><div class="case-title">Modalità Sorteggio 🎲 e Coppie fisse 🤝</div>
+            <details class="case"><summary>Come si gioca il girone</summary><p>Girone all'italiana: ogni coppia incontra tutte le altre una volta (es. 7 coppie = 21 partite). Con un numero di coppie dispari, a ogni giornata una coppia riposa.</p></details>
+            <details class="case"><summary>Portieri e attaccanti in numero diverso</summary><p>Le coppie restano le stesse per tutto il torneo, quindi chi non trova un compagno <b>va in panchina</b>. Per farlo giocare si può iscrivere «Talpa» nel ruolo che manca.</p></details>
+            <details class="case"><summary>Arriva tardi una coppia o una coppia si ritira</summary><p><b>➕ Coppia arrivata in ritardo</b>: si aggiunge a un girone e gioca contro tutte le coppie di quel girone. <b>🚫 Ritiro</b>: le sue partite ancora da giocare sono date vinte 7-0 agli avversari e la coppia non entra in fase finale (si può annullare).</p></details>
+          </div>
+          <div class="case-group"><div class="case-title">Durante il torneo</div>
+            <details class="case"><summary>Un giocatore se ne va o arriva tardi (Giallo)</summary><p><b>🔁 Sostituisci un giocatore</b>: chi entra prende il suo posto in tutte le partite ancora da giocare. Le partite già giocate restano com'erano.</p></details>
+            <details class="case"><summary>Risultato inserito sbagliato</summary><p>Basta correggere il numero. Con <b>↩️ Annulla</b> si torna indietro all'ultima modifica. Un 7-7 o un risultato senza nessuno a 7 viene evidenziato come sospetto.</p></details>
+          </div>
+          <div class="case-group"><div class="case-title">Classifica</div>
+            <details class="case"><summary>Come si fanno i punti</summary><p>Si gioca a chi arriva prima a 7 gol. Vittoria con 2 o più gol di scarto: 3 punti al vincitore. Vittoria con 1 gol di scarto: 2 punti al vincitore e 1 al perdente. Talpa e Jolly non prendono punti in quella partita.</p></details>
+            <details class="case"><summary>Parità in classifica</summary><p>Si guardano nell'ordine: punti → differenza reti → gol fatti → scontro diretto. Se ancora pari, l'app propone una partita di spareggio.</p></details>
+          </div>
+          <div class="case-group"><div class="case-title">Fase finale</div>
+            <details class="case"><summary>Chi entra</summary><p>Fascia A: i primi 8 portieri e i primi 8 attaccanti. Fascia B: i successivi 8 e 8. Chi resta oltre è fuori. (Con le coppie fisse divise in gironi passano le qualificate di ogni girone.)</p></details>
+            <details class="case"><summary>Come si formano le coppie</summary><p>Si incrocia la classifica per non mettere insieme i più forti: 1° portiere con 2° attaccante, 2° portiere con 1° attaccante, 3° con 4° e così via. Dopo i Quarti e dopo le Semifinali chi passa forma <b>nuove coppie</b> con lo stesso incrocio (anche per Finale e 3°/4° posto). L'organizzatore può cambiarle a mano con <b>✏️ Cambia le coppie</b> finché l'incontro non è iniziato.</p></details>
+            <details class="case"><summary>Numero di coppie che non torna (non 2, 4, 8, 16)</summary><p>Tutte giocano il primo turno e passano le vincenti più le <b>migliori perdenti</b> (ripescaggio: prima chi ha vinto una partita dell'incontro, poi differenza reti, poi gol fatti). Con un numero dispari la meglio classificata passa il turno. Con 3 coppie si gioca un <b>triangolare</b>.</p></details>
+            <details class="case"><summary>Come si gioca un incontro</summary><p>Andata e ritorno, sempre a 7 gol. Se ognuna vince una partita si gioca la <b>bella</b>. Chi vince passa il turno; in Finale e 3°/4° posto si decide il podio.</p></details>
+          </div>
+
 
         </div>
       </details>
@@ -1451,7 +1492,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 52</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 53</span></div>
 
 </div>
 
