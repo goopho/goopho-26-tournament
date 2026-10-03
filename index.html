@@ -1008,6 +1008,22 @@
   .pe-team b{ display:block; font-size:13px; margin-bottom:4px; color:var(--pitch); }
   .pe-team label{ display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:13px; margin:4px 0; }
   .pe-team select{ flex:1; max-width:220px; }
+  .cam-btn{ margin-left:8px; border:0; border-radius:999px; background:#fff; color:#c1121f; font:inherit; font-size:12px; font-weight:900; padding:3px 10px; cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,.2); }
+  .cam-modal{ position:fixed; inset:0; background:rgba(5,13,51,.82); display:flex; align-items:center; justify-content:center; padding:12px; }
+  .cam-box{ width:min(960px, 100%); background:#0b1640; border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.6); color:#fff; }
+  .cam-head{ display:flex; align-items:center; gap:10px; padding:10px 14px; }
+  .cam-head b{ font-size:17px; white-space:nowrap; } .cam-who{ flex:1; font-size:13px; opacity:.85; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .cam-x{ border:0; background:rgba(255,255,255,.15); color:#fff; border-radius:999px; width:34px; height:34px; font-size:16px; cursor:pointer; }
+  .cam-frame{ position:relative; padding-top:56.25%; background:#000; } .cam-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .cam-foot{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; padding:10px 14px; font-size:13px; }
+  .cam-foot a{ margin-left:auto; color:#9fc0ff; font-weight:700; }
+  .cam-tab{ border:0; border-radius:999px; padding:5px 12px; font:inherit; font-weight:800; background:rgba(255,255,255,.12); color:#fff; cursor:pointer; } .cam-tab.on{ background:#ffd868; color:#3a2a00; }
+  #camFab{ position:fixed; left:14px; bottom:14px; z-index:9000; border:0; border-radius:999px; padding:12px 16px; font:inherit; font-weight:900; font-size:15px; background:#c1121f; color:#fff; box-shadow:0 8px 24px rgba(0,0,0,.4); cursor:pointer; }
+  body.tv-on #camFab{ display:none; }
+  .cam-row{ display:flex; gap:8px; align-items:center; margin:6px 0; } .cam-row .cam-n{ font-weight:800; width:76px; flex:none; } .cam-row input{ flex:1; min-width:0; }
+  #tvCam{ position:absolute; right:1.4vw; bottom:44px; width:24vw; z-index:14; background:#000; border:3px solid #ffd868; border-radius:14px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.6); }
+  #tvCam iframe{ display:block; width:100%; aspect-ratio:16/9; border:0; }
+  #tvCam .tvcam-lbl{ position:absolute; left:8px; top:8px; background:rgba(193,18,31,.92); color:#fff; font-weight:900; font-size:clamp(11px,1vw,20px); border-radius:999px; padding:2px 10px; }
   .modal-box{ background:#fff; border-radius:14px; padding:20px; max-width:340px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,0.3); }
   .modal-box p{ margin:0 0 18px; font-size:14.5px; line-height:1.5; color:var(--ink); }
   .modal-actions{ display:flex; gap:10px; }
@@ -1245,6 +1261,7 @@
       <button class="btn btn-live" id="liveSyncToggleBtn" type="button" style="display:none">🔴 Live attivo · Disattiva</button>
       <button class="btn btn-primary" id="tvModeBtn" type="button">📺 Modalità TV</button>
       <button class="btn btn-primary" id="tvWinBtn" type="button" title="Apre la Modalità TV in una finestra a parte da trascinare sul televisore: qui continui a lavorare normalmente">🖥️ TV sul secondo schermo</button>
+      <button class="btn btn-primary" id="voiceBtn" type="button" title="Chiama a voce (due volte) le partite che vanno sui tavoli">🔊 Annunci vocali: sì</button>
       <button class="btn btn-primary" id="podiumImgBtn" type="button" style="display:none;">🖼️ Immagine del podio</button>
       <button class="btn btn-electric" id="resetScoresBtn" type="button">🧹 Azzera risultati</button>
       <button class="btn btn-electric" id="resetTournamentBtn">🆕 Nuovo torneo</button>
@@ -1413,7 +1430,7 @@
     <div id="histStagione" style="display:none;"></div>
   </section>
 
-  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 49</span></div>
+  <div class="app-footer"><span class="af-label">Contatti organizzatore</span><a href="mailto:fabio3398007364@gmail.com">fabio3398007364@gmail.com</a><span class="af-ver" style="display:block;margin-top:6px;font-size:11px;opacity:.55;">GOOPHO 26 · versione 50</span></div>
 
 </div>
 
@@ -6576,7 +6593,7 @@ module.exports = QRCode;
     Object.keys(current.onTable || {}).forEach(function(id){
       var card = cardOf(id); if(!card) return;
       card.classList.add("on-table");
-      card.insertAdjacentHTML("afterbegin", '<div class="table-badge on">🎯 Tavolo ' + current.onTable[id] + ' · in corso</div>');
+      card.insertAdjacentHTML("afterbegin", '<div class="table-badge on">🎯 Tavolo ' + current.onTable[id] + ' · in corso' + camBtnHtml(current.onTable[id]) + '</div>');
     });
     info.prep.forEach(function(id){
       var card = cardOf(id); if(!card || card.classList.contains("on-table")) return;
@@ -7189,6 +7206,7 @@ module.exports = QRCode;
       if(cfg.allowRemote) payload.k = cfg.apiKey;
       if(cfg.signupOpen) payload.su = true;
       try{ var th = window.__themeForLive && window.__themeForLive(); if(th) payload.th = JSON.stringify(th); }catch(e){}
+      try{ var cmz = window.__camsForLive && window.__camsForLive(); if(cmz) payload.cams = cmz; }catch(e){}
       getToken().then(function(tok){
         return fetch(cfg.dbUrl + "/live/" + encodeURIComponent(cfg.liveId) + ".json?auth=" + encodeURIComponent(tok), {
           method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
@@ -7492,7 +7510,7 @@ module.exports = QRCode;
           if(obj.updatedAt && obj.updatedAt === lastStamp) return;
           lastStamp = obj.updatedAt || null;
           try{ current = obj.data ? relinkGroupRounds(JSON.parse(obj.data)) : null; }catch(e){ return; }
-          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; window.__liveTheme = obj.th ? JSON.parse(obj.th) : null; }catch(e){}
+          try{ window.__liveProfiles = obj.prof ? JSON.parse(obj.prof) : null; window.__liveApiKey = obj.k || null; window.__liveSignup = !!obj.su; window.__liveTheme = obj.th ? JSON.parse(obj.th) : null; window.__liveCams = obj.cams || null; }catch(e){}
         }
         render();
       }
@@ -9130,7 +9148,7 @@ module.exports = QRCode;
   // Le frasi vengono dette una alla volta (la successiva parte quando finisce la
   // precedente): alcuni browser (Safari, Chrome) perdono le frasi messe in coda
   // tutte insieme, e così la ripetizione non si sentiva.
-  var ttsQueue = [], ttsBusy = false, ttsCur = null, ttsTimer = null;
+  var ttsQueue = [], ttsBusy = false, ttsCur = null, ttsTimer = null, ttsStartedAt = 0;
   function ttsNext(){
     clearTimeout(ttsTimer);
     if(!ttsQueue.length){ ttsBusy = false; ttsCur = null; return; }
@@ -9151,6 +9169,7 @@ module.exports = QRCode;
         fin();
       };
       ttsCur = u;                                   // tenuta in memoria finché parla
+      u.onstart = function(){ ttsStartedAt = Date.now(); };
       try{ speechSynthesis.resume(); }catch(e){}
       speechSynthesis.speak(u);
       // rete di sicurezza: se il browser non avvisa la fine, si va avanti lo stesso
@@ -9194,14 +9213,23 @@ module.exports = QRCode;
   function spokenTag(tag){
     return String(tag || "").replace(/^Gir\.\s*/i, "girone ").replace(/^G(\d+)$/, "giornata $1").replace("1° turno", "primo turno").replace("Semi", "semifinale").replace("Triang.", "triangolare").replace(/^A · /, "fascia A, ").replace(/^B · /, "fascia B, ");
   }
+  // Gli annunci partono dalla finestra in cui lavori (dove clicchi: il browser lì lascia parlare),
+  // anche senza Modalità TV. La finestra TV separata mostra solo la scritta; chi segue la Live
+  // in Modalità TV (es. un televisore collegato al link) li sente come prima.
   function tvAnnounceCheck(){
-    if(!document.body.classList.contains("tv-on") || !current || !current.rounds) return;
+    var tvOn = document.body.classList.contains("tv-on");
+    var mode = window.__fbViewer ? (tvOn ? "speak" : null) : (TV_WINDOW ? "caption" : "speak");
+    if(!mode || !current || !current.rounds) return;
     var info = computeTables(current), on = current.onTable || {};
     var ids = Object.keys(on).filter(function(id){ return info.byId[id]; });
     if(tvAnnounced === null){ tvAnnounced = {}; ids.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; }); return; }
     var fresh = ids.filter(function(id){ return !tvAnnounced[id + "@" + on[id]]; }).sort(function(a, b){ return on[a] - on[b]; });
     fresh.forEach(function(id){ tvAnnounced[id + "@" + on[id]] = 1; });
-    if(!fresh.length || !voiceOn()) return;
+    if(!fresh.length) return;
+    if(mode === "caption" || !voiceOn()){
+      fresh.forEach(function(id){ var it = info.byId[id]; function who(t){ return t ? t.keeper.name + " e " + t.attacker.name : ""; } tvCaption("Tavolo " + on[id] + ". " + who(it.a) + ", contro " + who(it.b) + "."); });
+      return;
+    }
     chime();
     setTimeout(function(){
       // ogni chiamata viene ripetuta due volte, per chi è distratto
@@ -9222,10 +9250,35 @@ module.exports = QRCode;
       b.type = "button"; b.className = "tv-back tv-voice"; b.id = "tvVoiceBtn";
       function lbl(){ b.textContent = voiceOn() ? "🔊 Voce: sì" : "🔇 Voce: no"; }
       lbl();
-      b.addEventListener("click", function(){ try{ localStorage.setItem(LS_VOICE, voiceOn() ? "0" : "1"); }catch(e){} lbl(); if(voiceOn()){ chime(); speak("Annunci vocali attivi."); } });
+      b.addEventListener("click", function(){ try{ localStorage.setItem(LS_VOICE, voiceOn() ? "0" : "1"); }catch(e){} lbl(); var vb2 = document.getElementById("voiceBtn"); if(vb2) vb2.textContent = voiceOn() ? "🔊 Annunci vocali: sì" : "🔇 Annunci vocali: no"; if(voiceOn()){ chime(); speak("Annunci vocali attivi."); } });
       ov.appendChild(b);
     }
     var _tvr2 = tvRender; tvRender = function(){ var r = _tvr2.apply(this, arguments); tvAnnounceCheck(); return r; };
+    // finestra di lavoro: annuncia dopo ogni salvataggio (anche risultati arrivati dal telefono)
+    if(!TV_WINDOW && !window.__fbViewer){ afterPersistHooks.push(function(){ setTimeout(tvAnnounceCheck, 50); }); setTimeout(tvAnnounceCheck, 0); }
+    function voiceTest(){
+      if(!window.speechSynthesis){ toast("🔇 Questo browser non sa parlare: usa Chrome, Edge o Safari."); return; }
+      var t0 = Date.now(); ttsStartedAt = 0;
+      chime(); speak("Annunci vocali attivi. Tavolo 1, prova.");
+      setTimeout(function(){
+        var vs = []; try{ vs = speechSynthesis.getVoices(); }catch(e){}
+        var it = vs.filter(function(v){ return /^it/i.test(v.lang); });
+        if(ttsStartedAt >= t0) toast("🔊 Voce funzionante" + (it.length ? " (" + it[0].name + ")" : "") + ". Se non senti niente, alza il volume del computer.");
+        else if(vs.length && !it.length) toast("🔇 Manca una voce italiana sul computer. Mac: Impostazioni di Sistema → Accessibilità → Contenuti letti → Voce di sistema → aggiungi una voce italiana.");
+        else toast("🔇 Il browser non ha parlato. Controlla il volume, chiudi e riapri il browser, oppure prova con Chrome.");
+      }, 2500);
+    }
+    var vb = document.getElementById("voiceBtn");
+    if(vb){
+      if(window.__fbViewer || TV_WINDOW) vb.style.display = "none";
+      var vlbl = function(){ vb.textContent = voiceOn() ? "🔊 Annunci vocali: sì" : "🔇 Annunci vocali: no"; };
+      vlbl();
+      vb.addEventListener("click", function(){
+        try{ localStorage.setItem(LS_VOICE, voiceOn() ? "0" : "1"); }catch(e){}
+        vlbl(); var tb = document.getElementById("tvVoiceBtn"); if(tb) tb.textContent = voiceOn() ? "🔊 Voce: sì" : "🔇 Voce: no";
+        if(voiceOn()) voiceTest(); else toast("Annunci vocali spenti.");
+      });
+    }
     document.addEventListener("click", function(e){ if(e.target && e.target.closest && e.target.closest("#tvModeBtn, #fbViewerTvBtn, #pinTvBtn")){ tvAnnounced = null; try{ if(window.speechSynthesis) speechSynthesis.getVoices(); }catch(err){} } }, true);
   })();
 
@@ -9767,7 +9820,7 @@ module.exports = QRCode;
     }
     var first = bar.firstChild;
     var g1 = grp("💾 Salva e condividi", [["saveTournamentBtn"], ["shareWhatsAppBtn"], ["podiumImgBtn", "btn-share"]]);
-    var g2 = grp("📺 Mostra e stampa", [["tvModeBtn", "btn-view"], ["tvWinBtn", "btn-view"], ["gridOpenBtn", "btn-view"], ["printsBtn", "btn-view"]]);
+    var g2 = grp("📺 Mostra e stampa", [["tvModeBtn", "btn-view"], ["tvWinBtn", "btn-view"], ["voiceBtn", "btn-view"], ["gridOpenBtn", "btn-view"], ["printsBtn", "btn-view"]]);
     var g3 = grp("⚠️ Correggi o ricomincia", [["undoBtn"], ["resetScoresBtn", "btn-risk"], ["resetTournamentBtn", "btn-risk"]]);
     bar.insertBefore(g1, first); bar.insertBefore(g2, first); bar.insertBefore(g3, first);
   })();
@@ -10089,6 +10142,126 @@ module.exports = QRCode;
     var _rrT = renderRounds;
     renderRounds = function(){ var ch = false; try{ ch = fillTalpaStandIns(); }catch(e){} if(ch) safeSet(LS_CURRENT, current); return _rrT.apply(this, arguments); };
     setTimeout(function(){ try{ if(fillTalpaStandIns()){ persistCurrent(); rerenderAll(); } }catch(e){ console.error(e); } }, 0);
+  })();
+
+
+  // ---------- TELECAMERE DEI TAVOLI (dirette YouTube) ----------
+  // Per ogni tavolo si incolla il link di una diretta (di solito YouTube "non in elenco").
+  // Sulla partita in corso compare 📹; chi segue la Live vede le stesse telecamere;
+  // in Modalità TV si può mostrare il video di un tavolo in un riquadro.
+  var LS_CAMS = "tg_cams_v1";
+  function camsCfg(){ var c = safeGet(LS_CAMS, null); return (c && typeof c === "object") ? c : { urls: {}, tv: 0 }; }
+  function camsMap(){ if(window.__fbViewer) return (window.__liveCams && window.__liveCams.urls) || {}; return camsCfg().urls || {}; }
+  function camUrl(t){ var u = camsMap()[String(t)]; return (typeof u === "string" && /^https?:\/\//i.test(u.trim())) ? u.trim() : ""; }
+  window.__camsForLive = function(){ var c = camsCfg(), has = Object.keys(c.urls || {}).some(function(k){ return !!c.urls[k]; }); return has ? { urls: c.urls, tv: c.tv || 0 } : null; };
+  function ytEmbed(url, mute){
+    var m, id = null, q = "autoplay=1&playsinline=1&rel=0" + (mute ? "&mute=1" : "");
+    try{
+      var u = new URL(url);
+      if(/(^|\.)youtu\.be$/i.test(u.hostname)) id = u.pathname.slice(1).split("/")[0];
+      else if(/(^|\.)youtube(-nocookie)?\.com$/i.test(u.hostname)){
+        if(u.searchParams.get("v")) id = u.searchParams.get("v");
+        else if((m = u.pathname.match(/^\/(live|embed|shorts)\/([\w-]{6,})/))) id = m[2];
+        else if((m = u.pathname.match(/^\/channel\/(UC[\w-]+)/))) return "https://www.youtube.com/embed/live_stream?channel=" + m[1] + "&" + q;
+      }
+    }catch(e){}
+    return id && /^[\w-]{6,20}$/.test(id) ? "https://www.youtube.com/embed/" + id + "?" + q : "";
+  }
+  function camBtnHtml(t){ return camUrl(t) ? ' <button type="button" class="cam-btn" data-cam="' + t + '" title="Guarda la telecamera del tavolo ' + t + '">📹 Guarda</button>' : ''; }
+  function whoOnTable(t){
+    var on = (current && current.onTable) || {}, id = Object.keys(on).filter(function(k){ return on[k] === t; })[0];
+    if(!id || !current) return "";
+    var m = findMatchById(id) || (typeof findPlayoffMatchById === "function" ? findPlayoffMatchById(id) : null);
+    return m && m.teamA && m.teamB ? pairLabel(m.teamA) + "  contro  " + pairLabel(m.teamB) : "";
+  }
+  function openCam(t){
+    var url = camUrl(t); if(!url) return;
+    var emb = ytEmbed(url, false);
+    if(!emb){ window.open(url, "_blank", "noopener"); return; }
+    var ov = document.createElement("div"); ov.className = "cam-modal"; ov.style.zIndex = "10050";
+    ov.innerHTML = '<div class="cam-box"><div class="cam-head"><b>📹 Tavolo ' + t + '</b><span class="cam-who">' + esc(whoOnTable(t)) + '</span><button type="button" class="cam-x" aria-label="Chiudi">✕</button></div>' +
+      '<div class="cam-frame"><iframe src="' + esc(emb) + '" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>' +
+      '<div class="cam-foot">' + (Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).length > 1 ? Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).sort(function(a, b){ return a - b; }).map(function(k){ return '<button type="button" class="cam-tab' + (+k === +t ? ' on' : '') + '" data-t="' + k + '">Tavolo ' + k + '</button>'; }).join("") : '') +
+      '<a href="' + esc(url) + '" target="_blank" rel="noopener">Apri su YouTube ↗</a></div></div>';
+    document.body.appendChild(ov);
+    function close(){ ov.remove(); }
+    ov.addEventListener("click", function(e){ if(e.target === ov) close(); });
+    ov.querySelector(".cam-x").addEventListener("click", close);
+    ov.querySelectorAll(".cam-tab").forEach(function(b){ b.addEventListener("click", function(){ close(); openCam(+b.dataset.t); }); });
+  }
+  document.addEventListener("click", function(e){ var b = e.target && e.target.closest && e.target.closest(".cam-btn"); if(b){ e.preventDefault(); e.stopPropagation(); openCam(+b.dataset.cam); } }, true);
+  // pulsante fisso per chi segue la Live (e in Modalità TV)
+  function camFab(){
+    var list = Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).sort(function(a, b){ return a - b; });
+    var f = document.getElementById("camFab");
+    if(!list.length || !(window.__fbViewer)){ if(f) f.remove(); return; }
+    if(!f){ f = document.createElement("button"); f.type = "button"; f.id = "camFab"; document.body.appendChild(f);
+      f.addEventListener("click", function(){
+        var l = Object.keys(camsMap()).filter(function(k){ return camUrl(k); }).sort(function(a, b){ return a - b; });
+        if(l.length === 1){ openCam(+l[0]); return; }
+        var on = (current && current.onTable) || {}, busy = {}; Object.keys(on).forEach(function(k){ busy[on[k]] = true; });
+        openCam(+(l.filter(function(k){ return busy[+k]; })[0] || l[0]));
+      });
+    }
+    f.textContent = "📹 Telecamere" + (list.length > 1 ? " (" + list.length + ")" : "");
+  }
+  // riquadro video in Modalità TV
+  var tvCamShown = "";
+  function tvCamUpdate(){
+    var ov = document.getElementById("tvOverlay"); if(!ov) return;
+    var cfg = window.__fbViewer ? (window.__liveCams || {}) : (TV_WINDOW ? (safeGet(LS_CAMS, null) || {}) : camsCfg());
+    var t = +(cfg.tv || 0), urls = cfg.urls || {}, url = t && typeof urls[t] === "string" ? urls[t] : "";
+    var emb = url && document.body.classList.contains("tv-on") ? ytEmbed(url, true) : "";
+    var box = document.getElementById("tvCam");
+    if(!emb){ if(box) box.remove(); tvCamShown = ""; return; }
+    if(box && tvCamShown === emb) return;
+    if(!box){ box = document.createElement("div"); box.id = "tvCam"; ov.appendChild(box); }
+    box.innerHTML = '<div class="tvcam-lbl">📹 Tavolo ' + t + '</div><iframe src="' + esc(emb) + '" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    tvCamShown = emb;
+  }
+  (function(){
+    var _tvrC = tvRender; tvRender = function(){ var r = _tvrC.apply(this, arguments); try{ tvCamUpdate(); }catch(e){} return r; };
+    var _exC = exitTvMode; exitTvMode = function(){ var r = _exC.apply(this, arguments); var b = document.getElementById("tvCam"); if(b) b.remove(); tvCamShown = ""; return r; };
+    if(window.__fbViewer){ var _vhC = window.__viewerHook; window.__viewerHook = function(){ if(_vhC) _vhC(); try{ camFab(); refreshTableBadges(); }catch(e){} }; }
+  })();
+  // riquadro di impostazione (dopo la Live)
+  (function(){
+    if(window.__fbViewer || TV_WINDOW) return;
+    var after = document.getElementById("fbLiveCard"); if(!after) return;
+    var card = document.createElement("div"); card.className = "card rules-card"; card.id = "camCard";
+    card.innerHTML = '<details id="camDetails"><summary>📹 Telecamere dei tavoli (video in diretta)</summary><div class="rules-body">' +
+      '<p>Metti un telefono (o una telecamera) sopra ogni biliardino e avvia una <b>diretta su YouTube</b> come "non in elenco". Incolla qui il link di ogni tavolo: sulla partita in corso comparirà <b>📹 Guarda</b>, e chi segue la <b>Live</b> potrà vedere i tavoli dal telefono. Avvisa i giocatori che vengono ripresi.</p>' +
+      '<div id="camRows"></div>' +
+      '<label class="field" for="camTv">In Modalità TV mostra il video di</label><select id="camTv"></select>' +
+      '<div class="fb-status" id="camStatus"></div></div></details>';
+    after.parentNode.insertBefore(card, after.nextSibling);
+    function save(c){ safeSet(LS_CAMS, c); if(window.__fbLiveSchedule) window.__fbLiveSchedule(); refreshTableBadges(); if(document.body.classList.contains("tv-on")) tvCamUpdate(); }
+    function draw(){
+      var c = camsCfg(), n = tablesCount(), rows = "";
+      for(var t = 1; t <= n; t++){
+        var v = (c.urls || {})[t] || "";
+        rows += '<div class="cam-row"><span class="cam-n">Tavolo ' + t + '</span><input type="url" data-t="' + t + '" placeholder="https://youtube.com/live/…" value="' + esc(v) + '"><button type="button" class="btn btn-ghost btn-sm" data-try="' + t + '"' + (v ? '' : ' disabled') + '>▶️ Prova</button></div>';
+      }
+      card.querySelector("#camRows").innerHTML = rows;
+      var sel = card.querySelector("#camTv"), opts = '<option value="0">— nessun video —</option>';
+      for(t = 1; t <= n; t++) opts += '<option value="' + t + '"' + (+c.tv === t ? ' selected' : '') + '>Tavolo ' + t + '</option>';
+      sel.innerHTML = opts;
+      var cnt = Object.keys(c.urls || {}).filter(function(k){ return c.urls[k] && +k <= n; }).length;
+      card.querySelector("#camStatus").innerHTML = cnt ? "📹 " + cnt + (cnt === 1 ? " telecamera collegata." : " telecamere collegate.") + " Chi segue la Live le vede con la Live accesa." : "Nessuna telecamera collegata.";
+      card.querySelectorAll("input[data-t]").forEach(function(inp){
+        inp.addEventListener("change", function(){
+          var c2 = camsCfg(); c2.urls = c2.urls || {}; var val = inp.value.trim();
+          if(val && !/^https?:\/\//i.test(val)){ toast("Il link deve iniziare con https://"); return; }
+          if(val) c2.urls[inp.dataset.t] = val; else delete c2.urls[inp.dataset.t];
+          save(c2); draw();
+          if(val) toast(ytEmbed(val, true) ? "📹 Telecamera del tavolo " + inp.dataset.t + " collegata." : "📹 Collegata (non è un link YouTube: si aprirà in una nuova scheda).");
+        });
+      });
+      card.querySelectorAll("[data-try]").forEach(function(b){ b.addEventListener("click", function(){ openCam(+b.dataset.try); }); });
+    }
+    card.querySelector("#camTv").addEventListener("change", function(){ var c2 = camsCfg(); c2.tv = +this.value || 0; save(c2); toast(c2.tv ? "In Modalità TV si vedrà il tavolo " + c2.tv + "." : "Nessun video in Modalità TV."); });
+    var tc = document.getElementById("tablesCount"); if(tc) tc.addEventListener("change", function(){ setTimeout(draw, 0); });
+    draw();
   })();
 
   // PIN organizzatore rimosso: pulizia di eventuali dati rimasti.
