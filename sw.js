@@ -1,7 +1,7 @@
 // GOOPHO 26 - service worker: rende l'app utilizzabile anche senza internet.
 // Quando pubblichi una nuova versione dell'app, cambia il numero qui sotto
 // (es. v2, v3...) così i dispositivi scaricano l'aggiornamento.
-const VERSION = "goopho26-v109";
+const VERSION = "goopho26-v110";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -19,7 +19,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
+      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION && k !== VERSION + "-regs" && k !== VERSION + "-fonts").map((k) => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
@@ -55,6 +55,15 @@ self.addEventListener("fetch", (event) => {
         if (res.ok) caches.open(VERSION).then((c) => c.put(key, copy));
         return res;
       }).catch(() => caches.match(/live\.html$/.test(url.pathname) ? "./live.html" : "./index.html"))
+    );
+    return;
+  }
+
+  // Regolamenti: prima la rete (così si vedono quelli nuovi), senza internet la copia salvata.
+  if (url.pathname.indexOf("/regolamenti/") !== -1) {
+    event.respondWith(
+      fetch(req).then((res) => { if (res.ok) { const copy = res.clone(); caches.open(VERSION + "-regs").then((c) => c.put(req, copy)); } return res; })
+        .catch(() => caches.open(VERSION + "-regs").then((c) => c.match(req, { ignoreSearch: true })))
     );
     return;
   }

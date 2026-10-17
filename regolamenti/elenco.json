@@ -1,0 +1,34 @@
+{
+ "list": [
+  {
+   "t": "FPICB · Regolamento Nazionale Unificato (R.N.U.)",
+   "b": "regolamento-rnu-fpicb",
+   "f": "regolamento-rnu-fpicb.pdf",
+   "p": 7
+  },
+  {
+   "t": "UISP · Regolamento Tecnico Nazionale 2026-2027",
+   "b": "regolamento-uisp-nazionale",
+   "f": "regolamento-uisp-nazionale.pdf",
+   "p": 6
+  },
+  {
+   "t": "Tradizionale · versione 2025",
+   "b": "regolamento-tradizionale",
+   "f": "regolamento-tradizionale.pdf",
+   "p": 10
+  },
+  {
+   "t": "Volo · versione 2025",
+   "b": "regolamento-volo",
+   "f": "regolamento-volo.pdf",
+   "p": 9
+  },
+  {
+   "t": "Rollerball · versione 2025",
+   "b": "regolamento-rollerball",
+   "f": "regolamento-rollerball.pdf",
+   "p": 10
+  }
+ ]
+}
