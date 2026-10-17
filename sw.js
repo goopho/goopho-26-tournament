@@ -1,7 +1,7 @@
 // GOOPHO 26 - service worker: rende l'app utilizzabile anche senza internet.
 // Quando pubblichi una nuova versione dell'app, cambia il numero qui sotto
 // (es. v2, v3...) così i dispositivi scaricano l'aggiornamento.
-const VERSION = "goopho26-v108";
+const VERSION = "goopho26-v109";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -12,7 +12,8 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(VERSION).then((c) => c.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+  // live.html c'è solo nella versione pubblicata: se manca non è un errore
+  event.waitUntil(caches.open(VERSION).then((c) => c.addAll(APP_SHELL).then(() => c.add("./live.html").catch(() => {}))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {
@@ -48,11 +49,12 @@ self.addEventListener("fetch", (event) => {
   if (req.mode === "navigate") {
     event.respondWith(
       // cache "no-cache": chiede sempre al sito se c'è una versione nuova (niente copie vecchie di 10 minuti)
+      // la pagina della Live (live.html) e quella dell'app si salvano separate
       fetch(req.url, { cache: "no-cache", credentials: "same-origin" }).then((res) => {
-        const copy = res.clone();
-        caches.open(VERSION).then((c) => c.put("./index.html", copy));
+        const copy = res.clone(), key = /live\.html$/.test(url.pathname) ? "./live.html" : "./index.html";
+        if (res.ok) caches.open(VERSION).then((c) => c.put(key, copy));
         return res;
-      }).catch(() => caches.match("./index.html"))
+      }).catch(() => caches.match(/live\.html$/.test(url.pathname) ? "./live.html" : "./index.html"))
     );
     return;
   }
