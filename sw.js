@@ -1,7 +1,7 @@
 // GOOPHO 26 - service worker: rende l'app utilizzabile anche senza internet.
 // Quando pubblichi una nuova versione dell'app, cambia il numero qui sotto
 // (es. v2, v3...) così i dispositivi scaricano l'aggiornamento.
-const VERSION = "goopho26-v240";
+const VERSION = "goopho26-v241";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -82,4 +82,13 @@ self.addEventListener("notificationclick", (event) => {
       return self.clients.openWindow ? self.clients.openWindow(u) : null;
     })
   );
+});
+
+// v241: notifiche push spedite dal Mac (avvisi, messaggi personali, «Tocca a te»)
+self.addEventListener("push", (event) => {
+  let d = {};
+  try { d = event.data ? event.data.json() : {}; } catch (e) { d = { body: event.data ? event.data.text() : "" }; }
+  const opt = { body: d.body || "", data: { url: d.url || "./" }, icon: "icons/icon-192.png", badge: "icons/icon-192.png", vibrate: [200, 100, 200] };
+  if (d.tag) { opt.tag = d.tag; opt.renotify = true; }
+  event.waitUntil(self.registration.showNotification(d.title || "GOOPHO", opt));
 });
